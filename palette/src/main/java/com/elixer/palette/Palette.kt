@@ -13,11 +13,13 @@ import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import com.elixer.palette.models.Swatch
 
 @Composable
 fun Palette(
     defaultColor: Color,
     buttonSize: Dp = 80.dp,
+    list: List<List<Color>>,
     modifier: Modifier
 ) {
 
@@ -35,7 +37,7 @@ fun Palette(
 
         drawCircle(
             color = Color.Black,
-            radius = canvasWidth/2,
+            radius = canvasWidth / 2,
             style = Stroke(width = 15f, cap = StrokeCap.Round)
         )
 
@@ -51,5 +53,5 @@ fun Palette(
 @Preview(showBackground = true, widthDp = 500, heightDp = 500)
 @Composable
 fun PreviewPalette() {
-    Palette(defaultColor = Color.Blue, modifier = Modifier.fillMaxSize())
+    Palette(defaultColor = Color.Blue, modifier = Modifier.fillMaxSize(), list = Presets.custom())
 }

@@ -14,7 +14,9 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.elixer.colorapp.ui.theme.ColorAppTheme
+import com.elixer.palette.ColorSwatches
 import com.elixer.palette.Palette
+import com.elixer.palette.Presets
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -24,7 +26,12 @@ class MainActivity : ComponentActivity() {
                 // A surface container using the 'background' color from the theme
                 Surface(modifier = Modifier.fillMaxSize(), color = MaterialTheme.colors.background) {
                     Box(modifier = Modifier.fillMaxSize()) {
-                        Palette(Color.Green, buttonSize = 80.dp, Modifier.fillMaxWidth().height(600.dp))
+                        Palette(
+                            Color.Green, buttonSize = 80.dp, Presets.custom(),
+                            Modifier
+                                .fillMaxWidth()
+                                .height(600.dp)
+                        )
                     }
                 }
             }
@@ -35,6 +42,7 @@ class MainActivity : ComponentActivity() {
 @Composable
 fun Greeting(name: String) {
     Text(text = "Hello $name!")
+    ColorSwatches(list = listOf(Color.Blue, Color.Black))
 }
 
 @Preview(showBackground = true)
