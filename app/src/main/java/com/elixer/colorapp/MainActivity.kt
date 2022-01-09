@@ -27,8 +27,9 @@ class MainActivity : ComponentActivity() {
                 Surface(modifier = Modifier.fillMaxSize(), color = MaterialTheme.colors.background) {
                     Box(modifier = Modifier.fillMaxSize()) {
                         Palette(
-                            Color.Green, buttonSize = 80.dp, Presets.custom(),
-                            Modifier
+                            Color.Green, buttonSize = 80.dp,
+                            Presets.custom(),
+                            modifier = Modifier
                                 .fillMaxWidth()
                                 .height(600.dp)
                         )
