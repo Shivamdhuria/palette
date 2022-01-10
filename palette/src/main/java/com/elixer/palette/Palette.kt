@@ -1,6 +1,7 @@
 package com.elixer.palette
 
 import android.graphics.Rect
+import android.util.Log
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.layout.*
 import androidx.compose.runtime.Composable
@@ -27,7 +28,7 @@ fun Palette(
     defaultColor: Color,
     buttonSize: Dp = 80.dp,
     list: List<List<Color>>,
-    innerRadius: Float = 200f,
+    innerRadiusFactor: Float = 4f,
     modifier: Modifier
 ) {
 
@@ -44,17 +45,21 @@ fun Palette(
     val drawArea = remember { mutableStateOf(Rect()) }
 
     fun offset(width: Float, size: Float): Offset =
-        Offset(width/2f  - size/2f, width/2f  - size/2f)
+        Offset(width / 2f - size / 2f, width / 2f - size / 2f)
 
-    val radius = 200f
+    val innerRadius = drawArea.value.width() / 2 * innerRadiusFactor
+    val degreeEach = 360f / list.size
+    val radiusIncrement = drawArea.value.width() / 2 - innerRadius
+    val radiusIncrementEach = 100f
+
+    Log.e("degreeEach", degreeEach.toString())
 
     Canvas(
         modifier = modifier
-            .fillMaxSize()
             .onGloballyPositioned {
                 drawArea.value = Rect(0, 0, it.size.width, it.size.height)
             }
-            .rotate(0f),
+            .rotate(20f),
     ) {
         val canvasWidth = size.width
         val canvasHeight = size.height
@@ -63,84 +68,100 @@ fun Palette(
         val colorBoxLength = maxRadius!! - innerRadius / maxShadeSize
         val redsize = size / 3f
 //        val colorBox = ColorBox(0f, 0f)
-        drawRect(
-            color = Green,
-            style = Stroke(10f)
-        )
-
-        drawCircle(
-            color = Color.Red,
-            radius = canvasWidth / 2,
-            style = Stroke(width = 15f, cap = StrokeCap.Round)
-        )
-
-        drawCircle(
-            color = Color.Red,
-            radius = canvasWidth / 4,
-            style = Stroke(width = 15f, cap = StrokeCap.Round)
-        )
-
-        drawArc(
-            color = Color(0xFF3F51B5),
-            startAngle = 0F,
-            sweepAngle = 70f,
-            useCenter = false,
-            style = Stroke(width = 80f),
-
-            )
-
-        drawArc(
-            color = Color(0xFF51B53F),
-            startAngle = 0F,
-            sweepAngle = 360f,
-            useCenter = false,
-            topLeft = offset(canvasWidth,500f),
-            style = Stroke(width = 80f),
-            size = Size(500f, 500f)
-
-        )
-
-        drawArc(
-            brush = Brush.verticalGradient(
-                colors = listOf(Blue, Magenta, Green),
-//                start = Offset(0.0f, 0.0f),
-//                end = Offset(0.0f, 100.0f)
-
-            ),
-            startAngle = 180F,
-            sweepAngle = 80f,
-            useCenter = true,
-            style = Stroke(width = 80f),
-
-            )
-
-        drawArc(
-            color = Color.DarkGray,
-            startAngle = 0f,
-            sweepAngle = 360f,
-            useCenter = false,
-            topLeft = Offset(size.width / 4, size.height / 4),
-            size = size / 2f,
-            style = Stroke(10.0f)
-        )
-
-        drawArc(
-            color = Blue,
-            startAngle = 0f,
-            sweepAngle = 360f,
-            useCenter = false,
-            topLeft = Offset(size.width / 9, size.height / 9),
-            size = size / 3f,
-            style = Stroke(10.0f)
-        )
-
-
 //        drawRect(
-//
+//            color = Green,
+//            style = Stroke(10f)
 //        )
 
-    }
+        val colors = list[0]
+        var radius = 600f
+        Log.e("colors", colors.toString())
 
+        for (item in colors) {
+            drawArc(
+                color = item,
+                startAngle = 0F,
+                sweepAngle = 2*degreeEach,
+                useCenter = false,
+                topLeft = offset(canvasWidth, radius),
+                style = Stroke(width = 100f),
+                size = Size(radius, radius)
+            )
+            radius += radiusIncrementEach + 100f
+        }
+
+        radius = 600f
+        for (item in list[1]) {
+            drawArc(
+                color = item,
+                startAngle = 2*degreeEach,
+                sweepAngle = 2*degreeEach,
+                useCenter = false,
+                topLeft = offset(canvasWidth, radius),
+                style = Stroke(width = 100f),
+                size = Size(radius, radius)
+            )
+            radius += radiusIncrementEach + 100f
+        }
+
+        radius = 600f
+        for (item in list[2]) {
+            drawArc(
+                color = item,
+                startAngle = 4*degreeEach,
+                sweepAngle = 2*degreeEach,
+                useCenter = false,
+                topLeft = offset(canvasWidth, radius),
+                style = Stroke(width = 100f),
+                size = Size(radius, radius)
+            )
+            radius += radiusIncrementEach + 100f
+        }
+
+        radius = 600f
+        for (item in list[3]) {
+            drawArc(
+                color = item,
+                startAngle = 6*degreeEach,
+                sweepAngle = 2*degreeEach,
+                useCenter = false,
+                topLeft = offset(canvasWidth, radius),
+                style = Stroke(width = 100f),
+                size = Size(radius, radius)
+            )
+            radius += radiusIncrementEach + 100f
+        }
+//
+//        drawArc(
+//            color = Color(0xFF87DD77),
+//            startAngle = 0F,
+//            sweepAngle = 360f,
+//            useCenter = false,
+//            topLeft = offset(canvasWidth, 500f),
+//            style = Stroke(width = 100f),
+//            size = Size(500f, 500f)
+//        )
+//
+//        drawArc(
+//            color = Color(0xFF5F7ECC),
+//            startAngle = 0F,
+//            sweepAngle = 360f,
+//            useCenter = false,
+//            topLeft = offset(canvasWidth, 700f),
+//            style = Stroke(width = 100f),
+//            size = Size(700f, 700f)
+//        )
+//
+//        drawArc(
+//            color = Color(0xFF8C5FCC),
+//            startAngle = 0F,
+//            sweepAngle = degreeEach,
+//            useCenter = false,
+//            topLeft = offset(canvasWidth, 700f),
+//            style = Stroke(width = 100f),
+//            size = Size(700f, 700f)
+//        )
+    }
 }
 
 @Composable
@@ -154,7 +175,7 @@ fun ColorBox() {
 
 }
 
-@Preview(showBackground = true, widthDp = 500, heightDp = 500)
+@Preview(showBackground = true, widthDp = 500, heightDp = 900)
 @Composable
 fun PreviewPalette() {
     Palette(defaultColor = Blue, modifier = Modifier.fillMaxSize(), list = Presets.custom())
