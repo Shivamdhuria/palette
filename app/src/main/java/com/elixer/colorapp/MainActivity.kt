@@ -28,16 +28,17 @@ class MainActivity : ComponentActivity() {
                 // A surface container using the 'background' color from the theme
                 Surface(modifier = Modifier.fillMaxSize(), color = MaterialTheme.colors.background) {
                     Box(modifier = Modifier.fillMaxSize()) {
-                        Column {
-                            Heading()
-                        }
                         Palette(
                             Color.Green, buttonSize = 80.dp,
                             Presets.custom(),
                             modifier = Modifier
                                 .height(450.dp)
                                 .width(450.dp)
+                                .offset(200.dp,400.dp)
                         )
+                        Column {
+                            Heading()
+                        }
                     }
                 }
             }
