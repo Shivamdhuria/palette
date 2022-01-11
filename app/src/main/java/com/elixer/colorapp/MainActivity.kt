@@ -34,7 +34,7 @@ class MainActivity : ComponentActivity() {
                             modifier = Modifier
                                 .height(450.dp)
                                 .width(450.dp)
-                                .offset(200.dp,400.dp)
+                                .offset(-50.dp,200.dp)
                         )
                         Column {
                             Heading()

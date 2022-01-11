@@ -5,10 +5,7 @@ import android.util.Log
 import android.view.MotionEvent
 import android.view.MotionEvent.ACTION_DOWN
 import android.view.MotionEvent.ACTION_MOVE
-import androidx.compose.animation.core.Animatable
-import androidx.compose.animation.core.AnimationVector1D
-import androidx.compose.animation.core.LinearEasing
-import androidx.compose.animation.core.tween
+import androidx.compose.animation.core.*
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.gestures.detectHorizontalDragGestures
 import androidx.compose.foundation.layout.*
@@ -33,7 +30,10 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.sync.Mutex
+import kotlinx.coroutines.sync.withLock
 import kotlin.math.PI
 import kotlin.math.atan2
 
@@ -72,20 +72,25 @@ fun Palette(
     val degreeEach = 360f / list.size
 
     val animateFloat0 = remember { Animatable(0f) }
-    val animateFloat1 = remember { Animatable(10f) }
+    val animateFloat1 = remember { Animatable(0f) }
     var touchX by remember { mutableStateOf(0f) }
     var touchY by remember { mutableStateOf(0f) }
     var centerX by remember { mutableStateOf(0f) }
     var centerY by remember { mutableStateOf(0f) }
+
+    val lock = Mutex()
+
 
     /**
      * contains  animatables for all shades
      */
     val animatables = mutableListOf<Animatable<Float, AnimationVector1D>>()
 
-//    list.forEachIndexed {i,e->
-//        animatables[i] = remember { Animatable(0f) }
-//    }
+    var degreeAddition = 0f
+    list.forEachIndexed { i, e ->
+        animatables.add(remember { Animatable(0f) })
+        degreeAddition += degreeEach
+    }
 
 
     Log.e("degreeEach", degreeEach.toString())
@@ -98,17 +103,7 @@ fun Palette(
                 centerX = windowBounds.size.width / 2f
                 centerY = windowBounds.size.height / 2f
             }
-            .rotate(rotationAnimatable.value)
-//            .pointerInput(Unit) {
-//                detectHorizontalDragGestures { change, dragAmount ->
-//                    coroutineScope.launch {
-//                        rotationAnimatable.animateTo(
-//                            targetValue = - dragAmount,
-//                            animationSpec = tween(durationMillis = 500, easing = LinearEasing)
-//                        )
-//                    }
-//                }
-//            },
+//            .rotate(rotationAnimatable.value)
             .pointerInteropFilter { event ->
                 touchX = event.x
                 touchY = event.y
@@ -149,13 +144,14 @@ fun Palette(
         val degreeIncrement = degreeEach
         var multiplier = 1
         var startAngle = 0f
+        var startIndex = 0
         shades.forEach { shade ->
 
             shade.forEach {
                 drawArc(
                     color = it,
                     startAngle = startAngle,
-                    sweepAngle = animateFloat0.value,
+                    sweepAngle = degreeEach * animatables[startIndex].value,
                     useCenter = false,
                     topLeft = offset(canvasWidth, radius),
                     style = Stroke(width = 100f),
@@ -165,10 +161,73 @@ fun Palette(
             }
             startAngle += degreeEach
             radius = innerRadius
-            multiplier++
-
-
+            startIndex++
         }
+
+//        val shadeOne = list[0]
+//        val shadeTwo = list[1]
+//        val shadeThree = list[2]
+//        shadeOne.forEach {
+//            drawArc(
+//                color = it,
+//                startAngle = 0f,
+//                sweepAngle = 10f * animatables[0].value,
+//                useCenter = false,
+//                topLeft = offset(canvasWidth, radius),
+//                style = Stroke(width = 100f),
+//                size = Size(radius, radius)
+//            )
+//            radius += colorLength + 100f
+//        }
+//        radius = innerRadius
+//        shadeTwo.forEach {
+//            drawArc(
+//                color = it,
+//                startAngle = 10f,
+//                sweepAngle = 10f * animatables[1].value,
+//                useCenter = false,
+//                topLeft = offset(canvasWidth, radius),
+//                style = Stroke(width = 100f),
+//                size = Size(radius, radius)
+//            )
+//            radius += colorLength + 100f
+//        }
+//        radius = innerRadius
+//        shadeThree.forEach {
+//            drawArc(
+//                color = it,
+//                startAngle = 20f,
+//                sweepAngle = 10f * animatables[2].value,
+//                useCenter = false,
+//                topLeft = offset(canvasWidth, radius),
+//                style = Stroke(width = 100f),
+//                size = Size(radius, radius)
+//            )
+//            radius += colorLength + 100f
+//        }
+
+        coroutineScope.launch {
+            animatables.forEach {
+                it.animateTo(
+                    targetValue = 1f,
+//                    animationSpec = tween(durationMillis = 10, easing = FastOutSlowInEasing)
+                    animationSpec = spring(
+                        dampingRatio = Spring.DampingRatioNoBouncy,
+                        stiffness = Spring.StiffnessHigh
+                    )
+                )
+            }
+        }
+
+//        coroutineScope.launch {
+//               animateFloat1.animateTo(
+//                    targetValue = 1f,
+//                    animationSpec = tween(durationMillis = 1000, easing = LinearEasing)
+//                )
+//            delay(1000)
+//
+//        }
+
 
 //        shades.forEach { shade ->
 //
@@ -190,12 +249,12 @@ fun Palette(
 //
 //
 //        }
-        coroutineScope.launch {
-            animateFloat0.animateTo(
-                targetValue = degreeIncrement,
-                animationSpec = tween(durationMillis = 1000, easing = LinearEasing)
-            )
-        }
+//        coroutineScope.launch {
+//            animateFloat0.animateTo(
+//                targetValue = degreeIncrement,
+//                animationSpec = tween(durationMillis = 1000, easing = LinearEasing)
+//            )
+//        }
 
     }
 
