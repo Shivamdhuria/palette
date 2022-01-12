@@ -4,6 +4,7 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.*
+import androidx.compose.material.Button
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
@@ -32,12 +33,14 @@ class MainActivity : ComponentActivity() {
                             Color.Green, buttonSize = 80.dp,
                             Presets.custom(),
                             modifier = Modifier
-                                .height(450.dp)
-                                .width(450.dp)
-                                .offset(-50.dp,200.dp)
+                                .offset(100.dp,100.dp)
+
                         )
                         Column {
-                            Heading()
+//                            Heading()
+                            Button(onClick = { /*TODO*/ }) {
+                                
+                            }
                         }
                     }
                 }
