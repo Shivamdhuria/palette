@@ -20,6 +20,7 @@ import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import com.elixer.palette.models.ColorBox
 import kotlinx.coroutines.sync.Mutex
 
 @OptIn(ExperimentalComposeUiApi::class)
@@ -32,6 +33,12 @@ fun Palette(
     colorLength: Float = 80f,
     modifier: Modifier
 ) {
+
+    /**
+     * Color boxes to draw
+     */
+    val particles = remember { mutableStateOf(emptyList<ColorBox>()) }
+
 
     val boxSizeWidth = remember { mutableStateOf(0f) }
     val boxSizeHeight = remember { mutableStateOf(0f) }
