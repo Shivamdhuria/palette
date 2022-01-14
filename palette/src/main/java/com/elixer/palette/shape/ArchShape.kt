@@ -54,11 +54,12 @@ class ArchShape(
 //            close()
             val rectTop = Rect(0f, 0f, outerRecSide, outerRecSide)
             addArc(rectTop, startingAngle, sweep)
-//            addArc(rectBttum, startingAngle, sweep)
+            addArc(rectBttum, startingAngle, sweep)
 
             moveTo(outerRadius , outerRadius)
             lineTo(stopXN, stopYN)
             lineTo(stopX, stopY)
+
 
 
 
