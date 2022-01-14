@@ -3,14 +3,12 @@ package com.elixer.palette
 import android.util.Log
 import androidx.compose.animation.core.Animatable
 import androidx.compose.animation.core.VectorConverter
+import androidx.compose.animation.core.animateOffsetAsState
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
-import androidx.compose.material.Button
-import androidx.compose.material.FloatingActionButton
-import androidx.compose.material.Icon
-import androidx.compose.material.Text
+import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Person
@@ -18,6 +16,7 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Color.Companion.Blue
@@ -30,6 +29,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.toSize
+import com.elixer.palette.shape.CustomShape
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalComposeUiApi::class)
@@ -47,7 +47,10 @@ fun NewPalette(
     val density = LocalDensity.current
     val scope = rememberCoroutineScope()
 
-    Box(
+    val animationState = remember { mutableStateOf(false) }
+
+
+    BoxWithConstraints(
         modifier = modifier
             .width(size)
             .height(size)
@@ -70,23 +73,34 @@ fun NewPalette(
             }
     ) {
 
-        FloatingActionButton(
-            modifier = Modifier.align(Alignment.Center),
-            onClick = {
-                scope.launch {
-                    if (imageSize == null || containerSize == null) return@launch
-                    val targetSize = if (animatableSize.value == imageSize) containerSize else imageSize
-                    animatableSize.animateTo(
-                        targetSize,
-                        animationSpec = tween(durationMillis = 1000)
-                    )
-                }
-            },
-            backgroundColor = Color.Black,
-            contentColor = Color.White,
-        ) {
-            Icon(Icons.Filled.Add, "", modifier = Modifier.size(40.dp))
-        }
+        LaunchButton(
+            animationState = animationState.value,
+            onToggleAnimationState = { animationState.value = !animationState.value }
+        )
+
+        Color(
+            isColorVisible = animationState.value,
+            maxWidth = maxWidth,
+            maxHeight = maxHeight
+        )
+
+//        FloatingActionButton(
+//            modifier = Modifier.align(Alignment.Center),
+//            onClick = {
+//                scope.launch {
+//                    if (imageSize == null || containerSize == null) return@launch
+//                    val targetSize = if (animatableSize.value == imageSize) containerSize else imageSize
+//                    animatableSize.animateTo(
+//                        targetSize,
+//                        animationSpec = tween(durationMillis = 1000)
+//                    )
+//                }
+//            },
+//            backgroundColor = Color.Black,
+//            contentColor = Color.White,
+//        ) {
+//            Icon(Icons.Filled.Add, "", modifier = Modifier.size(40.dp))
+//        }
 
 
 
@@ -115,6 +129,28 @@ fun NewPalette(
                     }
                 }
         )
+    }
+}
+
+@Composable
+fun Color(isColorVisible: Boolean, maxWidth: Dp, maxHeight: Dp) {
+    val offsetY = remember { Animatable(0f) }
+    val offsetX = remember { Animatable(0f) }
+    val coroutineScope = rememberCoroutineScope()
+
+    val offsetV: Offset by animateOffsetAsState(Offset(if (isColorVisible) 50f else 0f, if (isColorVisible) 50f else 0f))
+
+
+    Button(
+        onClick = {}, modifier = Modifier
+            .height(50.dp)
+            .aspectRatio(1f)
+            .offset(offsetV.x.dp,offsetV.y.dp),
+        shape = CustomShape(),
+        colors = ButtonDefaults.buttonColors(backgroundColor = Color.Yellow)
+    )
+    {
+
     }
 }
 

@@ -31,10 +31,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.unit.toSize
 import com.elixer.colorapp.ui.theme.ColorAppTheme
-import com.elixer.palette.ColorSwatches
-import com.elixer.palette.NewPalette
-import com.elixer.palette.Palette
-import com.elixer.palette.Presets
+import com.elixer.palette.*
 import kotlinx.coroutines.launch
 
 class MainActivity : ComponentActivity() {
@@ -59,6 +56,12 @@ class MainActivity : ComponentActivity() {
                         )
                         Column {
 //                            Heading()
+                            ArchedButton(onClick = {  }, modifier = Modifier
+                                .width(400.dp)
+                                .aspectRatio(1f)
+                                .offset(30.dp, 400.dp)) {
+                                
+                            }
 
                         }
                     }
