@@ -75,38 +75,27 @@ fun NewPalette(
         ColorSingle(
             isColorVisible = animationState.value,
             maxWidth = maxWidth,
-            maxHeight = maxHeight
+            maxHeight = maxHeight,
+            outerRadius = 300f,
+            innerRadius = 250f
         )
-
-//        FloatingActionButton(
-//            modifier = Modifier.align(Alignment.Center),
-//            onClick = {
-//                scope.launch {
-//                    if (imageSize == null || containerSize == null) return@launch
-//                    val targetSize = if (animatableSize.value == imageSize) containerSize else imageSize
-//                    animatableSize.animateTo(
-//                        targetSize,
-//                        animationSpec = tween(durationMillis = 1000)
-//                    )
-//                }
-//            },
-//            backgroundColor = Color.Black,
-//            contentColor = Color.White,
-//        ) {
-//            Icon(Icons.Filled.Add, "", modifier = Modifier.size(40.dp))
-//        }
 
     }
 }
 
 @Composable
-fun ColorSingle(isColorVisible: Boolean,
-                maxWidth: Dp,
-                maxHeight: Dp) {
-    ArchedButton(onClick = {  },
+fun ColorSingle(
+    isColorVisible: Boolean,
+    maxWidth: Dp,
+    maxHeight: Dp,
+    outerRadius: Float,
+    innerRadius: Float,
+) {
+    ArchedButton(
+        onClick = { },
         modifier = Modifier.aspectRatio(1f),
-        shape = ArchShape(300f,200f,0f,360f)
-      ) {
+        shape = ArchShape(outerRadius, innerRadius, 0f, 360f)
+    ) {
 
     }
 }
@@ -124,7 +113,7 @@ fun Color(isColorVisible: Boolean, maxWidth: Dp, maxHeight: Dp) {
         onClick = {}, modifier = Modifier
             .height(50.dp)
             .aspectRatio(1f)
-            .offset(offsetV.x.dp,offsetV.y.dp),
+            .offset(offsetV.x.dp, offsetV.y.dp),
         shape = CustomShape(),
         colors = ButtonDefaults.buttonColors(backgroundColor = Color.Yellow)
     )
