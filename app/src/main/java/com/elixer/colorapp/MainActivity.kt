@@ -49,17 +49,17 @@ class MainActivity : ComponentActivity() {
 //                                .offset(100.dp,100.dp)
 //
 //                        )
-                        NewPalette(
-                            size = 300.dp,
-                            modifier = Modifier
-                                .offset(30.dp, 40.dp)
-                        )
+//                        NewPalette(
+//                            size = 300.dp,
+//                            modifier = Modifier
+//                                .offset(30.dp, 40.dp)
+//                        )
                         Column {
 //                            Heading()
                             ArchedButton(onClick = {  }, modifier = Modifier
                                 .width(400.dp)
                                 .aspectRatio(1f)
-                                .offset(30.dp, 400.dp)) {
+                                .offset(80.dp, 200.dp)) {
                                 
                             }
 

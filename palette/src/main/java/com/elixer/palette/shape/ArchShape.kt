@@ -1,10 +1,10 @@
 package com.elixer.palette.shape
 
-import android.util.Log
 import androidx.compose.ui.geometry.Rect
 import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Outline
 import androidx.compose.ui.graphics.Path
+import androidx.compose.ui.graphics.PathOperation
 import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.unit.Density
 import androidx.compose.ui.unit.LayoutDirection
@@ -12,85 +12,111 @@ import kotlin.math.cos
 import kotlin.math.sin
 
 class ArchShape(
-    val outerRadius: Float = 600f,
-    val innerRadius: Float = 300f,
-    val startingAngle: Float = 210f,
-    val sweep: Float =90f
+    val outerRadius: Float = 300f,
+    val innerRadius: Float = 200f,
+    val startingAngle: Float = 250f,
+    val sweep: Float =40f
 ) : Shape {
 
     override fun createOutline(size: Size, layoutDirection: LayoutDirection, density: Density): Outline {
-        val path = Path().apply {
 
+        /**
+         * Center of the circle
+         */
+        val startX = outerRadius;
+        val startY = outerRadius;
 
-            moveTo(0f, 0f)
-            relativeLineTo(outerRadius,outerRadius)
-            val outerRecSide = 2 * outerRadius
-            val innerRecSide = 2 * innerRadius
-            val difference = outerRadius - innerRadius
+        val outerRecSide = 2 * outerRadius
+        val innerRecSide = 2 * innerRadius
+        val difference = outerRadius - innerRadius
 
+        val startingAngle =  ((startingAngle) * Math.PI / 180)
+        val endingAngle =  ((this@ArchShape.startingAngle + sweep) * Math.PI / 180)
 
-            Log.e("heigh ${innerRadius}", "width ${innerRadius}")
-
-            val react = Rect(innerRadius, 0f, innerRadius, innerRadius)
-
-
-            val rectBttum = Rect(difference, difference, difference+innerRecSide, difference+innerRecSide)
-//            lineTo(innerRadius, innerRadius)
-            val startX = outerRadius;
-            val startY = outerRadius;
-            val radius = outerRadius;
-            val angle =  ((startingAngle) * Math.PI / 180)
-            val stopX =  (startX + radius * cos(angle)).toFloat()
-            val stopY =  (startY + radius * sin(angle)).toFloat()
-
-            val angleN =  ((startingAngle+ sweep) * Math.PI / 180)
-            val stopXN =  (startX + radius * cos(angleN)).toFloat()
-            val stopYN =  (startY + radius * sin(angleN)).toFloat()
-
-
-            Log.e("stop X $stopX", "stop y $stopY")
-//            moveTo(startX,startY)
-//            lineTo( stopX, stopY);
-//            close()
-            val rectTop = Rect(0f, 0f, outerRecSide, outerRecSide)
-            addArc(rectTop, startingAngle, sweep)
-            addArc(rectBttum, startingAngle, sweep)
+        val pathOuter = Path().apply {
 
             moveTo(outerRadius , outerRadius)
-            lineTo(stopXN, stopYN)
-            lineTo(stopX, stopY)
 
+            //Outer arc cone
+            val radius = outerRadius;
 
+            val xOuterStart =  (startX + radius * cos(startingAngle)).toFloat()
+            val yOuterStart =  (startY + radius * sin(startingAngle)).toFloat()
 
+            val xOuterEnd =  (startX + radius * cos(endingAngle)).toFloat()
+            val yOuterEnd =  (startY + radius * sin(endingAngle)).toFloat()
 
-            close()
+            val rectOuter = Rect(0f, 0f, outerRecSide, outerRecSide)
 
-
-
-
-
-
-
-//            val deg = Math.toRadians(-startingAngle.toDouble())
-//            val xOuter = outerRadius+ cos(deg) - outerRecSide
-//            val yOuter = outerRadius+ sin(deg) - outerRecSide
-//
-//            val xInner = innerRadius+ cos(deg) - outerRecSide
-//            val yInner = innerRadius+ sin(deg) - outerRecSide
-//
-//            moveTo(xOuter.toFloat(), yOuter.toFloat())
-//            lineTo(xInner.toFloat(),yInner.toFloat())
-//
-//            val degN = Math.toRadians(-(startingAngle+sweep).toDouble())
-//            val xOuterN = outerRadius+ cos(degN) - outerRecSide
-//            val yOuterN = outerRadius+ sin(degN) - outerRecSide
-//
-//            val xInnerN = innerRadius+ cos(degN) - outerRecSide
-//            val yInnerN = innerRadius+ sin(degN)- outerRecSide
-//            moveTo(xOuterN.toFloat(), yOuterN.toFloat())
-//            lineTo(xInnerN.toFloat(),yInnerN.toFloat())
-
+            lineTo(xOuterEnd, yOuterEnd)
+            lineTo(xOuterStart, yOuterStart)
+            addArc(rectOuter, this@ArchShape.startingAngle, sweep)
         }
-        return Outline.Generic(path)
+
+        val pathInner = Path().apply {
+            moveTo(outerRadius , outerRadius)
+
+            val reactInner = Rect(difference, difference, difference+innerRecSide, difference+innerRecSide)
+
+            //inner arc cone
+            val xInnerStart =  (startX + innerRadius * cos(startingAngle)).toFloat()
+            val yInnerStart =  (startY + innerRadius * sin(startingAngle)).toFloat()
+
+            val xInnerEnd =  (startX + innerRadius * cos(endingAngle)).toFloat()
+            val yInnerEnd =  (startY + innerRadius * sin(endingAngle)).toFloat()
+//
+            lineTo(xInnerEnd, yInnerEnd)
+            lineTo(xInnerStart, yInnerStart)
+            addArc(reactInner, this@ArchShape.startingAngle, sweep)
+        }
+
+//        val path = Path().apply {
+//            val outerRecSide = 2 * outerRadius
+//            val innerRecSide = 2 * innerRadius
+//            val difference = outerRadius - innerRadius
+//
+//            moveTo(outerRadius , outerRadius)
+//
+//            val rectBttum = Rect(difference, difference, difference+innerRecSide, difference+innerRecSide)
+////            lineTo(innerRadius, innerRadius)
+//            /**
+//             * Center of the circle
+//             */
+//            val startX = outerRadius;
+//            val startY = outerRadius;
+//
+//            //Outer arc cone
+//
+//            val radius = outerRadius;
+//            val startingAngle =  ((startingAngle) * Math.PI / 180)
+//            val endingAngle =  ((this@ArchShape.startingAngle + sweep) * Math.PI / 180)
+//
+//            val xOuterStart =  (startX + radius * cos(startingAngle)).toFloat()
+//            val yOuterStart =  (startY + radius * sin(startingAngle)).toFloat()
+//
+//            val xOuterEnd =  (startX + radius * cos(endingAngle)).toFloat()
+//            val yOuterEnd =  (startY + radius * sin(endingAngle)).toFloat()
+//
+//            val rectTop = Rect(0f, 0f, outerRecSide, outerRecSide)
+//
+//            lineTo(xOuterEnd, yOuterEnd)
+//            lineTo(xOuterStart, yOuterStart)
+//            addArc(rectTop, this@ArchShape.startingAngle, sweep)
+//
+//
+//
+//            //inner arc cone
+//            val xInnerStart =  (startX + innerRadius * cos(startingAngle)).toFloat()
+//            val yInnerStart =  (startY + innerRadius * sin(startingAngle)).toFloat()
+//
+//            val xInnerEnd =  (startX + innerRadius * cos(endingAngle)).toFloat()
+//            val yInnerEnd =  (startY + innerRadius * sin(endingAngle)).toFloat()
+////
+//            lineTo(xInnerEnd, yInnerEnd)
+//            lineTo(xInnerStart, yInnerStart)
+//            addArc(rectBttum, this@ArchShape.startingAngle, sweep)
+//
+//        }
+        return Outline.Generic(Path.combine(PathOperation.Difference,pathOuter,pathInner))
     }
 }
