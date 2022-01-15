@@ -1,27 +1,22 @@
 package com.elixer.palette
 
-import android.widget.Button
 import androidx.compose.foundation.BorderStroke
-import androidx.compose.foundation.background
 import androidx.compose.foundation.interaction.MutableInteractionSource
-import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.shape.CornerSize
+import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.RowScope
+import androidx.compose.foundation.layout.size
 import androidx.compose.material.*
 import androidx.compose.material.ripple.rememberRipple
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Brush
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.elixer.palette.shape.ArchShape
-import com.elixer.palette.shape.CustomShape
 
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
@@ -31,7 +26,7 @@ fun ArchedButton(
     enabled: Boolean = true,
     interactionSource: MutableInteractionSource = remember { MutableInteractionSource() },
     elevation: ButtonElevation? = ButtonDefaults.elevation(),
-    shape: Shape = ArchShape(),
+    shape: Shape,
     border: BorderStroke? = null,
     colors: ButtonColors = ButtonDefaults.buttonColors(),
     contentPadding: PaddingValues = ButtonDefaults.ContentPadding,
@@ -70,12 +65,12 @@ fun ArchedButton(
         }
     }
 }
+
 @Preview(showBackground = true, widthDp = 500, heightDp = 900)
 @Composable
 fun Crazy() {
-    ArchedButton(
-        {  }, modifier = Modifier.size(200.dp,100.dp)
-    ){
+    ArchedButton(shape =
+    ArchShape(300f, 200f, 180f, 30f), modifier = Modifier.size(200.dp, 100.dp), onClick = {}) {
 
     }
 }

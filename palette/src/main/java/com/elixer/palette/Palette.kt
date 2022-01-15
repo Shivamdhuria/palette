@@ -378,17 +378,6 @@ private fun ColorPictureButton(defaultColor: Color) {
 }
 
 
-@Composable
-fun ColorBox() {
-    Canvas(modifier = Modifier.fillMaxSize(), onDraw = {
-        drawRect(
-            color = Green,
-            style = Stroke(50f)
-        )
-    })
-
-}
-
 @Preview(showBackground = true, widthDp = 500, heightDp = 900)
 @Composable
 fun PreviewPalette() {

@@ -4,7 +4,6 @@ import android.util.Log
 import androidx.compose.animation.core.Animatable
 import androidx.compose.animation.core.VectorConverter
 import androidx.compose.animation.core.animateOffsetAsState
-import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
@@ -13,15 +12,12 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Person
 import androidx.compose.runtime.*
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.Color.Companion.Blue
-import androidx.compose.ui.layout.boundsInRoot
-import androidx.compose.ui.layout.boundsInWindow
+import androidx.compose.ui.graphics.SweepGradient
 import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.layout.onSizeChanged
 import androidx.compose.ui.platform.LocalDensity
@@ -29,6 +25,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.toSize
+import com.elixer.palette.shape.ArchShape
 import com.elixer.palette.shape.CustomShape
 import kotlinx.coroutines.launch
 
@@ -78,10 +75,40 @@ fun NewPalette(
             onToggleAnimationState = { animationState.value = !animationState.value }
         )
 
-        Color(
+        ColorBox(
             isColorVisible = animationState.value,
             maxWidth = maxWidth,
-            maxHeight = maxHeight
+            maxHeight = maxHeight,
+            startingAngle = 0f,
+            sweep = 40f,
+            color =  Color.Blue
+
+        )
+        ColorBox(
+            isColorVisible = animationState.value,
+            maxWidth = maxWidth,
+            maxHeight = maxHeight,
+            startingAngle = 40f,
+            sweep = 40f,
+            color =  Color.Magenta
+
+        )
+        ColorBox(
+            isColorVisible = animationState.value,
+            maxWidth = maxWidth,
+            maxHeight = maxHeight,
+            startingAngle = 80f,
+            sweep = 180f,
+            color =  Color.Black
+        )
+
+        ColorBox(
+            isColorVisible = animationState.value,
+            maxWidth = maxWidth,
+            maxHeight = maxHeight,
+            startingAngle = 260f,
+            sweep = 100f,
+            color =  Color.Red
         )
 
 //        FloatingActionButton(
@@ -101,7 +128,6 @@ fun NewPalette(
 //        ) {
 //            Icon(Icons.Filled.Add, "", modifier = Modifier.size(40.dp))
 //        }
-
 
 
         Image(
@@ -133,21 +159,29 @@ fun NewPalette(
 }
 
 @Composable
-fun Color(isColorVisible: Boolean, maxWidth: Dp, maxHeight: Dp) {
+fun ColorBox(
+    isColorVisible: Boolean,
+    maxWidth: Dp,
+    maxHeight: Dp,
+    startingAngle: Float,
+    sweep: Float,
+    color: Color
+) {
     val offsetY = remember { Animatable(0f) }
     val offsetX = remember { Animatable(0f) }
     val coroutineScope = rememberCoroutineScope()
+    val maxH = (maxHeight / 2f)?.value
 
-    val offsetV: Offset by animateOffsetAsState(Offset(if (isColorVisible) 50f else 0f, if (isColorVisible) 50f else 0f))
+    val offsetV: Offset by animateOffsetAsState(Offset(0f, if (isColorVisible) maxH else 0f))
 
 
-    Button(
+    ArchedButton(
         onClick = {}, modifier = Modifier
             .height(50.dp)
             .aspectRatio(1f)
-            .offset(offsetV.x.dp,offsetV.y.dp),
-        shape = CustomShape(),
-        colors = ButtonDefaults.buttonColors(backgroundColor = Color.Yellow)
+            .offset(offsetV.x.dp, offsetV.y.dp),
+        shape = ArchShape(400f, 300f, startingAngle, sweep),
+        colors = ButtonDefaults.buttonColors(backgroundColor = color)
     )
     {
 
