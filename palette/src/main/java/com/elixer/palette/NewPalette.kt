@@ -29,6 +29,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.toSize
+import com.elixer.palette.shape.ArchShape
 import com.elixer.palette.shape.CustomShape
 import kotlinx.coroutines.launch
 
@@ -59,17 +60,10 @@ fun NewPalette(
                 setContainerSize(size.toSize())
             }
             .onGloballyPositioned { it ->
-//                val windowBounds = it.boundsInWindow()
-                Log.e("windowBounds ${it.size.toString()}", "")
-                Log.e("rdinates ${it.parentLayoutCoordinates.toString()}", "")
-                Log.e("width ${it.size.width.toString()}", "")
-
-
-//                    composableSize.value = it.size.toSize()
                 centerX = it.size.width / 2f
                 centerY = it.size.height / 2f
-                Log.e("centerX $centerX", "center Y $centerY")
-                Log.e("centerX ${centerX.dp}", "center Y ${centerY.dp}")
+                Log.e("centerX $centerX", "centerY,$centerY")
+
             }
     ) {
 
@@ -78,7 +72,7 @@ fun NewPalette(
             onToggleAnimationState = { animationState.value = !animationState.value }
         )
 
-        Color(
+        ColorSingle(
             isColorVisible = animationState.value,
             maxWidth = maxWidth,
             maxHeight = maxHeight
@@ -102,33 +96,18 @@ fun NewPalette(
 //            Icon(Icons.Filled.Add, "", modifier = Modifier.size(40.dp))
 //        }
 
+    }
+}
 
+@Composable
+fun ColorSingle(isColorVisible: Boolean,
+                maxWidth: Dp,
+                maxHeight: Dp) {
+    ArchedButton(onClick = {  },
+        modifier = Modifier.aspectRatio(1f),
+        shape = ArchShape(300f,200f,0f,360f)
+      ) {
 
-        Image(
-            Icons.Default.Person,
-            contentDescription = null,
-            modifier = Modifier
-                .then(
-                    if (animatableSize.value != Size.Zero) {
-                        animatableSize.value.run {
-                            Modifier.size(
-                                width = with(density) { width.toDp() },
-                                height = with(density) { height.toDp() },
-                            )
-                        }
-                    } else {
-                        Modifier
-                    }
-                )
-                .onSizeChanged { intSize ->
-                    if (imageSize != null) return@onSizeChanged
-                    val size = intSize.toSize()
-                    setImageSize(size)
-                    scope.launch {
-                        animatableSize.snapTo(size)
-                    }
-                }
-        )
     }
 }
 
@@ -154,17 +133,6 @@ fun Color(isColorVisible: Boolean, maxWidth: Dp, maxHeight: Dp) {
     }
 }
 
-
-@Composable
-private fun ColorPictureButton(defaultColor: Color) {
-    FloatingActionButton(
-        onClick = {},
-        backgroundColor = defaultColor,
-        contentColor = Color.White
-    ) {
-        Icon(Icons.Filled.Add, "", modifier = Modifier.size(80.dp))
-    }
-}
 
 @Preview(showBackground = true, widthDp = 500, heightDp = 900)
 @Composable
