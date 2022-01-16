@@ -1,7 +1,9 @@
 package com.elixer.palette.canvas
 
+import androidx.compose.animation.core.Spring
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.animateOffsetAsState
+import androidx.compose.animation.core.spring
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.layout.size
 import androidx.compose.runtime.Composable
@@ -25,7 +27,13 @@ fun ColorCanvas(
     isDisplayed: Boolean = true,
     modifier: Modifier
 ) {
-    val radius: Float by animateFloatAsState(if (isDisplayed) innerRadius else 0f)
+    val radius: Float by animateFloatAsState(
+        targetValue = if (isDisplayed) innerRadius else 0f,
+        animationSpec = spring(
+            dampingRatio = Spring.DampingRatioLowBouncy,
+            stiffness = Spring.StiffnessVeryLow
+        )
+    )
 
 
     fun offset(width: Float, size: Float): Offset =
@@ -48,9 +56,9 @@ fun ColorCanvas(
 @Composable
 fun PreviewColorWheel() {
     ColorCanvas(
-        500f,20f,Color.Magenta,180f,270f
-        , true, Modifier.size(500.dp, 900.dp))
+        500f, 20f, Color.Magenta, 180f, 270f, true, Modifier.size(500.dp, 900.dp)
+    )
     ColorCanvas(
-        700f,20f,Color.Blue,180f,270f
-        , true, Modifier.size(500.dp, 900.dp))
+        700f, 20f, Color.Blue, 180f, 270f, true, Modifier.size(500.dp, 900.dp)
+    )
 }
