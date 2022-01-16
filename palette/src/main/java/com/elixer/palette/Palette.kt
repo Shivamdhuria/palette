@@ -70,16 +70,6 @@ fun Palette(
     var centerX by remember { mutableStateOf(0f) }
     var centerY by remember { mutableStateOf(0f) }
 
-    val colorFirstRow = mutableListOf<Color>()
-    list.forEach {
-        colorFirstRow.add(it[0])
-    }
-
-    val color2Row = mutableListOf<Color>()
-    list.forEach {
-        color2Row.add(it[0])
-    }
-
     BoxWithConstraints(modifier = modifier
         .aspectRatio(1f)
         .background(Color.Red)
@@ -96,8 +86,13 @@ fun Palette(
             animationState = animationState.value,
             onToggleAnimationState = { animationState.value = !animationState.value }
         )
-        ColorWheel(innerRadius, colorFirstRow, colorLength, animationState.value,modifier)
-        ColorWheel(innerRadius + colorLength + 400f, color2Row, colorLength,animationState.value, modifier)
+        ColorWheel(
+            innerRadius,
+            list,
+            colorLength,
+            animationState.value,
+            modifier,
+            2f)
     }
 
 

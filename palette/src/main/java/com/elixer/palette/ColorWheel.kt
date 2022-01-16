@@ -3,42 +3,52 @@ package com.elixer.palette
 import androidx.compose.foundation.layout.size
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.Color.Companion.Green
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.elixer.palette.canvas.ColorCanvas
+import com.elixer.palette.canvas.Swatch
 
 @Composable
 fun ColorWheel(
     innerRadius: Float,
-
-    colorRow: List<Color>,
-    colorLength: Float,
+    swatches: List<List<Color>>,
+    strokeWidth: Float,
     isDisplayed: Boolean,
-    modifier: Modifier
+    modifier: Modifier,
+    spacer: Float = 0f
 ) {
 
     var startAngle = 0f
-    val degreeEach = 360f / colorRow.size
-
-    fun offset(width: Float, size: Float): Offset =
-        Offset(width / 2f - size / 2f, width / 2f - size / 2f)
+    val degreeEach = (360f - (swatches.size * spacer)) / (swatches.size)
 
 
-    for (item in colorRow) {
-        ColorCanvas(
-            innerRadius, colorLength, item, startAngle, degreeEach, isDisplayed, modifier
+    for (swatch in swatches) {
+        Swatch(
+            innerRadius = innerRadius,
+            colorSwatch = swatch,
+            strokeWidth = strokeWidth,
+            isDisplayed = isDisplayed,
+            modifier = modifier,
+            startingAngle = startAngle,
+            sweep = degreeEach,
+            spacer = spacer
         )
-        startAngle += degreeEach
+        startAngle += degreeEach + spacer
     }
+
+//    Swatch(innerRadius = innerRadius, colorSwatch = swatches[2], strokeWidth = strokeWidth, isDisplayed = isDisplayed, modifier = modifier, startingAngle = startAngle, sweep = 20f, spacer = 10f)
+
 }
 
 @Preview(showBackground = true, widthDp = 500, heightDp = 900)
 @Composable
 fun PreviewColorWheel() {
-    ColorWheel(500f, listOf(Green, Color.Blue, Color.Red), 100f,true, Modifier.size(500.dp, 900.dp))
-    ColorWheel(700f, listOf(Color.Magenta, Color.Blue, Color.Red), 50f, true,Modifier.size(500.dp, 900.dp))
-
+    ColorWheel(
+        innerRadius = 300f,
+        swatches = Presets.custom(),
+        strokeWidth = 10f,
+        isDisplayed = true,
+        modifier = Modifier.size(400.dp),
+        spacer = 0f
+    )
 }

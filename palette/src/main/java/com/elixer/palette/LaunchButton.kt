@@ -33,7 +33,7 @@ fun LaunchButton(
         } else {
             FloatingActionButton(
                 onClick = onToggleAnimationState,
-                backgroundColor = Color.White,
+                backgroundColor = Color.LightGray,
                 contentColor = Color.White,
             ) {
                 Text("Unfold")
