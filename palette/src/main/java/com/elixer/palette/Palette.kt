@@ -71,10 +71,7 @@ fun Palette(
     ) {
 
 
-        LaunchButton(
-            animationState = animationState.value,
-            onToggleAnimationState = { animationState.value = !animationState.value }
-        )
+
         ColorWheel(
             innerRadius,
             list,
@@ -82,6 +79,10 @@ fun Palette(
             animationState.value,
             Modifier.size(size = maxHeight),
             2f)
+        LaunchButton(
+            animationState = animationState.value,
+            onToggleAnimationState = { animationState.value = !animationState.value }
+        )
     }
 
 

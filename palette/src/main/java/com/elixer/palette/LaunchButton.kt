@@ -1,5 +1,6 @@
 package com.elixer.palette
 
+import androidx.compose.animation.animateColorAsState
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.Button
 import androidx.compose.material.FloatingActionButton
@@ -9,35 +10,33 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 
 @Composable
 fun LaunchButton(
     animationState: Boolean,
     onToggleAnimationState: () -> Unit,
+    modifier: Modifier = Modifier.size(80.dp)
 ) {
+
+    val animatedColor = animateColorAsState(if (animationState) Color.Black else Color.LightGray)
+    val text = if (animationState) "Fold" else "Unfold"
+
     Box(
         modifier = Modifier
             .fillMaxWidth()
             .fillMaxHeight()
             .padding(16.dp),
-       contentAlignment = Alignment.Center
+        contentAlignment = Alignment.Center
     ) {
-        if (animationState) {
-            FloatingActionButton(
-                onClick = onToggleAnimationState,
-                backgroundColor = Color.Black,
-                contentColor = Color.White,
-            ) {
-                Text("Fold")
-            }
-        } else {
-            FloatingActionButton(
-                onClick = onToggleAnimationState,
-                backgroundColor = Color.LightGray,
-                contentColor = Color.White,
-            ) {
-                Text("Unfold")
-            }
+
+        FloatingActionButton(
+            onClick = onToggleAnimationState,
+            backgroundColor = animatedColor.value,
+            contentColor = Color.White,
+            modifier = modifier
+        ) {
+            Text(text)
         }
     }
 }
