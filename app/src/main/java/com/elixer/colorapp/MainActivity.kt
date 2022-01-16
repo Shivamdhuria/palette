@@ -45,11 +45,15 @@ class MainActivity : ComponentActivity() {
                         Palette(
                             Color.Green, buttonSize = 80.dp,
                             Presets.custom(),
-                            modifier = Modifier.size(400.dp,400.dp)
+                            modifier = Modifier
+                                .size(1000.dp,1000.dp)
+                                .offset(0.dp,250.dp),
+                            innerRadius = 900f,
+                            colorStroke = 150f
                         )
 
                         Column {
-//                            Heading()
+                            Heading()
 //                            NewPalette(
 //                                size = 300.dp,
 //                                modifier = Modifier

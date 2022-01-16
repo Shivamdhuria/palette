@@ -3,29 +3,18 @@ package com.elixer.palette
 import android.graphics.Rect
 import android.util.Log
 import androidx.compose.animation.core.*
-import androidx.compose.foundation.Canvas
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
-import androidx.compose.material.FloatingActionButton
-import androidx.compose.material.Icon
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Add
 import androidx.compose.runtime.*
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clipToBounds
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Color.Companion.Blue
-import androidx.compose.ui.graphics.Color.Companion.Green
-import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
-import com.elixer.palette.canvas.ColorCanvas
 import com.elixer.palette.models.ColorBox
-import kotlinx.coroutines.sync.Mutex
 
 @OptIn(ExperimentalComposeUiApi::class)
 @Composable
@@ -34,7 +23,7 @@ fun Palette(
     buttonSize: Dp = 80.dp,
     list: List<List<Color>>,
     innerRadius: Float = 400f,
-    colorLength: Float = 80f,
+    colorStroke: Float = 80f,
     modifier: Modifier
 ) {
     //New
@@ -72,13 +61,13 @@ fun Palette(
 
     BoxWithConstraints(modifier = modifier
         .aspectRatio(1f)
-        .background(Color.Red)
+//color
         .onGloballyPositioned { it ->
             centerX = it.size.width / 2f
             centerY = it.size.height / 2f
             Log.e("centerX $centerX", "centerY,$centerY")
         }
-        .clipToBounds()
+//        .clipToBounds()
     ) {
 
 
@@ -89,9 +78,9 @@ fun Palette(
         ColorWheel(
             innerRadius,
             list,
-            colorLength,
+            colorStroke,
             animationState.value,
-            modifier,
+            Modifier.size(size = maxHeight),
             2f)
     }
 
