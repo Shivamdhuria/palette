@@ -25,18 +25,18 @@ fun LaunchButton(
         if (animationState) {
             FloatingActionButton(
                 onClick = onToggleAnimationState,
-                backgroundColor = Color.Red,
+                backgroundColor = Color.Black,
                 contentColor = Color.White,
             ) {
-                Text("STOP")
+                Text("Fold")
             }
         } else {
             FloatingActionButton(
                 onClick = onToggleAnimationState,
-                backgroundColor = Color.Green,
+                backgroundColor = Color.White,
                 contentColor = Color.White,
             ) {
-                Text("LAUNCH")
+                Text("Unfold")
             }
         }
     }

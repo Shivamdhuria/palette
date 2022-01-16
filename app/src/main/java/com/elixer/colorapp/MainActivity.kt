@@ -42,30 +42,28 @@ class MainActivity : ComponentActivity() {
                 // A surface container using the 'background' color from the theme
                 Surface(modifier = Modifier.fillMaxSize(), color = MaterialTheme.colors.background) {
                     Box(modifier = Modifier.fillMaxSize()) {
-//                        Palette(
-//                            Color.Green, buttonSize = 80.dp,
-//                            Presets.custom(),
-//                            modifier = Modifier
-//                                .offset(100.dp,100.dp)
-//
-//                        )
+                        Palette(
+                            Color.Green, buttonSize = 80.dp,
+                            Presets.custom(),
+                            modifier = Modifier.size(400.dp,400.dp)
+                        )
 
                         Column {
 //                            Heading()
-                            NewPalette(
-                                size = 300.dp,
-                                modifier = Modifier
-                                    .offset(30.dp, 40.dp)
-                            )
+//                            NewPalette(
+//                                size = 300.dp,
+//                                modifier = Modifier
+//                                    .offset(30.dp, 40.dp)
+//                            )
 
-                            NewNewPalette(
-                                Color.Green, buttonSize = 90.dp,
-                                Presets.custom(),
-                                modifier = Modifier
-                                    .size(300.dp)
-                                    .offset(0.dp, 90.dp)
-
-                            )
+//                            NewNewPalette(
+//                                Color.Green, buttonSize = 90.dp,
+//                                Presets.custom(),
+//                                modifier = Modifier
+//                                    .size(300.dp)
+//                                    .offset(0.dp,70.dp)
+//
+//                            )
                         }
                     }
                 }

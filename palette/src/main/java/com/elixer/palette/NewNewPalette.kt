@@ -6,6 +6,9 @@ import androidx.compose.animation.core.*
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.material.Button
+import androidx.compose.material.ButtonDefaults
 import androidx.compose.material.FloatingActionButton
 import androidx.compose.material.Icon
 import androidx.compose.material.icons.Icons
@@ -27,6 +30,8 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.toSize
 import com.elixer.palette.models.ColorBox
+import com.elixer.palette.shape.ArchShape
+import com.elixer.palette.surface.ColorButton
 import kotlinx.coroutines.sync.Mutex
 
 @OptIn(ExperimentalComposeUiApi::class)
@@ -111,10 +116,12 @@ fun NewNewPalette(
             animationState = animationState.value,
             onToggleAnimationState = { animationState.value = !animationState.value }
         )
-        NewColorWheel(300f,
+        NewColorWheel(
+            300f,
             colorFirstRow,
             colorLength,
-            maxHeight)
+            maxHeight
+        )
 
     }
 
@@ -134,41 +141,46 @@ fun NewNewPalette(
 
 
 @Composable
-fun NewColorWheel(innerRadius: Float,
-                  colorRow: List<Color>,
-                  colorLength: Float,
-                  size: Dp) {
+fun NewColorWheel(
+    innerRadius: Float,
+    colorRow: List<Color>,
+    colorLength: Float,
+    maxHeight: Dp
+) {
 
+    Log.e("max heigt", maxHeight.toString())
     var startAngle = 0f
-    val degreeEach = 360f/colorRow.size
+    val degreeEach = 360f / colorRow.size
 
     fun offset(width: Float, size: Float): Offset =
         Offset(width / 2f - size / 2f, width / 2f - size / 2f)
 
-    Canvas(modifier = Modifier.size(size), onDraw = {
+    ColorButton(
+        onClick = { },
+        shape = ArchShape(300f,200f,0f,360f),
+        backgroundColor = colorRow[0]
+    ) {
 
-        for (item in colorRow) {
-            drawArc(
-                color = item,
-                startAngle = startAngle,
-                sweepAngle = degreeEach,
-                useCenter = false,
-                topLeft = offset(0f,0f),
-                style = Stroke(width = colorLength),
-                size = Size(innerRadius, innerRadius)
-            )
-            startAngle += degreeEach
-        }
-    })
+    }
+
+    ColorButton(
+        onClick = { },
+        shape = ArchShape(300f,200f,0f,360f),
+        backgroundColor = colorRow[0]
+    ) {
+
+    }
 }
 
 
 @Preview(showBackground = true, widthDp = 400, heightDp = 900)
 @Composable
 fun PreviewNewNewPalette() {
-    NewNewPalette(defaultColor = Blue,
-        modifier = Modifier.size(400.dp,400.dp),
+    NewNewPalette(
+        defaultColor = Blue,
+        modifier = Modifier.size(400.dp, 400.dp),
         list = Presets.custom(),
-        size = 100.dp)
+        size = 100.dp
+    )
 
 }
