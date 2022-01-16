@@ -58,11 +58,12 @@ class MainActivity : ComponentActivity() {
                                     .offset(30.dp, 40.dp)
                             )
 
-                            Palette(
-                                Color.Green, buttonSize = 80.dp,
+                            NewNewPalette(
+                                Color.Green, buttonSize = 90.dp,
                                 Presets.custom(),
                                 modifier = Modifier
-                                    .offset(100.dp, 100.dp)
+                                    .size(300.dp)
+                                    .offset(0.dp, 90.dp)
 
                             )
                         }

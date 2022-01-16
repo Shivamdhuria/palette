@@ -16,6 +16,7 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clipToBounds
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Color
@@ -64,7 +65,7 @@ fun NewPalette(
                 centerY = it.size.height / 2f
                 Log.e("centerX $centerX", "centerY,$centerY")
 
-            }
+            }.clipToBounds()
     ) {
 
         LaunchButton(
@@ -76,19 +77,25 @@ fun NewPalette(
             isColorVisible = animationState.value,
             maxWidth = maxWidth,
             maxHeight = maxHeight,
-            outerRadius = 300f,
-            innerRadius = 200f,
-            modifier = modifier
+            outerRadius = 410f,
+            innerRadius = 290f,
         )
 
-        ColorSingle(
-            isColorVisible = animationState.value,
-            maxWidth = maxWidth,
-            maxHeight = maxHeight,
-            outerRadius = 400f,
-            innerRadius = 300f,
-            modifier = modifier
-        )
+//        ColorSingle(
+//            isColorVisible = animationState.value,
+//            maxWidth = maxWidth,
+//            maxHeight = maxHeight,
+//            outerRadius = 240f,
+//            innerRadius = 200f,
+//        )
+//
+//        ColorSingle(
+//            isColorVisible = animationState.value,
+//            maxWidth = maxWidth,
+//            maxHeight = maxHeight,
+//            outerRadius = 150f,
+//            innerRadius = 140f,
+//        )
 
     }
 }
@@ -100,38 +107,33 @@ fun ColorSingle(
     maxHeight: Dp,
     outerRadius: Float,
     innerRadius: Float,
-    modifier: Modifier
 ) {
+
+
+    Log.e("maxWid $maxWidth","max He $maxHeight")
+    Log.e("outer $outerRadius","inner $innerRadius")
+    fun arcOffset(width: Float, size: Float): Offset =
+        Offset(width / 2f - size, width / 2f - size)
+
+
+    val nOffset = arcOffset(maxWidth.value,outerRadius)
+//    val x = maxHeight.value.dp/2
+    val x = 0.dp
+    val radius = outerRadius
+    Log.e("x"," $x")
+    Log.e("radius F"," $radius")
+    Log.e("radius Dp"," ${radius.dp}")
+
     ArchedButton(
         onClick = { },
-        modifier = modifier.aspectRatio(1f).offset(23.dp,63.dp),
+        modifier = Modifier.aspectRatio(1f)
+            .offset(x,x ),
         shape = ArchShape(outerRadius, innerRadius, 0f, 360f)
     ) {
 
     }
 }
 
-@Composable
-fun Color(isColorVisible: Boolean, maxWidth: Dp, maxHeight: Dp) {
-    val offsetY = remember { Animatable(0f) }
-    val offsetX = remember { Animatable(0f) }
-    val coroutineScope = rememberCoroutineScope()
-
-    val offsetV: Offset by animateOffsetAsState(Offset(if (isColorVisible) 50f else 0f, if (isColorVisible) 50f else 0f))
-
-
-    Button(
-        onClick = {}, modifier = Modifier
-            .height(50.dp)
-            .aspectRatio(1f)
-            .offset(offsetV.x.dp, offsetV.y.dp),
-        shape = CustomShape(),
-        colors = ButtonDefaults.buttonColors(backgroundColor = Color.Yellow)
-    )
-    {
-
-    }
-}
 
 
 @Preview(showBackground = true, widthDp = 500, heightDp = 900)
