@@ -77,7 +77,17 @@ fun NewPalette(
             maxWidth = maxWidth,
             maxHeight = maxHeight,
             outerRadius = 300f,
-            innerRadius = 250f
+            innerRadius = 200f,
+            modifier = modifier
+        )
+
+        ColorSingle(
+            isColorVisible = animationState.value,
+            maxWidth = maxWidth,
+            maxHeight = maxHeight,
+            outerRadius = 400f,
+            innerRadius = 300f,
+            modifier = modifier
         )
 
     }
@@ -90,10 +100,11 @@ fun ColorSingle(
     maxHeight: Dp,
     outerRadius: Float,
     innerRadius: Float,
+    modifier: Modifier
 ) {
     ArchedButton(
         onClick = { },
-        modifier = Modifier.aspectRatio(1f),
+        modifier = modifier.aspectRatio(1f).offset(23.dp,63.dp),
         shape = ArchShape(outerRadius, innerRadius, 0f, 360f)
     ) {
 
@@ -127,7 +138,7 @@ fun Color(isColorVisible: Boolean, maxWidth: Dp, maxHeight: Dp) {
 @Composable
 fun NewreviewPalette() {
     NewPalette(
-        size = 200.dp,
+        size = 500.dp,
         modifier = Modifier
             .offset(20.dp, 50.dp)
     )

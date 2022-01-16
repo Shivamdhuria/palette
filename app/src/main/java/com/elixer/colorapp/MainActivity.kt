@@ -49,15 +49,22 @@ class MainActivity : ComponentActivity() {
 //                                .offset(100.dp,100.dp)
 //
 //                        )
-                        NewPalette(
-                            size = 300.dp,
-                            modifier = Modifier
-                                .offset(30.dp, 40.dp)
-                        )
+
                         Column {
 //                            Heading()
+                            NewPalette(
+                                size = 300.dp,
+                                modifier = Modifier
+                                    .offset(30.dp, 40.dp)
+                            )
 
+                            Palette(
+                                Color.Green, buttonSize = 80.dp,
+                                Presets.custom(),
+                                modifier = Modifier
+                                    .offset(100.dp, 100.dp)
 
+                            )
                         }
                     }
                 }
