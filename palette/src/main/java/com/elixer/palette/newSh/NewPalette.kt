@@ -64,7 +64,7 @@ fun NewPalette(
         ColorSingleNew(
             innerRadius = 200f,
             strokeWidth = 300f,
-            color = Color.Black,
+            color = Color.Green,
             startAngle = 0f,
             sweep = 360f,
             isDisplayed = animationState.value,
