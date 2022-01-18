@@ -14,7 +14,7 @@ fun ColorWheel(
     swatches: List<List<Color>>,
     strokeWidth: Float,
     isDisplayed: Boolean,
-    modifier: Modifier,
+//    modifier: Modifier,
     spacer: Float = 0f
 ) {
 
@@ -28,7 +28,7 @@ fun ColorWheel(
             colorSwatch = swatch,
             strokeWidth = strokeWidth,
             isDisplayed = isDisplayed,
-            modifier = modifier,
+//            modifier = modifier,
             startingAngle = startAngle,
             sweep = degreeEach,
             spacer = spacer
@@ -48,7 +48,7 @@ fun PreviewColorWheel() {
         swatches = Presets.custom(),
         strokeWidth = 10f,
         isDisplayed = true,
-        modifier = Modifier.size(400.dp),
+//        modifier = Modifier.size(400.dp),
         spacer = 0f
     )
 }

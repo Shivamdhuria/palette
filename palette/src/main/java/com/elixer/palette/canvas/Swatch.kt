@@ -15,7 +15,7 @@ fun Swatch(
     colorSwatch: List<Color>,
     strokeWidth: Float,
     isDisplayed: Boolean,
-    modifier: Modifier,
+//    modifier: Modifier,
     startingAngle: Float,
     sweep: Float,
     spacer: Float = 0f
@@ -23,9 +23,7 @@ fun Swatch(
 
     var radius = innerRadius
     for (item in colorSwatch) {
-        ColorCanvas(
-            radius, strokeWidth, item, startingAngle, sweep, isDisplayed, modifier
-        )
+        ColorCanvas(radius, strokeWidth, item, startingAngle, sweep, isDisplayed)
         radius += strokeWidth + spacer
     }
 }
@@ -34,7 +32,7 @@ fun Swatch(
 @Composable
 fun PreviewSwatch() {
     Swatch(
-        300f, listOf(Green, Color.Blue, Color.Red), 100f, true, Modifier.size(500.dp, 900.dp),
+        300f, listOf(Green, Color.Blue, Color.Red), 100f, true,
         startingAngle = 270f, sweep = 30f, spacer = 140f
     )
 

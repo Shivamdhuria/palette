@@ -29,33 +29,6 @@ fun Palette(
     //New
     val animationState = remember { mutableStateOf(false) }
 
-
-    /**
-     * Color boxes to draw
-     */
-    val particles = remember { mutableStateOf(emptyList<ColorBox>()) }
-
-    //TODO: calculate this dynamically
-    val maxShadeSize = 10
-    var maxRadius: Float? = 0f
-
-    /**
-     * Area in which the particles are being drawn
-     */
-    val drawArea = remember { mutableStateOf(Rect()) }
-
-    fun offset(width: Float, size: Float): Offset =
-        Offset(width / 2f - size / 2f, width / 2f - size / 2f)
-
-    /**
-     * degree for each shade
-     */
-    val degreeEach = 360f / list.size
-
-    val animateFloat0 = remember { Animatable(0f) }
-    val animateFloat1 = remember { Animatable(0f) }
-    var touchX by remember { mutableStateOf(0f) }
-    var touchY by remember { mutableStateOf(0f) }
     var centerX by remember { mutableStateOf(0f) }
     var centerY by remember { mutableStateOf(0f) }
 
@@ -77,24 +50,12 @@ fun Palette(
             list,
             colorStroke,
             animationState.value,
-            Modifier.size(size = maxHeight),
+//            Modifier.size(size = maxHeight),
             2f)
         LaunchButton(
             animationState = animationState.value,
             onToggleAnimationState = { animationState.value = !animationState.value }
         )
-    }
-
-
-    /**
-     * contains  animatables for all shades
-     */
-    val animatables = mutableListOf<Animatable<Float, AnimationVector1D>>()
-
-    var degreeAddition = 0f
-    list.forEachIndexed { i, e ->
-        animatables.add(remember { Animatable(0f) })
-        degreeAddition += degreeEach
     }
 }
 

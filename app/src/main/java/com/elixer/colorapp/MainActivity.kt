@@ -3,61 +3,62 @@ package com.elixer.colorapp
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.compose.animation.core.Animatable
-import androidx.compose.animation.core.VectorConverter
-import androidx.compose.animation.core.tween
-import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
-import androidx.compose.material.Button
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Person
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.layout.onSizeChanged
-import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.compose.ui.unit.toSize
 import com.elixer.colorapp.ui.theme.ColorAppTheme
 import com.elixer.palette.*
-import kotlinx.coroutines.launch
+import com.elixer.palette.newSh.ColorSingleNew
+import com.elixer.palette.newSh.NewPalette
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
+            //New
+
+
             ColorAppTheme {
                 // A surface container using the 'background' color from the theme
                 Surface(modifier = Modifier.fillMaxSize(), color = MaterialTheme.colors.background) {
-                    Box(modifier = Modifier.fillMaxSize()) {
-                        Palette(
-                            Color.Green, buttonSize = 80.dp,
-                            Presets.custom(),
+                    BoxWithConstraints(modifier = Modifier.fillMaxSize()) {
+//                        ColorSingleNew(
+//                            innerRadius = 300f,
+//                            strokeWidth = 50f,
+//                            color = Color.Cyan,
+//                            startAngle = 0f,
+//                            sweep = 360f,
+//                            isDisplayed = true,
+//                        )
+//                        ColorSingleNew(
+//                            innerRadius = 400f,
+//                            strokeWidth = 50f,
+//                            color = Color.Green,
+//                            startAngle = 0f,
+//                            sweep = 360f,
+//                            isDisplayed = true,
+//                        )
+                        NewPalette(
+                            size = 400.dp,
                             modifier = Modifier
-                                .size(1000.dp,1000.dp)
-                                .offset(0.dp,250.dp),
-                            innerRadius = 900f,
-                            colorStroke = 150f
+                                .offset(0.dp, 0.dp)
                         )
 
-                        Column {
-                            Heading()
+                        Column() {
+//                            Heading()
+
 //                            NewPalette(
 //                                size = 300.dp,
 //                                modifier = Modifier
-//                                    .offset(30.dp, 40.dp)
+//                                    .offset(0.dp, 0.dp)
 //                            )
 
 //                            NewNewPalette(
