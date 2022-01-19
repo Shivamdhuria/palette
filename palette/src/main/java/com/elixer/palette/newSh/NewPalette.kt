@@ -53,18 +53,18 @@ fun NewPalette(
                 Log.e("centerX $centerX", "centerY,$centerY")
 
             }
-            .clipToBounds()
+//            .clipToBounds()
     ) {
 
 
         ColorSingleNew(
-            innerRadius = 160f,
+            innerRadius = 180f,
             strokeWidth = 30f,
             color = Color.Green,
             startAngle = 0f,
             sweep = 360f,
             isDisplayed = animationState.value,
-            totalSize = maxWidth
+            totalSize = centerX.dp
         )
         LaunchButton(
             animationState = animationState.value,

@@ -29,7 +29,7 @@ fun ColorSingleNew(
     val outerRadius = innerRadius + strokeWidth
 
     val radius: Float by animateFloatAsState(
-        targetValue = if (isDisplayed) innerRadius else 60f,
+        targetValue = if (isDisplayed) innerRadius else 90f,
         animationSpec = spring(
             dampingRatio = Spring.DampingRatioLowBouncy,
             stiffness = Spring.StiffnessVeryLow
@@ -38,7 +38,7 @@ fun ColorSingleNew(
 
 
     Log.e("outerRadius", outerRadius.toString())
-    Log.e("size", totalSize.toString())
+    Log.e("size", totalSize.value.toString())
 
     fun offset(width: Float, size: Float): Offset =
         Offset(width / 2f - size / 2f, width / 2f - size / 2f)
@@ -49,7 +49,24 @@ fun ColorSingleNew(
             Log.e("button Clicked", color.toArgb().toString())
         }, modifier = Modifier.size(800.dp, 500.dp),
         shape =
-        NArchShape(strokeWidth , radius,180f, 360f, 410f)
+        NArchShape(strokeWidth , radius,180f, 360f,
+//            totalSize.value/2 + outerRadius)
+            totalSize.value),
+
+    ) {
+
+    }
+
+
+    NArchedButton(
+        {
+            //Adding offset removed click
+            Log.e("button Clicked", color.toArgb().toString())
+        }, modifier = Modifier.size(800.dp, 500.dp),
+        shape =
+        NArchShape(10f , 00f,180f, 360f,
+//            totalSize.value/2 + outerRadius)
+            totalSize.value)
 
     ) {
 

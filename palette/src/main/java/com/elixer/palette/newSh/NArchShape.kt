@@ -39,7 +39,7 @@ class NArchShape(
 
         val pathOuter = Path().apply {
 
-            moveTo(outerRadius, outerRadius)
+            moveTo(startX, startY)
 
             //Outer arc cone
             val radius = outerRadius;
@@ -50,7 +50,7 @@ class NArchShape(
             val xOuterEnd = (startX + radius * cos(endingAngle)).toFloat()
             val yOuterEnd = (startY + radius * sin(endingAngle)).toFloat()
 
-            val rectOuter = Rect(-outerRecSide+offset, -outerRecSide+offset, outerRecSide+offset, outerRecSide+offset)
+            val rectOuter = Rect(-outerRadius + offset, -outerRadius + offset, outerRadius + offset, outerRadius + offset)
 
             lineTo(xOuterEnd, yOuterEnd)
             lineTo(xOuterStart, yOuterStart)
@@ -58,9 +58,11 @@ class NArchShape(
         }
 
         val pathInner = Path().apply {
-            moveTo(outerRadius, outerRadius)
+            moveTo(outerRadius + offset, outerRadius + offset)
 
-            val reactInner = Rect(difference, difference, difference + innerRecSide, difference + innerRecSide)
+//            val reactInner = Rect(-difference + offset, -difference + offset, difference + innerRecSide + offset, difference + innerRecSide + offset)
+
+            val reactInner = Rect(-innerRadius + offset, -innerRadius + offset, innerRadius + offset, innerRadius + offset)
 
             //inner arc cone
             val xInnerStart = (startX + innerRadius * cos(startingAngle)).toFloat()
@@ -73,7 +75,7 @@ class NArchShape(
             lineTo(xInnerStart, yInnerStart)
             addArc(reactInner, this@NArchShape.startingAngle, sweep)
         }
-//        return Outline.Generic(Path.combine(PathOperation.Difference, pathOuter, pathInner))
-        return Outline.Generic(pathOuter)
+        return Outline.Generic(Path.combine(PathOperation.Difference, pathOuter, pathInner))
+//        return Outline.Generic(pathOuter)
     }
 }
