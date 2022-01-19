@@ -56,10 +56,6 @@ fun NewPalette(
             .clipToBounds()
     ) {
 
-        LaunchButton(
-            animationState = animationState.value,
-            onToggleAnimationState = { animationState.value = !animationState.value }
-        )
 
         ColorSingleNew(
             innerRadius = 200f,
@@ -70,6 +66,11 @@ fun NewPalette(
             isDisplayed = animationState.value,
             totalSize = maxWidth
         )
+        LaunchButton(
+            animationState = animationState.value,
+            onToggleAnimationState = { animationState.value = !animationState.value }
+        )
+
 
 //        ColorSingle(
 //            isColorVisible = animationState.value,

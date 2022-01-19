@@ -70,6 +70,7 @@ class NArchShape(
             lineTo(xInnerStart, yInnerStart)
             addArc(reactInner, this@NArchShape.startingAngle, sweep)
         }
-        return Outline.Generic(Path.combine(PathOperation.Difference, pathOuter, pathInner))
+//        return Outline.Generic(Path.combine(PathOperation.Difference, pathOuter, pathInner))
+        return Outline.Generic(pathOuter)
     }
 }

@@ -18,7 +18,7 @@ import androidx.compose.ui.unit.dp
 @Composable
 fun ColorSingleNew(
     innerRadius: Float = 200f,
-    strokeWidth: Float = 250f,
+    strokeWidth: Float = 70f,
     color: Color,
     startAngle: Float,
     sweep: Float,
@@ -28,7 +28,7 @@ fun ColorSingleNew(
     val outerRadius = innerRadius + strokeWidth
 
     val radius: Float by animateFloatAsState(
-        targetValue = if (isDisplayed) outerRadius else 50f,
+        targetValue = if (isDisplayed) outerRadius else 300f,
         animationSpec = spring(
             dampingRatio = Spring.DampingRatioLowBouncy,
             stiffness = Spring.StiffnessVeryLow
@@ -60,7 +60,7 @@ fun ColorSingleNew(
         {
             Log.e("button Clicked", color.toArgb().toString())
         }, modifier = Modifier.size(800.dp, 500.dp),
-        shape = NArchShape(radius + strokeWidth, radius, 180f, 360f)
+        shape = NArchShape(radius , radius - strokeWidth, 180f, 360f)
 
     ) {
 
