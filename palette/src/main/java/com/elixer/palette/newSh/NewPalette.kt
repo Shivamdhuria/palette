@@ -52,7 +52,6 @@ fun NewPalette(
                 Log.e("centerX $centerX", "centerY,$centerY")
 
             }
-//            .clipToBounds()
     ) {
 
 
@@ -70,24 +69,6 @@ fun NewPalette(
             animationState = animationState.value,
             onToggleAnimationState = { animationState.value = !animationState.value }
         )
-
-
-//        ColorSingle(
-//            isColorVisible = animationState.value,
-//            maxWidth = maxWidth,
-//            maxHeight = maxHeight,
-//            outerRadius = 240f,
-//            innerRadius = 200f,
-//        )
-//
-//        ColorSingle(
-//            isColorVisible = animationState.value,
-//            maxWidth = maxWidth,
-//            maxHeight = maxHeight,
-//            outerRadius = 150f,
-//            innerRadius = 140f,
-//        )
-
     }
 }
 
