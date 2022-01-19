@@ -1,6 +1,5 @@
 package com.elixer.palette.newSh
 
-import androidx.compose.ui.geometry.CornerRadius
 import androidx.compose.ui.geometry.Rect
 import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Outline
@@ -17,7 +16,8 @@ class NArchShape(
     val innerRadius: Float = 200f,
     val startingAngle: Float = 250f,
     val sweep: Float = 40f,
-    val offset: Float = 0f
+    val centerX: Float = 0f,
+    val centerY:Float = 0f
 ) : Shape {
 
     override fun createOutline(size: Size, layoutDirection: LayoutDirection, density: Density): Outline {
@@ -27,8 +27,8 @@ class NArchShape(
         /**
          * Center of the circle
          */
-        val startX = outerRadius + offset;
-        val startY = outerRadius + offset;
+        val startX = outerRadius + centerX;
+        val startY = outerRadius + centerX;
 
         val outerRecSide = 2 * outerRadius
         val innerRecSide = 2 * innerRadius
@@ -50,7 +50,7 @@ class NArchShape(
             val xOuterEnd = (startX + radius * cos(endingAngle)).toFloat()
             val yOuterEnd = (startY + radius * sin(endingAngle)).toFloat()
 
-            val rectOuter = Rect(-outerRadius + offset, -outerRadius + offset, outerRadius + offset, outerRadius + offset)
+            val rectOuter = Rect(-outerRadius + centerX, -outerRadius + centerX, outerRadius + centerX, outerRadius + centerX)
 
             lineTo(xOuterEnd, yOuterEnd)
             lineTo(xOuterStart, yOuterStart)
@@ -58,11 +58,11 @@ class NArchShape(
         }
 
         val pathInner = Path().apply {
-            moveTo(outerRadius + offset, outerRadius + offset)
+            moveTo(outerRadius + centerX, outerRadius + centerX)
 
 //            val reactInner = Rect(-difference + offset, -difference + offset, difference + innerRecSide + offset, difference + innerRecSide + offset)
 
-            val reactInner = Rect(-innerRadius + offset, -innerRadius + offset, innerRadius + offset, innerRadius + offset)
+            val reactInner = Rect(-innerRadius + centerX, -innerRadius + centerX, innerRadius + centerX, innerRadius + centerX)
 
             //inner arc cone
             val xInnerStart = (startX + innerRadius * cos(startingAngle)).toFloat()

@@ -4,7 +4,6 @@ import android.util.Log
 import androidx.compose.animation.core.Spring
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.spring
-import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.size
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -24,7 +23,8 @@ fun ColorSingleNew(
     startAngle: Float,
     sweep: Float,
     isDisplayed: Boolean = true,
-    totalSize: Dp
+    centerX: Dp,
+    centerY:Dp
 ) {
     val outerRadius = innerRadius + strokeWidth
 
@@ -36,9 +36,8 @@ fun ColorSingleNew(
         )
     )
 
-
     Log.e("outerRadius", outerRadius.toString())
-    Log.e("size", totalSize.value.toString())
+    Log.e("size", centerX.value.toString())
 
     fun offset(width: Float, size: Float): Offset =
         Offset(width / 2f - size / 2f, width / 2f - size / 2f)
@@ -51,25 +50,8 @@ fun ColorSingleNew(
         shape =
         NArchShape(strokeWidth , radius,180f, 360f,
 //            totalSize.value/2 + outerRadius)
-            totalSize.value),
-
+            centerX.value, centerY.value),
     ) {
-
-    }
-
-
-    NArchedButton(
-        {
-            //Adding offset removed click
-            Log.e("button Clicked", color.toArgb().toString())
-        }, modifier = Modifier.size(800.dp, 500.dp),
-        shape =
-        NArchShape(10f , 00f,180f, 360f,
-//            totalSize.value/2 + outerRadius)
-            totalSize.value)
-
-    ) {
-
     }
 }
 
@@ -78,7 +60,7 @@ fun ColorSingleNew(
 fun PreviewColorSingle() {
     ColorSingleNew(
         color = Color.Black, startAngle = 0f, sweep = 360f,
-        isDisplayed = true, totalSize = 300.dp
+        isDisplayed = true, centerX = 300.dp, centerY = 0.dp
     )
 //    ColorCanvas(
 //        700f, 20f, Color.Blue, 180f, 270f, true, Modifier.size(500.dp, 900.dp)

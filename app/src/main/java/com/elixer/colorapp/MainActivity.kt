@@ -30,46 +30,12 @@ class MainActivity : ComponentActivity() {
                 // A surface container using the 'background' color from the theme
                 Surface(modifier = Modifier.fillMaxSize(), color = MaterialTheme.colors.background) {
                     BoxWithConstraints(modifier = Modifier.fillMaxSize()) {
-//                        ColorSingleNew(
-//                            innerRadius = 300f,
-//                            strokeWidth = 50f,
-//                            color = Color.Cyan,
-//                            startAngle = 0f,
-//                            sweep = 360f,
-//                            isDisplayed = true,
-//                        )
-//                        ColorSingleNew(
-//                            innerRadius = 400f,
-//                            strokeWidth = 50f,
-//                            color = Color.Green,
-//                            startAngle = 0f,
-//                            sweep = 360f,
-//                            isDisplayed = true,
-//                        )
+
                         NewPalette(
-                            size = 300.dp,
+                            size =200.dp,
                             modifier = Modifier
                                 .offset(40.dp, 180.dp)
                         )
-
-                        Column() {
-//                            Heading()
-
-//                            NewPalette(
-//                                size = 300.dp,
-//                                modifier = Modifier
-//                                    .offset(0.dp, 0.dp)
-//                            )
-
-//                            NewNewPalette(
-//                                Color.Green, buttonSize = 90.dp,
-//                                Presets.custom(),
-//                                modifier = Modifier
-//                                    .size(300.dp)
-//                                    .offset(0.dp,70.dp)
-//
-//                            )
-                        }
                     }
                 }
             }

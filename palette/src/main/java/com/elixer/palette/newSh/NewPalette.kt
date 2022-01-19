@@ -8,7 +8,6 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clipToBounds
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Color
@@ -64,7 +63,8 @@ fun NewPalette(
             startAngle = 0f,
             sweep = 360f,
             isDisplayed = animationState.value,
-            totalSize = centerX.dp
+            centerX = centerX.dp,
+            centerY = centerY.dp
         )
         LaunchButton(
             animationState = animationState.value,
