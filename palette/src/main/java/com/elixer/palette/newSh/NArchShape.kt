@@ -17,17 +17,18 @@ class NArchShape(
     val innerRadius: Float = 200f,
     val startingAngle: Float = 250f,
     val sweep: Float = 40f,
-    val offset :Float = 0f
+    val offset: Float = 0f
 ) : Shape {
 
     override fun createOutline(size: Size, layoutDirection: LayoutDirection, density: Density): Outline {
 
-        val outerRadius = innerRadius+strokeWidth
+        val outerRadius = innerRadius + strokeWidth
+
         /**
          * Center of the circle
          */
-        val startX = outerRadius;
-        val startY = outerRadius;
+        val startX = outerRadius + offset;
+        val startY = outerRadius + offset;
 
         val outerRecSide = 2 * outerRadius
         val innerRecSide = 2 * innerRadius

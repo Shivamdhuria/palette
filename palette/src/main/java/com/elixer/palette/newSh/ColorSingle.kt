@@ -29,7 +29,7 @@ fun ColorSingleNew(
     val outerRadius = innerRadius + strokeWidth
 
     val radius: Float by animateFloatAsState(
-        targetValue = if (isDisplayed) innerRadius else 20f,
+        targetValue = if (isDisplayed) innerRadius else 60f,
         animationSpec = spring(
             dampingRatio = Spring.DampingRatioLowBouncy,
             stiffness = Spring.StiffnessVeryLow
@@ -48,7 +48,8 @@ fun ColorSingleNew(
             //Adding offset removed click
             Log.e("button Clicked", color.toArgb().toString())
         }, modifier = Modifier.size(800.dp, 500.dp),
-        shape = NArchShape(radius , radius - strokeWidth, 180f, 360f)
+        shape =
+        NArchShape(strokeWidth , radius,180f, 360f, 400f)
 
     ) {
 

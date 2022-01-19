@@ -58,7 +58,7 @@ fun NewPalette(
 
 
         ColorSingleNew(
-            innerRadius = 120f,
+            innerRadius = 160f,
             strokeWidth = 30f,
             color = Color.Green,
             startAngle = 0f,
