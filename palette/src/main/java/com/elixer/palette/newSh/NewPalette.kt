@@ -58,8 +58,8 @@ fun NewPalette(
 
 
         ColorSingleNew(
-            innerRadius = 200f,
-            strokeWidth = 300f,
+            innerRadius = 120f,
+            strokeWidth = 30f,
             color = Color.Green,
             startAngle = 0f,
             sweep = 360f,

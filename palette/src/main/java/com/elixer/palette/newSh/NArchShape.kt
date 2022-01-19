@@ -13,14 +13,16 @@ import kotlin.math.cos
 import kotlin.math.sin
 
 class NArchShape(
-    val outerRadius: Float = 300f,
+    val strokeWidth: Float = 20f,
     val innerRadius: Float = 200f,
     val startingAngle: Float = 250f,
-    val sweep: Float = 40f
+    val sweep: Float = 40f,
+    val offset :Float = 0f
 ) : Shape {
 
     override fun createOutline(size: Size, layoutDirection: LayoutDirection, density: Density): Outline {
 
+        val outerRadius = innerRadius+strokeWidth
         /**
          * Center of the circle
          */

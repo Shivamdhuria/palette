@@ -49,7 +49,7 @@ class MainActivity : ComponentActivity() {
                         NewPalette(
                             size = 300.dp,
                             modifier = Modifier
-                                .offset(0.dp, 0.dp)
+                                .offset(40.dp, 180.dp)
                         )
 
                         Column() {
