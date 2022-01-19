@@ -5,6 +5,8 @@ import androidx.compose.animation.core.Spring
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.spring
 import androidx.compose.foundation.layout.size
+import androidx.compose.material.ButtonColors
+import androidx.compose.material.ButtonDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
@@ -47,8 +49,8 @@ fun ColorSingleNew(
             //Adding offset removed click
             Log.e("button Clicked", color.toArgb().toString())
         }, modifier = Modifier.size(800.dp, 500.dp),
-        shape =
-        NArchShape(strokeWidth , radius,180f, 360f,
+        colors = ButtonDefaults.buttonColors(color),
+        shape = NArchShape(strokeWidth , radius,180f, 360f,
 //            totalSize.value/2 + outerRadius)
             centerX.value, centerY.value),
     ) {

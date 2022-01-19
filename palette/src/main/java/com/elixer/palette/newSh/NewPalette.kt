@@ -56,9 +56,20 @@ fun NewPalette(
 
 
         ColorSingleNew(
-            innerRadius = 180f,
-            strokeWidth = 30f,
+            innerRadius = 200f,
+            strokeWidth = 60f,
             color = Color.Green,
+            startAngle = 0f,
+            sweep = 360f,
+            isDisplayed = animationState.value,
+            centerX = centerX.dp,
+            centerY = centerY.dp
+        )
+
+        ColorSingleNew(
+            innerRadius = 260f,
+            strokeWidth = 60f,
+            color = Color.Red,
             startAngle = 0f,
             sweep = 360f,
             isDisplayed = animationState.value,
