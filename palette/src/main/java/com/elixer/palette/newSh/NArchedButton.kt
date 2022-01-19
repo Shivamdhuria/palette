@@ -60,7 +60,7 @@ fun NArchedButton(
 fun Crazy() {
     NArchedButton(
         {  }, modifier = Modifier.size(200.dp,100.dp),
-        shape = ArchShape(400f,200f,180f,40f)
+        shape = ArchShape(400f,200f,180f,90f)
 
     ){
 

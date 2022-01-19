@@ -1,5 +1,6 @@
 package com.elixer.palette.newSh
 
+import androidx.compose.ui.geometry.CornerRadius
 import androidx.compose.ui.geometry.Rect
 import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Outline
@@ -12,8 +13,8 @@ import kotlin.math.cos
 import kotlin.math.sin
 
 class NArchShape(
+    val outerRadius: Float = 300f,
     val innerRadius: Float = 200f,
-    val strokeWidth: Float = 20f,
     val startingAngle: Float = 250f,
     val sweep: Float = 40f
 ) : Shape {
@@ -23,8 +24,6 @@ class NArchShape(
         /**
          * Center of the circle
          */
-
-        val outerRadius = innerRadius + strokeWidth
         val startX = outerRadius;
         val startY = outerRadius;
 
@@ -34,18 +33,6 @@ class NArchShape(
 
         val startingAngle = ((startingAngle) * Math.PI / 180)
         val endingAngle = ((this@NArchShape.startingAngle + sweep) * Math.PI / 180)
-
-//        val pathCircle = Path().apply {
-//            moveTo(0f, 0f)
-//            val rectOuter = Rect(0f, 0f, outerRecSide, outerRecSide)
-//            addArc(rectOuter, 0f, 360f)
-//        }
-
-        val pathCircle = Path().apply {
-            moveTo(outerRadius, outerRecSide)
-            val rectOuter = Rect(-outerRadius, -outerRadius, outerRecSide, outerRecSide)
-            addArc(rectOuter, 0f, 360f)
-        }
 
         val pathOuter = Path().apply {
 
@@ -83,7 +70,6 @@ class NArchShape(
             lineTo(xInnerStart, yInnerStart)
             addArc(reactInner, this@NArchShape.startingAngle, sweep)
         }
-
-        return Outline.Generic(pathCircle)
+        return Outline.Generic(Path.combine(PathOperation.Difference, pathOuter, pathInner))
     }
 }
