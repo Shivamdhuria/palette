@@ -49,7 +49,7 @@ fun ColorSingleNew(
             Log.e("button Clicked", color.toArgb().toString())
         }, modifier = Modifier.size(800.dp, 500.dp),
         shape =
-        NArchShape(strokeWidth , radius,180f, 360f, 400f)
+        NArchShape(strokeWidth , radius,180f, 360f, 410f)
 
     ) {
 
