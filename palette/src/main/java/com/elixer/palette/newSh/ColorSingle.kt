@@ -4,6 +4,7 @@ import android.util.Log
 import androidx.compose.animation.core.Spring
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.spring
+import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.size
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -17,7 +18,7 @@ import androidx.compose.ui.unit.dp
 
 @Composable
 fun ColorSingleNew(
-    innerRadius: Float = 200f,
+    innerRadius: Float = 100f,
     strokeWidth: Float = 70f,
     color: Color,
     startAngle: Float,
@@ -58,6 +59,7 @@ fun ColorSingleNew(
 
     NArchedButton(
         {
+            //Adding offset removed click
             Log.e("button Clicked", color.toArgb().toString())
         }, modifier = Modifier.size(800.dp, 500.dp),
         shape = NArchShape(radius , radius - strokeWidth, 180f, 360f)

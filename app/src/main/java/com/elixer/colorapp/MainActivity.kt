@@ -47,7 +47,7 @@ class MainActivity : ComponentActivity() {
 //                            isDisplayed = true,
 //                        )
                         NewPalette(
-                            size = 400.dp,
+                            size = 300.dp,
                             modifier = Modifier
                                 .offset(0.dp, 0.dp)
                         )

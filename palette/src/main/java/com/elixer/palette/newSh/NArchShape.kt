@@ -47,7 +47,7 @@ class NArchShape(
             val xOuterEnd = (startX + radius * cos(endingAngle)).toFloat()
             val yOuterEnd = (startY + radius * sin(endingAngle)).toFloat()
 
-            val rectOuter = Rect(0f, 0f, outerRecSide, outerRecSide)
+            val rectOuter = Rect(-outerRecSide, -outerRecSide, outerRecSide, outerRecSide)
 
             lineTo(xOuterEnd, yOuterEnd)
             lineTo(xOuterStart, yOuterStart)
