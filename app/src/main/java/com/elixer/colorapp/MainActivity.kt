@@ -91,7 +91,6 @@ private fun Heading() {
 @Composable
 fun Greeting(name: String) {
     Text(text = "Hello $name!")
-    ColorSwatches(list = listOf(Color.Blue, Color.Black))
 }
 
 @Preview(showBackground = true)
