@@ -16,7 +16,7 @@ import androidx.compose.ui.unit.sp
 fun LaunchButton(
     animationState: Boolean,
     onToggleAnimationState: () -> Unit,
-    modifier: Modifier = Modifier.size(80.dp)
+    modifier: Modifier = Modifier.size(50.dp)
 ) {
 
     val animatedColor = animateColorAsState(if (animationState) Color.Black else Color.LightGray)
@@ -26,7 +26,7 @@ fun LaunchButton(
         modifier = Modifier
             .fillMaxWidth()
             .fillMaxHeight()
-            .padding(16.dp),
+            .padding(8.dp),
         contentAlignment = Alignment.Center
     ) {
 
