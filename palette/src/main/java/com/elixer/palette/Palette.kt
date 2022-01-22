@@ -2,6 +2,7 @@ package com.elixer.palette
 
 
 import android.util.Log
+import androidx.compose.animation.animateColorAsState
 import androidx.compose.animation.core.*
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
@@ -25,6 +26,7 @@ import androidx.compose.ui.unit.dp
 import androidx.core.graphics.red
 import com.elixer.palette.geometry.Utils
 import com.elixer.palette.models.*
+import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalComposeUiApi::class)
 @Composable
@@ -34,18 +36,23 @@ fun Palette(
     list: List<List<Color>>,
     innerRadius: Float = 340f,
     colorStroke: Float = 120f,
-    modifier: Modifier
+    modifier: Modifier,
 ) {
-    //New
+    //Newl,
     val isPaletteDisplayed = remember { mutableStateOf(false) }
     val colorSelected = remember { mutableStateOf(defaultColor) }
 
+    val animatedColor = animateColorAsState(colorSelected.value)
+
+
     val showSelectedColorArc = remember { mutableStateOf(false) }
-    val selectedColor = remember { mutableStateOf(Color(0xFFF71010)) }
+    val coroutineScope = rememberCoroutineScope()
+
+
     val selectedArch = remember {
         mutableStateOf(
             ColorArch(
-                radius = 200f,
+                radius = 0f,
                 strokeWidth = 30f,
                 startingAngle = 240f,
                 sweep = 40f,
@@ -54,6 +61,17 @@ fun Palette(
             )
         )
     }
+
+    val selectedRadius: Float by animateFloatAsState(
+        targetValue = selectedArch.value.radius,
+        animationSpec = tween(
+            durationMillis = 2000,
+            easing = LinearEasing
+        )
+    )
+
+    val newSeletedAnimatable = remember { Animatable(0f) }
+    val selectedColor = remember { mutableStateOf(Color(0xFFF71010)) }
 
 
     /**
@@ -96,10 +114,26 @@ fun Palette(
 
 
     fun onColorSelected(colorArc: ColorArch) {
-        colorSelected.value = colorArc.color
+        selectedArch.value = colorArc
+        showSelectedColorArc.value = true
         isPaletteDisplayed.value = false
         showSelectedColorArc.value = true
-        selectedArch.value = colorArc
+        coroutineScope.launch {
+            newSeletedAnimatable.snapTo(
+                colorArc.radius
+            )
+            newSeletedAnimatable.animateTo(
+                targetValue = 0f,
+                tween(
+                    durationMillis = 1000,
+                    easing = LinearEasing
+                )
+            )
+            colorSelected.value = colorArc.color
+        }
+
+
+
     }
 
     BoxWithConstraints(modifier = Modifier
@@ -166,9 +200,9 @@ fun Palette(
                 startAngle = selectedArch.value.startingAngle - 2f,
                 sweepAngle = selectedArch.value.sweep + 4f,
                 useCenter = false,
-                topLeft = Offset(centerX - selectedArch.value.radius, centerY - selectedArch.value.radius),
+                topLeft = Offset(centerX - newSeletedAnimatable.value, centerY - newSeletedAnimatable.value),
                 style = Stroke(width = selectedArch.value.strokeWidth + 30f),
-                size = Size(2 * selectedArch.value.radius, 2 * selectedArch.value.radius)
+                size = Size(2 * newSeletedAnimatable.value, 2 * newSeletedAnimatable.value)
             )
 
             drawArc(
@@ -176,16 +210,16 @@ fun Palette(
                 startAngle = selectedArch.value.startingAngle,
                 sweepAngle = selectedArch.value.sweep,
                 useCenter = false,
-                topLeft = Offset(centerX - selectedArch.value.radius, centerY - selectedArch.value.radius),
+                topLeft = Offset(centerX - newSeletedAnimatable.value, centerY - newSeletedAnimatable.value),
                 style = Stroke(width = selectedArch.value.strokeWidth),
-                size = Size(2 * selectedArch.value.radius, 2 * selectedArch.value.radius)
+                size = Size(2 * newSeletedAnimatable.value, 2 * newSeletedAnimatable.value)
             )
 
 
         }
         LaunchButton(
             animationState = isPaletteDisplayed.value,
-            selectedColor = colorSelected.value,
+            selectedColor = animatedColor,
             onToggleAnimationState = { isPaletteDisplayed.value = !isPaletteDisplayed.value }
         )
     }
