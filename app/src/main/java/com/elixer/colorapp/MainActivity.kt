@@ -43,7 +43,7 @@ class MainActivity : ComponentActivity() {
                 Surface(modifier = Modifier.fillMaxSize(), color = MaterialTheme.colors.background) {
                     Box(modifier = Modifier.fillMaxSize()) {
                         Palette(
-                            Color.Black, buttonSize = 80.dp,
+                            Color.DarkGray, buttonSize = 80.dp,
                             Presets.custom(),
                             modifier = Modifier
                                 .size(1000.dp,1000.dp)
@@ -81,8 +81,8 @@ private fun Heading() {
             .fillMaxSize()
             .padding(20.dp)
     ) {
-        Text(text = "palette", fontSize = 80.sp, color = Color.DarkGray, textAlign = TextAlign.Center)
-        Text(text = "color picker made with Jetpack Compose", fontSize = 15.sp, color = Color.Gray, textAlign = TextAlign.Center)
+        Text(text = "palette", fontSize = 80.sp, color = Color.White, textAlign = TextAlign.Center)
+        Text(text = "color picker made with Jetpack Compose", fontSize = 15.sp, color = Color.LightGray, textAlign = TextAlign.Center)
     }
 }
 

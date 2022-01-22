@@ -37,6 +37,8 @@ fun Palette(
     innerRadius: Float = 340f,
     colorStroke: Float = 120f,
     modifier: Modifier,
+    spacerRotation: Float = 0f,
+    spacerOutward: Float = 0f
 ) {
     //Newl,
     val isPaletteDisplayed = remember { mutableStateOf(false) }
@@ -62,16 +64,8 @@ fun Palette(
         )
     }
 
-    val selectedRadius: Float by animateFloatAsState(
-        targetValue = selectedArch.value.radius,
-        animationSpec = tween(
-            durationMillis = 2000,
-            easing = LinearEasing
-        )
-    )
 
     val newSeletedAnimatable = remember { Animatable(0f) }
-    val selectedColor = remember { mutableStateOf(Color(0xFFF71010)) }
 
 
     /**
@@ -87,7 +81,13 @@ fun Palette(
     var centerX by remember { mutableStateOf(0f) }
     var centerY by remember { mutableStateOf(0f) }
 
-    val colorWheel = ColorWheel(radius = innerRadius, swatches = list, strokeWidth = colorStroke, isDisplayed = isPaletteDisplayed.value)
+    val colorWheel = ColorWheel(
+        radius = innerRadius, swatches = list,
+        strokeWidth = colorStroke,
+        isDisplayed = isPaletteDisplayed.value,
+        spacerOutward = 2f,
+        spacerRotation = 2f
+    )
 
     Log.e("colorWheel", colorWheel.swatches.toString())
 
@@ -125,13 +125,12 @@ fun Palette(
             newSeletedAnimatable.animateTo(
                 targetValue = 0f,
                 tween(
-                    durationMillis = 1000,
+                    durationMillis = 700,
                     easing = LinearEasing
                 )
             )
             colorSelected.value = colorArc.color
         }
-
 
 
     }
@@ -148,31 +147,35 @@ fun Palette(
 
         Canvas(modifier = Modifier
             .fillMaxSize()
-            .background(Color.Black)
+            .background(Color(0xFF052F75))
             .pointerInput(Unit) {
                 detectTapGestures(
                     onTap = { tapOffset ->
+                        if (isPaletteDisplayed.value) {
 
-                        /**
-                         * Calculate angle between center and tapped offset
-                         */
+                            /**
+                             * Calculate angle between center and tapped offset
+                             */
 
-                        val angle = Utils.calculateAngle(centerX.dp.value, centerY.dp.value, tapOffset.x, tapOffset.y)
-                        Log.e("angle", angle.toString())
+                            val angle = Utils.calculateAngle(centerX.dp.value, centerY.dp.value, tapOffset.x, tapOffset.y)
+                            Log.e("angle", angle.toString())
 
-                        /**
-                         * Calculate distance between center and tapped offset
-                         */
-                        val distance = Utils.calculateDistance(centerX, centerY, tapOffset.x, tapOffset.y)
+                            /**
+                             * Calculate distance between center and tapped offset
+                             */
+                            val distance = Utils.calculateDistance(centerX, centerY, tapOffset.x, tapOffset.y)
 
-                        Log.e("distance", distance.toString())
+                            Log.e("distance", distance.toString())
 
-                        var index = 0
-                        colorArcsN.forEachIndexed { index, it ->
-                            if (it.contains(angle, distance)) {
-                                Log.e("Found", it.color.toArgb().red.toString())
-                                onColorSelected(it)
-                                return@forEachIndexed
+                            var index = 0
+                            colorArcsN.forEachIndexed { index, it ->
+                                if (it.contains(angle, distance)) {
+                                    Log.e("Found", it.color.toArgb().red.toString())
+                                    onColorSelected(it)
+                                    return@forEachIndexed
+                                } else {
+                                    isPaletteDisplayed.value = false
+                                }
                             }
                         }
                     }
