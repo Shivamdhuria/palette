@@ -13,9 +13,12 @@ data class ColorArc(
 
     val innerRadius: Float,
 
-    val strokeWidth: Float
+    val strokeWidth: Float,
 
-) {
+    val isDisplayed: Boolean,
+
+
+    ) {
 
     fun contains(angle: Float, distance: Float): Boolean {
         if (angle in startingAngle.rangeTo(startingAngle + sweep)) {

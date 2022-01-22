@@ -32,12 +32,12 @@ fun Palette(
     defaultColor: Color,
     buttonSize: Dp = 80.dp,
     list: List<List<Color>>,
-    innerRadius: Float = 440f,
+    innerRadius: Float = 340f,
     colorStroke: Float = 90f,
     modifier: Modifier
 ) {
     //New
-    val animationState = remember { mutableStateOf(true) }
+    val animationState = remember { mutableStateOf(false) }
 
 
     /**
@@ -57,25 +57,37 @@ fun Palette(
     dotRects.add(Rect(0f, 0f, 240f, 440f))
 
     val colorArcs = ArrayList<ColorArc>()
-//    colorArcs.add(
-//        ColorArc(
-//            0f, 360f,
-//            Color.Cyan,
-//            innerRadius,
-//            colorStroke,
-//        )
-//    )
+    colorArcs.add(
+        ColorArc(
+            0f, 360f,
+            Color.Cyan,
+            innerRadius,
+            colorStroke,
+            animationState.value
+        )
+    )
 
     colorArcs.add(
         ColorArc(
             0f, 360f,
-            Color.Red, innerRadius,
+            Color.Red,
+            innerRadius + colorStroke,
             colorStroke,
+            animationState.value
+
         )
     )
 
-    val radius: Float by animateFloatAsState(
-        targetValue = if (animationState.value) innerRadius else 0f,
+    val radiusOne: Float by animateFloatAsState(
+        targetValue = if (animationState.value) colorArcs[0].innerRadius else 0f,
+        animationSpec = spring(
+            dampingRatio = Spring.DampingRatioLowBouncy,
+            stiffness = Spring.StiffnessVeryLow
+        )
+    )
+
+    val radiusTwo: Float by animateFloatAsState(
+        targetValue = if (animationState.value) colorArcs[1].innerRadius else 0f,
         animationSpec = spring(
             dampingRatio = Spring.DampingRatioLowBouncy,
             stiffness = Spring.StiffnessVeryLow
@@ -140,38 +152,50 @@ fun Palette(
 //            )
             fun offset(width: Float, height: Float, size: Float): Offset =
                 Offset(width / 2f - size / 2f, height / 2f - size / 2f)
-            colorArcs.forEach {
+            colorArcs[0].let { it ->
                 drawArc(
                     color = it.color,
                     startAngle = it.startingAngle,
                     sweepAngle = it.sweep,
                     useCenter = false,
-                    topLeft = Offset(centerX - it.innerRadius, centerY - it.innerRadius),
+                    topLeft = Offset(centerX - radiusOne, centerY - radiusOne),
                     style = Stroke(width = it.strokeWidth),
-                    size = Size(2 * it.innerRadius, 2 * it.innerRadius)
+                    size = Size(2 * radiusOne, 2 * radiusOne)
                 )
             }
 
-            val rectRadius = 2 * radius + colorStroke
-            val rectRadiusInner = 2 * radius - colorStroke
+            colorArcs[1].let { it ->
+                drawArc(
+                    color = it.color,
+                    startAngle = it.startingAngle,
+                    sweepAngle = it.sweep,
+                    useCenter = false,
+                    topLeft = Offset(centerX - radiusTwo, centerY - radiusTwo),
+                    style = Stroke(width = it.strokeWidth),
+                    size = Size(2 * radiusTwo, 2 * radiusTwo)
+                )
+            }
 
-            drawRect(
-                color = Color(0x609D2933),
-                size = Size(rectRadius, rectRadius),
-                topLeft = Offset(centerX - rectRadius / 2, centerY - rectRadius / 2)
-            )
+//            val rectRadius = 2 * radius + colorStroke
+//            val rectRadiusInner = 2 * radius - colorStroke
 
-            drawRect(
-                color = Color(0x4D2196F3),
-                size = Size(rectRadiusInner, rectRadiusInner),
-                topLeft = Offset(centerX - rectRadiusInner / 2, centerY - rectRadiusInner / 2)
-            )
+//            drawRect(
+//                color = Color(0x609D2933),
+//                size = Size(rectRadius, rectRadius),
+//                topLeft = Offset(centerX - rectRadius / 2, centerY - rectRadius / 2)
+//            )
+//
+//            drawRect(
+//                color = Color(0x4D2196F3),
+//                size = Size(rectRadiusInner, rectRadiusInner),
+//                topLeft = Offset(centerX - rectRadiusInner / 2, centerY - rectRadiusInner / 2)
+//            )
         }
 
-//        LaunchButton(
-//            animationState = animationState.value,
-//            onToggleAnimationState = { animationState.value = !animationState.value }
-//        )
+        LaunchButton(
+            animationState = animationState.value,
+            onToggleAnimationState = { animationState.value = !animationState.value }
+        )
     }
 
 
