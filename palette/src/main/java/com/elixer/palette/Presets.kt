@@ -41,7 +41,7 @@ class Presets {
                 gray.map { getColor(it) },
                 blueGray.map { getColor(it) },
                 black.map { getColor(it) },
-                white.map { getColor(it) },
+//                white.map { getColor(it) },
             )
         }
 

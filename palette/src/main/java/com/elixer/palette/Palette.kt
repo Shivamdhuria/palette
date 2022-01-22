@@ -91,6 +91,14 @@ fun Palette(
 
     Log.e("colorWheel", colorWheel.swatches.toString())
 
+    val clrWheels = mutableListOf<List<List<Color>>>()
+    val circleNo = 0
+
+    val color1 = mutableListOf<Color?>()
+    list.forEach {
+        color1.add(it[0])
+    }
+    val degree = 360f / 34
     val swatches = colorWheel.toSwatches()
     val colorArcsN = mutableListOf<ColorArch>()
     Log.e("swatches", swatches.toString())
@@ -100,6 +108,19 @@ fun Palette(
     }
 
     val rad = mutableListOf<Float>()
+
+    var startingRad = 200f
+    for (i in 1..10) {
+        val radius: Float by animateFloatAsState(
+            targetValue = if (isPaletteDisplayed.value) startingRad else 0f,
+            animationSpec = spring(
+                dampingRatio = Spring.DampingRatioLowBouncy,
+                stiffness = Spring.StiffnessVeryLow
+            )
+        )
+        rad.add(radius)
+        startingRad = startingRad + 50f
+    }
 
     colorArcsN.forEachIndexed { index, it ->
         val radius: Float by animateFloatAsState(
@@ -112,6 +133,14 @@ fun Palette(
         rad.add(radius)
     }
 
+
+    val radius5: Float by animateFloatAsState(
+        targetValue = if (isPaletteDisplayed.value) 600f else 0f,
+        animationSpec = spring(
+            dampingRatio = Spring.DampingRatioLowBouncy,
+            stiffness = Spring.StiffnessVeryLow
+        )
+    )
 
     fun onColorSelected(colorArc: ColorArch) {
         selectedArch.value = colorArc
@@ -147,7 +176,7 @@ fun Palette(
 
         Canvas(modifier = Modifier
             .fillMaxSize()
-            .background(Color(0xFF052F75))
+//            .background(Color(0xFF052F75))
             .pointerInput(Unit) {
                 detectTapGestures(
                     onTap = { tapOffset ->
@@ -185,38 +214,62 @@ fun Palette(
             Log.e("max height ", maxHeight.value.toString())
 
 
-            colorArcsN.forEachIndexed { index, it ->
-                val radius = rad[index]
-                drawArc(
-                    color = it.color,
-                    startAngle = it.startingAngle,
-                    sweepAngle = it.sweep,
-                    useCenter = false,
-                    topLeft = Offset(centerX - radius, centerY - radius),
-                    style = Stroke(width = it.strokeWidth),
-                    size = Size(2 * radius, 2 * radius)
-                )
+//            colorArcsN.forEachIndexed { index, it ->
+//                val radius = rad[index]
+//                drawArc(
+//                    color = it.color,
+//                    startAngle = it.startingAngle,
+//                    sweepAngle = it.sweep,
+//                    useCenter = false,
+//                    topLeft = Offset(centerX - radius, centerY - radius),
+//                    style = Stroke(width = it.strokeWidth),
+//                    size = Size(2 * radius, 2 * radius)
+//                )
+//            }
+            val radius = 200f
+            Log.e("color1", color1.toString())
+            var startAngle = 0f
+
+            for(i in 1..10) {
+                color1.shuffle()
+                color1.forEach { color ->
+                    color?.let {
+                        drawArc(
+                            color = it,
+                            startAngle = startAngle,
+                            sweepAngle = degree,
+                            useCenter = false,
+                            topLeft = Offset(centerX - rad[i], centerY - rad[i]),
+                            style = Stroke(width = 100f),
+                            size = Size(2 * rad[i], 2 * rad[i])
+                        )
+
+                    }
+                    startAngle += degree
+                }
+                startAngle = 0f
             }
 
-            drawArc(
-                color = Color.White,
-                startAngle = selectedArch.value.startingAngle - 2f,
-                sweepAngle = selectedArch.value.sweep + 4f,
-                useCenter = false,
-                topLeft = Offset(centerX - newSeletedAnimatable.value, centerY - newSeletedAnimatable.value),
-                style = Stroke(width = selectedArch.value.strokeWidth + 30f),
-                size = Size(2 * newSeletedAnimatable.value, 2 * newSeletedAnimatable.value)
-            )
 
-            drawArc(
-                color = selectedArch.value.color,
-                startAngle = selectedArch.value.startingAngle,
-                sweepAngle = selectedArch.value.sweep,
-                useCenter = false,
-                topLeft = Offset(centerX - newSeletedAnimatable.value, centerY - newSeletedAnimatable.value),
-                style = Stroke(width = selectedArch.value.strokeWidth),
-                size = Size(2 * newSeletedAnimatable.value, 2 * newSeletedAnimatable.value)
-            )
+//            drawArc(
+//                color = Color.White,
+//                startAngle = selectedArch.value.startingAngle - 2f,
+//                sweepAngle = selectedArch.value.sweep + 4f,
+//                useCenter = false,
+//                topLeft = Offset(centerX - newSeletedAnimatable.value, centerY - newSeletedAnimatable.value),
+//                style = Stroke(width = selectedArch.value.strokeWidth + 30f),
+//                size = Size(2 * newSeletedAnimatable.value, 2 * newSeletedAnimatable.value)
+//            )
+//
+//            drawArc(
+//                color = selectedArch.value.color,
+//                startAngle = selectedArch.value.startingAngle,
+//                sweepAngle = selectedArch.value.sweep,
+//                useCenter = false,
+//                topLeft = Offset(centerX - newSeletedAnimatable.value, centerY - newSeletedAnimatable.value),
+//                style = Stroke(width = selectedArch.value.strokeWidth),
+//                size = Size(2 * newSeletedAnimatable.value, 2 * newSeletedAnimatable.value)
+//            )
 
 
         }
