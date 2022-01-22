@@ -13,7 +13,5 @@ package com.elixer.palette.models
  * @param alpha the transparency of the confetti between 0 - 255
  */
 data class ColorShade(
-    val x: Float,
-    val y: Float,
     val colors: List<ColorBox>
 )

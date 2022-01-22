@@ -14,30 +14,33 @@ import androidx.compose.ui.graphics.Color
  * @param shape the Shape of the confetti such as a circle, square of custom shape
  * @param alpha the transparency of the confetti between 0 - 255
  */
-data class Swatch(
+data class ColorWheel(
     val radius: Float,
+    val swatches: List<List<Color>>,
     val strokeWidth: Float,
-    val startingAngle: Float,
-    val sweep: Float,
-    val color: List<Color>,
-    val spacerOutward: Float
+    val isDisplayed: Boolean,
+    val spacerRotation: Float = 0f,
+    val spacerOutward: Float = 0f
 )
 
-fun Swatch.toColorArch(isSelected: Boolean): List<ColorArch> {
-    val list = mutableListOf<ColorArch>()
-    var startingRadius = radius
-    this.color.forEach {
-        list.add(
-            ColorArch(
-                radius = startingRadius,
+fun ColorWheel.toSwatches(): List<Swatch> {
+    var startAngle = 0f
+    val degreeEach = (360f - (swatches.size * spacerRotation)) / (swatches.size)
+
+    val swatchesList = mutableListOf<Swatch>()
+
+    swatches.forEach {
+        swatchesList.add(
+            Swatch(
+                radius = radius,
                 strokeWidth = strokeWidth,
-                startingAngle = startingAngle,
-                sweep = sweep,
-                color = it,
-                isSelected = isSelected
+                startingAngle = startAngle,
+                sweep = degreeEach,
+                spacerOutward = spacerOutward,
+                color = it
             )
         )
-        startingRadius += strokeWidth
+        startAngle += degreeEach + spacerOutward
     }
-    return list
+    return swatchesList
 }
