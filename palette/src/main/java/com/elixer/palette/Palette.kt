@@ -34,11 +34,12 @@ fun Palette(
     buttonSize: Dp = 80.dp,
     list: List<List<Color>>,
     innerRadius: Float = 340f,
-    colorStroke: Float = 90f,
+    colorStroke: Float = 120f,
     modifier: Modifier
 ) {
     //New
     val animationState = remember { mutableStateOf(false) }
+    val colorSelected = remember { mutableStateOf(defaultColor) }
 
 
     /**
@@ -121,6 +122,11 @@ fun Palette(
 //        )
 //    )
 
+    fun onColorSelected(color: Color) {
+        colorSelected.value = color
+    }
+
+
 
     BoxWithConstraints(modifier = Modifier
         .fillMaxSize()
@@ -157,6 +163,7 @@ fun Palette(
                         colorArcsN.forEachIndexed { index, it ->
                             if (it.contains(angle, distance)) {
                                 Log.e("Found", it.color.toArgb().red.toString())
+                                onColorSelected(it.color)
                                 return@forEachIndexed
                             }
                         }
@@ -180,7 +187,9 @@ fun Palette(
                 )
             }
 
-           Log.e("colorArchN", colorArcsN.toString())
+
+
+            Log.e("colorArchN", colorArcsN.toString())
             val radius = 200f
 //            drawArc(
 //                color = colorOne.color,
@@ -247,6 +256,7 @@ fun Palette(
 
         LaunchButton(
             animationState = animationState.value,
+            selectedColor = colorSelected.value,
             onToggleAnimationState = { animationState.value = !animationState.value }
         )
     }

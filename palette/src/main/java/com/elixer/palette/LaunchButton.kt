@@ -16,10 +16,12 @@ import androidx.compose.ui.unit.sp
 fun LaunchButton(
     animationState: Boolean,
     onToggleAnimationState: () -> Unit,
+    selectedColor: Color,
     modifier: Modifier = Modifier.size(80.dp)
 ) {
 
-    val animatedColor = animateColorAsState(if (animationState) Color.Black else Color.LightGray)
+//    val animatedColor = animateColorAsState(if (animationState) Color.Black else Color.LightGray)
+    val animatedColor = animateColorAsState(selectedColor)
     val text = if (animationState) "Fold" else "Unfold"
 
     Box(
