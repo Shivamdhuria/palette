@@ -19,9 +19,9 @@ data class ColorArc(
 
     fun contains(angle: Float, distance: Float): Boolean {
         if (angle in startingAngle.rangeTo(startingAngle + sweep)) {
-            Log.e("angle true", "${startingAngle}..$angle.. ${startingAngle+sweep}")
-            Log.e("distance idk", "${innerRadius}..$distance...${innerRadius+strokeWidth}")
-            return distance in innerRadius..(innerRadius + strokeWidth)
+            Log.e("angle true", "${startingAngle}..$angle.. ${startingAngle + sweep}")
+            Log.e("distance idk", "${innerRadius}..$distance...${innerRadius + strokeWidth}")
+            return distance in (innerRadius - strokeWidth)..(innerRadius + strokeWidth)
         } else return false
     }
 }

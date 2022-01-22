@@ -15,11 +15,13 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Color.Companion.Blue
 import androidx.compose.ui.graphics.drawscope.Fill
 import androidx.compose.ui.graphics.drawscope.Stroke
+import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import androidx.core.graphics.red
 import com.elixer.palette.geometry.ColorArc
 import com.elixer.palette.geometry.Utils
 import com.elixer.palette.models.ColorBox
@@ -30,8 +32,8 @@ fun Palette(
     defaultColor: Color,
     buttonSize: Dp = 80.dp,
     list: List<List<Color>>,
-    innerRadius: Float = 240f,
-    colorStroke: Float = 130f,
+    innerRadius: Float = 440f,
+    colorStroke: Float = 90f,
     modifier: Modifier
 ) {
     //New
@@ -55,11 +57,19 @@ fun Palette(
     dotRects.add(Rect(0f, 0f, 240f, 440f))
 
     val colorArcs = ArrayList<ColorArc>()
+//    colorArcs.add(
+//        ColorArc(
+//            0f, 360f,
+//            Color.Cyan,
+//            innerRadius,
+//            colorStroke,
+//        )
+//    )
+
     colorArcs.add(
         ColorArc(
-            160f, 40f,
-            Color.Yellow,
-            innerRadius,
+            0f, 360f,
+            Color.Red, innerRadius,
             colorStroke,
         )
     )
@@ -90,10 +100,6 @@ fun Palette(
                 detectTapGestures(
                     onTap = { tapOffset ->
 
-                        Log.e("tapOffset x", tapOffset.x.toString())
-                        Log.e("center x", centerX.toString())
-                        Log.e("diff x", (tapOffset.x - centerX.dp.value).toString())
-
                         /**
                          * Calculate angle between center and tapped offset
                          */
@@ -111,7 +117,7 @@ fun Palette(
                         var index = 0
                         colorArcs.forEachIndexed { index, it ->
                             if (it.contains(angle, distance)) {
-                                Log.e("Found", it.color.toString())
+                                Log.e("Found", it.color.toArgb().red.toString())
                                 return@forEachIndexed
                             }
                         }
@@ -121,7 +127,7 @@ fun Palette(
             Log.e("max width ", maxWidth.value.toString())
             Log.e("max height ", maxHeight.value.toString())
 
-//            drawRect(
+            //            drawRect(
 //                color = Color(0xFF9D2933),
 //                size = Size(
 //                    width = 240f,
@@ -140,19 +146,25 @@ fun Palette(
                     startAngle = it.startingAngle,
                     sweepAngle = it.sweep,
                     useCenter = false,
-//                topLeft = offset(maxWidth.value,maxHeight.value,100f),
-                    topLeft = Offset(centerX - radius , centerY - radius ),
+                    topLeft = Offset(centerX - it.innerRadius, centerY - it.innerRadius),
                     style = Stroke(width = it.strokeWidth),
-                    size = Size(2*radius, 2*radius)
+                    size = Size(2 * it.innerRadius, 2 * it.innerRadius)
                 )
             }
 
-            val rectRadius = 2*radius + colorStroke
+            val rectRadius = 2 * radius + colorStroke
+            val rectRadiusInner = 2 * radius - colorStroke
 
             drawRect(
                 color = Color(0x609D2933),
                 size = Size(rectRadius, rectRadius),
                 topLeft = Offset(centerX - rectRadius / 2, centerY - rectRadius / 2)
+            )
+
+            drawRect(
+                color = Color(0x4D2196F3),
+                size = Size(rectRadiusInner, rectRadiusInner),
+                topLeft = Offset(centerX - rectRadiusInner / 2, centerY - rectRadiusInner / 2)
             )
         }
 
