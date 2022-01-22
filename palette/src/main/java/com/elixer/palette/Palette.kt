@@ -12,7 +12,6 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
-import androidx.compose.ui.geometry.Rect
 import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Color.Companion.Blue
@@ -38,8 +37,23 @@ fun Palette(
     modifier: Modifier
 ) {
     //New
-    val animationState = remember { mutableStateOf(false) }
+    val isPaletteDisplayed = remember { mutableStateOf(false) }
     val colorSelected = remember { mutableStateOf(defaultColor) }
+
+    val showSelectedColorArc = remember { mutableStateOf(false) }
+    val selectedColor = remember { mutableStateOf(Color(0xFFF71010)) }
+    val selectedArch = remember {
+        mutableStateOf(
+            ColorArch(
+                radius = 200f,
+                strokeWidth = 30f,
+                startingAngle = 240f,
+                sweep = 40f,
+                color = Color.Cyan,
+                isSelected = false
+            )
+        )
+    }
 
 
     /**
@@ -55,7 +69,7 @@ fun Palette(
     var centerX by remember { mutableStateOf(0f) }
     var centerY by remember { mutableStateOf(0f) }
 
-    val colorWheel = ColorWheel(radius = innerRadius, swatches = list, strokeWidth = colorStroke, isDisplayed = animationState.value)
+    val colorWheel = ColorWheel(radius = innerRadius, swatches = list, strokeWidth = colorStroke, isDisplayed = isPaletteDisplayed.value)
 
     Log.e("colorWheel", colorWheel.swatches.toString())
 
@@ -64,14 +78,14 @@ fun Palette(
     Log.e("swatches", swatches.toString())
 
     swatches.forEach {
-        colorArcsN.addAll(it.toColorArch(animationState.value))
+        colorArcsN.addAll(it.toColorArch(isPaletteDisplayed.value))
     }
 
     val rad = mutableListOf<Float>()
 
     colorArcsN.forEachIndexed { index, it ->
         val radius: Float by animateFloatAsState(
-            targetValue = if (animationState.value) it.radius else 0f,
+            targetValue = if (isPaletteDisplayed.value) it.radius else 0f,
             animationSpec = spring(
                 dampingRatio = Spring.DampingRatioLowBouncy,
                 stiffness = Spring.StiffnessVeryLow
@@ -81,52 +95,12 @@ fun Palette(
     }
 
 
-    val dotRects = ArrayList<Rect>()
-    dotRects.add(Rect(0f, 0f, 240f, 440f))
-
-//    val colorArcs = ArrayList<ColorArc>()
-//    colorArcs.add(
-//        ColorArc(
-//            0f, 360f,
-//            Color.Cyan,
-//            innerRadius,
-//            colorStroke,
-//            animationState.value
-//        )
-//    )
-//
-//    colorArcs.add(
-//        ColorArc(
-//            0f, 360f,
-//            Color.Red,
-//            innerRadius + colorStroke,
-//            colorStroke,
-//            animationState.value
-//
-//        )
-//    )
-
-//    val radiusOne: Float by animateFloatAsState(
-//        targetValue = if (animationState.value) colorArcs[0].innerRadius else 0f,
-//        animationSpec = spring(
-//            dampingRatio = Spring.DampingRatioLowBouncy,
-//            stiffness = Spring.StiffnessVeryLow
-//        )
-//    )
-//
-//    val radiusTwo: Float by animateFloatAsState(
-//        targetValue = if (animationState.value) colorArcs[1].innerRadius else 0f,
-//        animationSpec = spring(
-//            dampingRatio = Spring.DampingRatioLowBouncy,
-//            stiffness = Spring.StiffnessVeryLow
-//        )
-//    )
-
-    fun onColorSelected(color: Color) {
-        colorSelected.value = color
+    fun onColorSelected(colorArc: ColorArch) {
+        colorSelected.value = colorArc.color
+        isPaletteDisplayed.value = false
+        showSelectedColorArc.value = true
+        selectedArch.value = colorArc
     }
-
-
 
     BoxWithConstraints(modifier = Modifier
         .fillMaxSize()
@@ -140,7 +114,7 @@ fun Palette(
 
         Canvas(modifier = Modifier
             .fillMaxSize()
-            .background(Color.LightGray)
+            .background(Color.Black)
             .pointerInput(Unit) {
                 detectTapGestures(
                     onTap = { tapOffset ->
@@ -163,7 +137,7 @@ fun Palette(
                         colorArcsN.forEachIndexed { index, it ->
                             if (it.contains(angle, distance)) {
                                 Log.e("Found", it.color.toArgb().red.toString())
-                                onColorSelected(it.color)
+                                onColorSelected(it)
                                 return@forEachIndexed
                             }
                         }
@@ -187,77 +161,32 @@ fun Palette(
                 )
             }
 
+            drawArc(
+                color = Color.White,
+                startAngle = selectedArch.value.startingAngle - 2f,
+                sweepAngle = selectedArch.value.sweep + 4f,
+                useCenter = false,
+                topLeft = Offset(centerX - selectedArch.value.radius, centerY - selectedArch.value.radius),
+                style = Stroke(width = selectedArch.value.strokeWidth + 30f),
+                size = Size(2 * selectedArch.value.radius, 2 * selectedArch.value.radius)
+            )
+
+            drawArc(
+                color = selectedArch.value.color,
+                startAngle = selectedArch.value.startingAngle,
+                sweepAngle = selectedArch.value.sweep,
+                useCenter = false,
+                topLeft = Offset(centerX - selectedArch.value.radius, centerY - selectedArch.value.radius),
+                style = Stroke(width = selectedArch.value.strokeWidth),
+                size = Size(2 * selectedArch.value.radius, 2 * selectedArch.value.radius)
+            )
 
 
-            Log.e("colorArchN", colorArcsN.toString())
-            val radius = 200f
-//            drawArc(
-//                color = colorOne.color,
-//                startAngle = colorOne.startingAngle,
-//                sweepAngle = colorOne.sweep,
-//                useCenter = false,
-//                topLeft = Offset(centerX - radius, centerY - radius),
-//                style = Stroke(width = colorOne.strokeWidth),
-//                size = Size(2 * radius, 2 * radius)
-//            )
-
-            //            drawRect(
-//                color = Color(0xFF9D2933),
-//                size = Size(
-//                    width = 240f,
-//                    height = 440f
-//                ),
-//                topLeft = Offset(
-//                    x = 240f,
-//                    y = 240f
-//                )
-//            )
-            fun offset(width: Float, height: Float, size: Float): Offset =
-                Offset(width / 2f - size / 2f, height / 2f - size / 2f)
-//            colorArcs[0].let { it ->
-//                drawArc(
-//                    color = it.color,
-//                    startAngle = it.startingAngle,
-//                    sweepAngle = it.sweep,
-//                    useCenter = false,
-//                    topLeft = Offset(centerX - radiusOne, centerY - radiusOne),
-//                    style = Stroke(width = it.strokeWidth),
-//                    size = Size(2 * radiusOne, 2 * radiusOne)
-//                )
-//            }
-//
-//            colorArcs[1].let { it ->
-//                drawArc(
-//                    color = it.color,
-//                    startAngle = it.startingAngle,
-//                    sweepAngle = it.sweep,
-//                    useCenter = false,
-//                    topLeft = Offset(centerX - radiusTwo, centerY - radiusTwo),
-//                    style = Stroke(width = it.strokeWidth),
-//                    size = Size(2 * radiusTwo, 2 * radiusTwo)
-//                )
-//            }
-
-//            val rectRadius = 2 * radius + colorStroke
-//            val rectRadiusInner = 2 * radius - colorStroke
-
-//            drawRect(
-//                color = Color(0x609D2933),
-//                size = Size(rectRadius, rectRadius),
-//                topLeft = Offset(centerX - rectRadius / 2, centerY - rectRadius / 2)
-//            )
-//
-//            drawRect(
-//                color = Color(0x4D2196F3),
-//                size = Size(rectRadiusInner, rectRadiusInner),
-//                topLeft = Offset(centerX - rectRadiusInner / 2, centerY - rectRadiusInner / 2)
-//            )
         }
-
         LaunchButton(
-            animationState = animationState.value,
+            animationState = isPaletteDisplayed.value,
             selectedColor = colorSelected.value,
-            onToggleAnimationState = { animationState.value = !animationState.value }
+            onToggleAnimationState = { isPaletteDisplayed.value = !isPaletteDisplayed.value }
         )
     }
 
