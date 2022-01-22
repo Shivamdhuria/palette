@@ -40,7 +40,7 @@ fun ColorWheel.toSwatches(): List<Swatch> {
                 color = it
             )
         )
-        startAngle += degreeEach + spacerOutward
+        startAngle += degreeEach + spacerRotation
     }
     return swatchesList
 }

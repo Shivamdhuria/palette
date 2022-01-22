@@ -37,8 +37,8 @@ fun Palette(
     innerRadius: Float = 340f,
     colorStroke: Float = 120f,
     modifier: Modifier,
-    spacerRotation: Float = 0f,
-    spacerOutward: Float = 0f
+    spacerRotation: Float = 1f,
+    spacerOutward: Float = 500f
 ) {
     //Newl,
     val isPaletteDisplayed = remember { mutableStateOf(false) }
@@ -85,8 +85,8 @@ fun Palette(
         radius = innerRadius, swatches = list,
         strokeWidth = colorStroke,
         isDisplayed = isPaletteDisplayed.value,
-        spacerOutward = 2f,
-        spacerRotation = 2f
+        spacerOutward = spacerOutward,
+        spacerRotation = spacerRotation
     )
 
     Log.e("colorWheel", colorWheel.swatches.toString())
