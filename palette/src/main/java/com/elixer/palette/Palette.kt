@@ -27,6 +27,7 @@ import androidx.core.graphics.red
 import com.elixer.palette.geometry.Utils
 import com.elixer.palette.models.*
 import kotlinx.coroutines.launch
+import java.util.*
 
 @OptIn(ExperimentalComposeUiApi::class)
 @Composable
@@ -95,9 +96,15 @@ fun Palette(
     val circleNo = 0
 
     val color1 = mutableListOf<Color?>()
+    val color2 = mutableListOf<Color?>()
     list.forEach {
         color1.add(it[0])
+        color2.add(it[0])
     }
+
+
+    Collections.rotate(color2, -5)
+
     val degree = 360f / 34
     val swatches = colorWheel.toSwatches()
     val colorArcsN = mutableListOf<ColorArch>()
@@ -230,27 +237,185 @@ fun Palette(
             Log.e("color1", color1.toString())
             var startAngle = 0f
 
-            for(i in 1..10) {
-                color1.shuffle()
-                color1.forEach { color ->
-                    color?.let {
-                        drawArc(
-                            color = it,
-                            startAngle = startAngle,
-                            sweepAngle = degree,
-                            useCenter = false,
-                            topLeft = Offset(centerX - rad[i], centerY - rad[i]),
-                            style = Stroke(width = 100f),
-                            size = Size(2 * rad[i], 2 * rad[i])
-                        )
 
-                    }
-                    startAngle += degree
+            color1.forEach { color ->
+                color?.let {
+                    drawArc(
+                        color = it,
+                        startAngle = startAngle,
+                        sweepAngle = degree,
+                        useCenter = false,
+                        topLeft = Offset(centerX - rad[0], centerY - rad[0]),
+                        style = Stroke(width = 100f),
+                        size = Size(2 * rad[0], 2 * rad[0])
+                    )
+
                 }
-                startAngle = 0f
+                startAngle += degree
             }
 
 
+            startAngle = 0f
+            color2.forEach { color ->
+                color?.let {
+                    drawArc(
+                        color = it,
+                        startAngle = startAngle,
+                        sweepAngle = degree,
+                        useCenter = false,
+                        topLeft = Offset(centerX - rad[1], centerY - rad[1]),
+                        style = Stroke(width = 100f),
+                        size = Size(2 * rad[1], 2 * rad[1])
+                    )
+
+                }
+                startAngle += degree
+            }
+
+            startAngle = 0f
+            color1.forEach { color ->
+                color?.let {
+                    drawArc(
+                        color = it,
+                        startAngle = startAngle,
+                        sweepAngle = degree,
+                        useCenter = false,
+                        topLeft = Offset(centerX - rad[2], centerY - rad[2]),
+                        style = Stroke(width = 100f),
+                        size = Size(2 * rad[2], 2 * rad[2])
+                    )
+
+                }
+                startAngle += degree
+            }
+
+
+            startAngle = 0f
+            color2.forEach { color ->
+                color?.let {
+                    drawArc(
+                        color = it,
+                        startAngle = startAngle,
+                        sweepAngle = degree,
+                        useCenter = false,
+                        topLeft = Offset(centerX - rad[3], centerY - rad[3]),
+                        style = Stroke(width = 100f),
+                        size = Size(2 * rad[3], 2 * rad[3])
+                    )
+
+                }
+                startAngle += degree
+            }
+
+
+            startAngle = 0f
+            color1.forEach { color ->
+                color?.let {
+                    drawArc(
+                        color = it,
+                        startAngle = startAngle,
+                        sweepAngle = degree,
+                        useCenter = false,
+                        topLeft = Offset(centerX - rad[5], centerY - rad[5]),
+                        style = Stroke(width = 100f),
+                        size = Size(2 * rad[5], 2 * rad[5])
+                    )
+
+                }
+                startAngle += degree
+            }
+
+
+
+            startAngle = 0f
+            color2.forEach { color ->
+                color?.let {
+                    drawArc(
+                        color = it,
+                        startAngle = startAngle,
+                        sweepAngle = degree,
+                        useCenter = false,
+                        topLeft = Offset(centerX - rad[6], centerY - rad[6]),
+                        style = Stroke(width = 100f),
+                        size = Size(2 * rad[6], 2 * rad[6])
+                    )
+
+                }
+                startAngle += degree
+            }
+
+
+
+            startAngle = 0f
+            color1.forEach { color ->
+                color?.let {
+                    drawArc(
+                        color = it,
+                        startAngle = startAngle,
+                        sweepAngle = degree,
+                        useCenter = false,
+                        topLeft = Offset(centerX - rad[7], centerY - rad[7]),
+                        style = Stroke(width = 100f),
+                        size = Size(2 * rad[7], 2 * rad[7])
+                    )
+
+                }
+                startAngle += degree
+            }
+
+
+            startAngle = 0f
+            color2.forEach { color ->
+                color?.let {
+                    drawArc(
+                        color = it,
+                        startAngle = startAngle,
+                        sweepAngle = degree,
+                        useCenter = false,
+                        topLeft = Offset(centerX - rad[8], centerY - rad[8]),
+                        style = Stroke(width = 100f),
+                        size = Size(2 * rad[8], 2 * rad[8])
+                    )
+
+                }
+                startAngle += degree
+            }
+
+
+            startAngle = 0f
+            color1.forEach { color ->
+                color?.let {
+                    drawArc(
+                        color = it,
+                        startAngle = startAngle,
+                        sweepAngle = degree,
+                        useCenter = false,
+                        topLeft = Offset(centerX - rad[9], centerY - rad[9]),
+                        style = Stroke(width = 100f),
+                        size = Size(2 * rad[9], 2 * rad[9])
+                    )
+
+                }
+                startAngle += degree
+            }
+
+
+            startAngle = 0f
+            color2.forEach { color ->
+                color?.let {
+                    drawArc(
+                        color = it,
+                        startAngle = startAngle,
+                        sweepAngle = degree,
+                        useCenter = false,
+                        topLeft = Offset(centerX - rad[10], centerY - rad[10]),
+                        style = Stroke(width = 100f),
+                        size = Size(2 * rad[10], 2 * rad[10])
+                    )
+
+                }
+                startAngle += degree
+            }
 //            drawArc(
 //                color = Color.White,
 //                startAngle = selectedArch.value.startingAngle - 2f,
@@ -272,25 +437,26 @@ fun Palette(
 //            )
 
 
-        }
-        LaunchButton(
-            animationState = isPaletteDisplayed.value,
-            selectedColor = animatedColor,
-            onToggleAnimationState = { isPaletteDisplayed.value = !isPaletteDisplayed.value }
-        )
     }
+    LaunchButton(
+        animationState = isPaletteDisplayed.value,
+        selectedColor = animatedColor,
+        onToggleAnimationState = { isPaletteDisplayed.value = !isPaletteDisplayed.value }
+    )
+}
 
 
-    /**
-     * contains  animatables for all shades
-     */
-    val animatables = mutableListOf<Animatable<Float, AnimationVector1D>>()
+/**
+ * contains  animatables for all shades
+ */
+val animatables = mutableListOf<Animatable<Float, AnimationVector1D>>()
 
-    var degreeAddition = 0f
-    list.forEachIndexed { i, e ->
-        animatables.add(remember { Animatable(0f) })
-        degreeAddition += degreeEach
-    }
+var degreeAddition = 0f
+list.forEachIndexed {
+    i, e ->
+    animatables.add(remember { Animatable(0f) })
+    degreeAddition += degreeEach
+}
 }
 
 
