@@ -15,8 +15,6 @@ data class ColorArch(
     fun contains(angle: Float, distance: Float, rotation: Float): Boolean {
 
         if (angle in ((startingAngle + rotation) % 360).rangeTo((startingAngle + sweep + rotation) % 360f)) {
-            Log.e("angle true", "${startingAngle}..$angle.. ${startingAngle + sweep}")
-            Log.e("distance idk", "${radius}..$distance...${radius + strokeWidth}")
             return distance in (radius - strokeWidth)..(radius + strokeWidth)
         } else return false
     }

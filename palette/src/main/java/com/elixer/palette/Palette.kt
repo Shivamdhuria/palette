@@ -5,7 +5,7 @@ import android.util.Log
 import androidx.compose.animation.animateColorAsState
 import androidx.compose.animation.core.*
 import androidx.compose.foundation.Canvas
-import androidx.compose.foundation.background
+import androidx.compose.foundation.gestures.detectDragGestures
 import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.fillMaxSize
@@ -18,16 +18,20 @@ import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Color.Companion.Blue
 import androidx.compose.ui.graphics.drawscope.Stroke
-import androidx.compose.ui.graphics.toArgb
+import androidx.compose.ui.input.pointer.consumeAllChanges
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
-import androidx.core.graphics.red
 import com.elixer.palette.geometry.Utils
-import com.elixer.palette.models.*
+import com.elixer.palette.models.ColorArch
+import com.elixer.palette.models.ColorWheel
+import com.elixer.palette.models.toColorArch
+import com.elixer.palette.models.toSwatches
 import kotlinx.coroutines.launch
+import kotlin.math.abs
+import kotlin.math.atan2
 
 @OptIn(ExperimentalComposeUiApi::class)
 @Composable
@@ -65,7 +69,7 @@ fun Palette(
 
     val newSeletedAnimatable = remember { Animatable(0f) }
 
-    var rotation by remember { mutableStateOf(900f) }
+    var rotation by remember { mutableStateOf(0f) }
 
     var centerX by remember { mutableStateOf(0f) }
     var centerY by remember { mutableStateOf(0f) }
@@ -86,6 +90,10 @@ fun Palette(
     }
 
     val rad = mutableListOf<Float>()
+
+    var rotationAngle by remember { mutableStateOf(0f) }
+    var dragStartedAngle by remember { mutableStateOf(0f) }
+    var oldAngle by remember { mutableStateOf(rotationAngle) }
 
     colorArcsN.forEachIndexed { index, it ->
         val radius: Float by animateFloatAsState(
@@ -118,17 +126,46 @@ fun Palette(
         }
     }
 
-    BoxWithConstraints(modifier = Modifier
-        .fillMaxSize()
-        .onGloballyPositioned { it ->
-            centerX = it.size.width / 2f
-            centerY = it.size.height / 2f
-        }
+    BoxWithConstraints(
+        modifier = Modifier
+            .fillMaxSize()
+            .onGloballyPositioned { it ->
+                centerX = it.size.width / 2f
+                centerY = it.size.height / 2f
+            }
+            .pointerInput(Unit) {
+                detectDragGestures(
+                    onDragStart = { offset ->
+                        dragStartedAngle = atan2(
+                            y = centerX - offset.x,
+                            x = centerY - offset.y
+                        ) * (180f / Math.PI.toFloat()) * -1
+                    },
+                    onDragEnd = {
+                        oldAngle = rotationAngle
+                    }
+                ) { change, _ ->
+
+                    val touchAngle = atan2(
+                        y = centerX - change.position.x,
+                        x = centerY - change.position.y
+                    ) * (180f / Math.PI.toFloat()) * -1
+
+                    rotationAngle = oldAngle + (touchAngle - dragStartedAngle)
+
+                    //we want to work with positive angles
+                    if (rotationAngle > 360) {
+                        rotationAngle -= 360
+                    } else if (rotationAngle < 0) {
+                        rotationAngle = 360 - abs(rotationAngle)
+                    }
+                }
+            }
+            .rotate(rotationAngle)
     ) {
 
         Canvas(modifier = Modifier
             .fillMaxSize()
-            .background(Color(0xFF052F75))
             .pointerInput(Unit) {
                 detectTapGestures(
                     onTap = { tapOffset ->
@@ -147,7 +184,6 @@ fun Palette(
 
                             colorArcsN.forEachIndexed { index, it ->
                                 if (it.contains(angle, distance, rotation)) {
-                                    Log.e("Found", it.color.toArgb().red.toString())
                                     onColorSelected(it)
                                     return@forEachIndexed
                                 } else {
@@ -155,10 +191,9 @@ fun Palette(
                                 }
                             }
                         }
-                    }
+                    },
                 )
             }
-            .rotate(rotation)
         ) {
 
             colorArcsN.forEachIndexed { index, it ->
