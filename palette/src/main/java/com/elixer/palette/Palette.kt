@@ -12,6 +12,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.*
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Color
@@ -40,16 +41,13 @@ fun Palette(
     spacerRotation: Float = 1f,
     spacerOutward: Float = 500f
 ) {
-    //Newl,
+
     val isPaletteDisplayed = remember { mutableStateOf(false) }
     val colorSelected = remember { mutableStateOf(defaultColor) }
 
     val animatedColor = animateColorAsState(colorSelected.value)
-
-
     val showSelectedColorArc = remember { mutableStateOf(false) }
     val coroutineScope = rememberCoroutineScope()
-
 
     val selectedArch = remember {
         mutableStateOf(
@@ -67,16 +65,7 @@ fun Palette(
 
     val newSeletedAnimatable = remember { Animatable(0f) }
 
-
-    /**
-     * Color boxes to draw
-     */
-    val particles = remember { mutableStateOf(emptyList<ColorBox>()) }
-
-    /**
-     * degree for each shade
-     */
-    val degreeEach = 360f / list.size
+    var rotation by remember { mutableStateOf(300f) }
 
     var centerX by remember { mutableStateOf(0f) }
     var centerY by remember { mutableStateOf(0f) }
@@ -89,11 +78,8 @@ fun Palette(
         spacerRotation = spacerRotation
     )
 
-    Log.e("colorWheel", colorWheel.swatches.toString())
-
     val swatches = colorWheel.toSwatches()
     val colorArcsN = mutableListOf<ColorArch>()
-    Log.e("swatches", swatches.toString())
 
     swatches.forEach {
         colorArcsN.addAll(it.toColorArch(isPaletteDisplayed.value))
@@ -111,7 +97,6 @@ fun Palette(
         )
         rad.add(radius)
     }
-
 
     fun onColorSelected(colorArc: ColorArch) {
         selectedArch.value = colorArc
@@ -131,8 +116,6 @@ fun Palette(
             )
             colorSelected.value = colorArc.color
         }
-
-
     }
 
     BoxWithConstraints(modifier = Modifier
@@ -142,7 +125,6 @@ fun Palette(
             centerY = it.size.height / 2f
             Log.e("centerX $centerX", "centerY,$centerY")
         }
-//        .clipToBounds()
     ) {
 
         Canvas(modifier = Modifier
@@ -158,16 +140,12 @@ fun Palette(
                              */
 
                             val angle = Utils.calculateAngle(centerX.dp.value, centerY.dp.value, tapOffset.x, tapOffset.y)
-                            Log.e("angle", angle.toString())
 
                             /**
                              * Calculate distance between center and tapped offset
                              */
                             val distance = Utils.calculateDistance(centerX, centerY, tapOffset.x, tapOffset.y)
 
-                            Log.e("distance", distance.toString())
-
-                            var index = 0
                             colorArcsN.forEachIndexed { index, it ->
                                 if (it.contains(angle, distance)) {
                                     Log.e("Found", it.color.toArgb().red.toString())
@@ -180,10 +158,9 @@ fun Palette(
                         }
                     }
                 )
-            }) {
-            Log.e("max width ", maxWidth.value.toString())
-            Log.e("max height ", maxHeight.value.toString())
-
+            }
+            .rotate(rotation)
+        ) {
 
             colorArcsN.forEachIndexed { index, it ->
                 val radius = rad[index]
@@ -217,26 +194,12 @@ fun Palette(
                 style = Stroke(width = selectedArch.value.strokeWidth),
                 size = Size(2 * newSeletedAnimatable.value, 2 * newSeletedAnimatable.value)
             )
-
-
         }
         LaunchButton(
             animationState = isPaletteDisplayed.value,
             selectedColor = animatedColor,
             onToggleAnimationState = { isPaletteDisplayed.value = !isPaletteDisplayed.value }
         )
-    }
-
-
-    /**
-     * contains  animatables for all shades
-     */
-    val animatables = mutableListOf<Animatable<Float, AnimationVector1D>>()
-
-    var degreeAddition = 0f
-    list.forEachIndexed { i, e ->
-        animatables.add(remember { Animatable(0f) })
-        degreeAddition += degreeEach
     }
 }
 
