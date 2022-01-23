@@ -12,8 +12,9 @@ data class ColorArch(
     val isSelected: Boolean
 ) {
 
-    fun contains(angle: Float, distance: Float): Boolean {
-        if (angle in startingAngle.rangeTo(startingAngle + sweep)) {
+    fun contains(angle: Float, distance: Float, rotation: Float): Boolean {
+
+        if (angle in ((startingAngle + rotation) % 360).rangeTo((startingAngle + sweep + rotation) % 360f)) {
             Log.e("angle true", "${startingAngle}..$angle.. ${startingAngle + sweep}")
             Log.e("distance idk", "${radius}..$distance...${radius + strokeWidth}")
             return distance in (radius - strokeWidth)..(radius + strokeWidth)

@@ -65,7 +65,7 @@ fun Palette(
 
     val newSeletedAnimatable = remember { Animatable(0f) }
 
-    var rotation by remember { mutableStateOf(300f) }
+    var rotation by remember { mutableStateOf(900f) }
 
     var centerX by remember { mutableStateOf(0f) }
     var centerY by remember { mutableStateOf(0f) }
@@ -123,7 +123,6 @@ fun Palette(
         .onGloballyPositioned { it ->
             centerX = it.size.width / 2f
             centerY = it.size.height / 2f
-            Log.e("centerX $centerX", "centerY,$centerY")
         }
     ) {
 
@@ -147,7 +146,7 @@ fun Palette(
                             val distance = Utils.calculateDistance(centerX, centerY, tapOffset.x, tapOffset.y)
 
                             colorArcsN.forEachIndexed { index, it ->
-                                if (it.contains(angle, distance)) {
+                                if (it.contains(angle, distance, rotation)) {
                                     Log.e("Found", it.color.toArgb().red.toString())
                                     onColorSelected(it)
                                     return@forEachIndexed
