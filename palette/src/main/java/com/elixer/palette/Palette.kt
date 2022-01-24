@@ -5,6 +5,7 @@ import android.util.Log
 import androidx.compose.animation.animateColorAsState
 import androidx.compose.animation.core.*
 import androidx.compose.foundation.Canvas
+import androidx.compose.foundation.background
 import androidx.compose.foundation.gestures.detectDragGestures
 import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.BoxWithConstraints
@@ -106,6 +107,14 @@ fun Palette(
         rad.add(radius)
     }
 
+    val rotationAnimatable: Float by animateFloatAsState(
+        targetValue = rotationAngle,
+        animationSpec = spring(
+            dampingRatio = Spring.DampingRatioLowBouncy,
+            stiffness = Spring.StiffnessVeryLow
+        )
+    )
+
     fun onColorSelected(colorArc: ColorArch) {
         selectedArch.value = colorArc
         showSelectedColorArc.value = true
@@ -161,11 +170,11 @@ fun Palette(
                     }
                 }
             }
-            .rotate(rotationAngle)
     ) {
 
         Canvas(modifier = Modifier
             .fillMaxSize()
+            .background(Color.Red)
             .pointerInput(Unit) {
                 detectTapGestures(
                     onTap = { tapOffset ->
@@ -183,7 +192,7 @@ fun Palette(
                             val distance = Utils.calculateDistance(centerX, centerY, tapOffset.x, tapOffset.y)
 
                             colorArcsN.forEachIndexed { index, it ->
-                                if (it.contains(angle, distance, rotation)) {
+                                if (it.contains(angle, distance, rotationAnimatable)) {
                                     onColorSelected(it)
                                     return@forEachIndexed
                                 } else {
@@ -200,7 +209,7 @@ fun Palette(
                 val radius = rad[index]
                 drawArc(
                     color = it.color,
-                    startAngle = it.startingAngle,
+                    startAngle = it.startingAngle + rotationAnimatable,
                     sweepAngle = it.sweep,
                     useCenter = false,
                     topLeft = Offset(centerX - radius, centerY - radius),
