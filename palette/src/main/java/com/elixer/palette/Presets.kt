@@ -42,6 +42,19 @@ class Presets {
                 blueGray.map { getColor(it) },
                 black.map { getColor(it) },
                 white.map { getColor(it) },
+
+                //
+                redOne.map { getColor(it) },
+                redTwo.map { getColor(it) },
+                pink.map { getColor(it) },
+                pinktwo.map { getColor(it) },
+                purple.map { getColor(it) },
+                purpleTwo.map { getColor(it) },
+                indigo.map { getColor(it) },
+                indigoTwo.map { getColor(it) },
+                blue.map { getColor(it) },
+                blueTwo.map { getColor(it) },
+                lightBlue.map { getColor(it) },
             )
         }
 

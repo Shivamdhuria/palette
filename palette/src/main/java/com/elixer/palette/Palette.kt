@@ -10,16 +10,16 @@ import androidx.compose.foundation.gestures.detectDragGestures
 import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.offset
+import androidx.compose.foundation.layout.size
 import androidx.compose.runtime.*
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Color.Companion.Blue
 import androidx.compose.ui.graphics.drawscope.Stroke
-import androidx.compose.ui.input.pointer.consumeAllChanges
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.tooling.preview.Preview
@@ -38,13 +38,15 @@ import kotlin.math.atan2
 @Composable
 fun Palette(
     defaultColor: Color,
-    buttonSize: Dp = 80.dp,
+    buttonSize: Dp = 100.dp,
     list: List<List<Color>>,
-    innerRadius: Float = 340f,
-    colorStroke: Float = 120f,
+    innerRadius: Float = 940f,
+    colorStroke: Float = 100f,
     modifier: Modifier,
     spacerRotation: Float = 1f,
-    spacerOutward: Float = 500f
+    spacerOutward: Float = 500f,
+    centerOffsetX: Float = 50f,
+    centerOffsetY: Float = 50f,
 ) {
 
     val isPaletteDisplayed = remember { mutableStateOf(false) }
@@ -74,6 +76,8 @@ fun Palette(
 
     var centerX by remember { mutableStateOf(0f) }
     var centerY by remember { mutableStateOf(0f) }
+
+    var buttonCenter by remember { mutableStateOf(0f) }
 
     val colorWheel = ColorWheel(
         radius = innerRadius, swatches = list,
@@ -138,10 +142,6 @@ fun Palette(
     BoxWithConstraints(
         modifier = Modifier
             .fillMaxSize()
-            .onGloballyPositioned { it ->
-                centerX = it.size.width / 2f
-                centerY = it.size.height / 2f
-            }
             .pointerInput(Unit) {
                 detectDragGestures(
                     onDragStart = { offset ->
@@ -171,6 +171,7 @@ fun Palette(
                 }
             }
     ) {
+
 
         Canvas(modifier = Modifier
             .fillMaxSize()
@@ -239,10 +240,18 @@ fun Palette(
             )
         }
         LaunchButton(
+            modifier = Modifier
+                .size(buttonSize)
+                .offset(centerOffsetX.dp - (buttonSize / 2), centerOffsetY.dp - (buttonSize / 2))
+                .onGloballyPositioned { it ->
+                    Log.e("on gloabally po W", buttonSize.toString())
+                },
             animationState = isPaletteDisplayed.value,
             selectedColor = animatedColor,
             onToggleAnimationState = { isPaletteDisplayed.value = !isPaletteDisplayed.value }
         )
+
+
     }
 }
 

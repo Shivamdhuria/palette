@@ -32,14 +32,15 @@ class MainActivity : ComponentActivity() {
                             .background(Color.Black)
                     ) {
                         Palette(
-                            Color.DarkGray, buttonSize = 80.dp,
-                            Presets.custom(),
+                            Color.DarkGray,
+                            list = Presets.custom(),
                             modifier = Modifier
                                 .size(1000.dp, 1000.dp)
-                                .offset(0.dp, 250.dp),
+
                         )
 
                         Column {
+                            Spacer(modifier = Modifier.weight(1.0f))
                             Heading()
                         }
                     }
