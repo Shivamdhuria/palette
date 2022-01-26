@@ -18,8 +18,10 @@ import androidx.compose.ui.unit.sp
 import com.elixer.colorapp.ui.theme.ColorAppTheme
 import com.elixer.palette.Palette
 import com.elixer.palette.Presets
-import com.elixer.palette.constraints.HorizontalAxis
-import com.elixer.palette.constraints.VerticalAxis
+import com.elixer.palette.constraints.HorizontalAlignment
+import com.elixer.palette.constraints.HorizontalAlignment.*
+import com.elixer.palette.constraints.VerticalAlignment
+import com.elixer.palette.constraints.VerticalAlignment.*
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -31,15 +33,86 @@ class MainActivity : ComponentActivity() {
                     Box(
                         modifier = Modifier
                             .fillMaxSize()
+                            .background(Color(0xFF1E1E1F))
 
                     ) {
                         Palette(
-                            Color.DarkGray, buttonSize = 80.dp,
-                            Presets.custom(),
-                            modifier = Modifier
-                                .size(1000.dp, 1000.dp)
-                                .offset(0.dp, 0.dp),
+                            defaultColor = Color(0xFF9CCC65),
+                            buttonSize = 190.dp,
+                            list = Presets.custom(),
+                            innerRadius = 1040f,
+                            strokeWidth = 120f,
+                            spacerRotation = 1f,
+                            spacerOutward = 500f,
+                            verticalAlignment = Top,
+                            horizontalAlignment = Start
                         )
+//
+//                        Palette(
+//                            Color(0xFF65CCCC),
+//                            buttonSize = 100.dp,
+//                            Presets.custom(),
+//                            verticalAlignment = Top,
+//                            horizontalAlignment = Center
+//                        )
+//
+//                        Palette(
+//                            Color(0xFF657BCC), buttonSize = 100.dp,
+//                            Presets.custom(),
+//                            verticalAlignment = Top,
+//                            horizontalAlignment = End
+//                        )
+//
+//                        //mid
+//                        Palette(
+//                            Color(0xFF8465CC),
+//                            buttonSize = 100.dp,
+//                            Presets.custom(),
+//                            verticalAlignment = Middle,
+//                            horizontalAlignment = Start
+//                        )
+//
+//                        Palette(
+//                            Color(0xFFCC65C2),
+//                            buttonSize = 100.dp,
+//                            Presets.custom(),
+//                            verticalAlignment = Middle,
+//                            horizontalAlignment = Center
+//                        )
+//
+//                        Palette(
+//                            Color(0xFF8465CC),
+//                            buttonSize = 100.dp,
+//                            Presets.custom(),
+//                            verticalAlignment = Middle,
+//                            horizontalAlignment = End
+//                        )
+//
+//                        //end
+//                        Palette(
+//                            Color(0xFFCC6565),
+//                            buttonSize = 100.dp,
+//                            Presets.custom(),
+//                            verticalAlignment = Bottom,
+//                            horizontalAlignment = Start
+//                        )
+//
+//                        Palette(
+//                            Color(0xFFCC9265),
+//                            buttonSize = 100.dp,
+//                            Presets.custom(),
+//                            verticalAlignment = Bottom,
+//                            horizontalAlignment = Center
+//                        )
+//
+//                        Palette(
+//                            Color(0xFFC2CC65),
+//                            buttonSize = 100.dp,
+//                            Presets.custom(),
+//                            verticalAlignment = Bottom,
+//                            horizontalAlignment = End
+//                        )
+
 
                         Column {
                             Heading()

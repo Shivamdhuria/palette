@@ -1,15 +1,15 @@
 package com.elixer.palette.constraints
 
-sealed class HorizontalAxis() {
+sealed class HorizontalAlignment() {
 
-    object Start : HorizontalAxis()
-    object Center : HorizontalAxis()
-    object End : HorizontalAxis()
+    object Start : HorizontalAlignment()
+    object Center : HorizontalAlignment()
+    object End : HorizontalAlignment()
 }
 
-sealed class VerticalAxis() {
+sealed class VerticalAlignment() {
 
-    object Top : VerticalAxis()
-    object Middle : VerticalAxis()
-    object Bottom : VerticalAxis()
+    object Top : VerticalAlignment()
+    object Middle : VerticalAlignment()
+    object Bottom : VerticalAlignment()
 }
