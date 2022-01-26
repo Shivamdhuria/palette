@@ -1,364 +1,282 @@
 package com.elixer.palette
 
-import android.graphics.Rect
-import android.util.Log
-import android.view.MotionEvent
-import android.view.MotionEvent.ACTION_DOWN
-import android.view.MotionEvent.ACTION_MOVE
+
+import androidx.compose.animation.animateColorAsState
 import androidx.compose.animation.core.*
 import androidx.compose.foundation.Canvas
-import androidx.compose.foundation.gestures.detectHorizontalDragGestures
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.gestures.detectDragGestures
+import androidx.compose.foundation.gestures.detectTapGestures
+import androidx.compose.foundation.layout.BoxWithConstraints
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.*
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Size
-import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Color.Companion.Blue
-import androidx.compose.ui.graphics.Color.Companion.Green
-import androidx.compose.ui.graphics.Color.Companion.Magenta
-import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.input.pointer.pointerInput
-import androidx.compose.ui.input.pointer.pointerInteropFilter
-import androidx.compose.ui.layout.boundsInWindow
 import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
-import kotlinx.coroutines.CoroutineScope
+import com.elixer.palette.constraints.HorizontalAlignment
+import com.elixer.palette.constraints.HorizontalAlignment.*
+import com.elixer.palette.constraints.VerticalAlignment
+import com.elixer.palette.constraints.VerticalAlignment.*
+import com.elixer.palette.geometry.Utils
+import com.elixer.palette.models.ColorArch
+import com.elixer.palette.models.ColorWheel
+import com.elixer.palette.models.toColorArch
+import com.elixer.palette.models.toSwatches
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.sync.Mutex
-import kotlinx.coroutines.sync.withLock
-import kotlin.math.PI
+import kotlin.math.abs
 import kotlin.math.atan2
 
 @OptIn(ExperimentalComposeUiApi::class)
 @Composable
 fun Palette(
     defaultColor: Color,
-    buttonSize: Dp = 80.dp,
+    buttonSize: Dp = 100.dp,
     list: List<List<Color>>,
-    innerRadius: Float = 900f,
-    colorLength: Float = 100f,
-    modifier: Modifier
+    innerRadius: Float = 440f,
+    strokeWidth: Float = 120f,
+    spacerRotation: Float = 1f,
+    spacerOutward: Float = 500f,
+    verticalAlignment: VerticalAlignment = Top,
+    horizontalAlignment: HorizontalAlignment = Start
 ) {
 
-    val boxSizeWidth = remember { mutableStateOf(0f) }
-    val boxSizeHeight = remember { mutableStateOf(0f) }
+    val isPaletteDisplayed = remember { mutableStateOf(false) }
+    val colorSelected = remember { mutableStateOf(defaultColor) }
+
+    val animatedColor = animateColorAsState(colorSelected.value)
+    val showSelectedColorArc = remember { mutableStateOf(false) }
     val coroutineScope = rememberCoroutineScope()
-    val rotationAnimatable = remember { Animatable(0f) }
+
+    val selectedArch = remember {
+        mutableStateOf(
+            ColorArch(
+                radius = 0f,
+                strokeWidth = 30f,
+                startingAngle = 240f,
+                sweep = 40f,
+                color = Color.Cyan,
+                isSelected = false
+            )
+        )
+    }
 
 
-    //TODO: calculate this dynamically
-    val maxShadeSize = 10
-    var maxRadius: Float? = 0f
+    val newSeletedAnimatable = remember { Animatable(0f) }
 
-    /**
-     * Area in which the particles are being drawn
-     */
-    val drawArea = remember { mutableStateOf(Rect()) }
+    var rotation by remember { mutableStateOf(0f) }
 
-    fun offset(width: Float, size: Float): Offset =
-        Offset(width / 2f - size / 2f, width / 2f - size / 2f)
-
-    /**
-     * degree for each shade
-     */
-    val degreeEach = 360f / list.size
-
-    val animateFloat0 = remember { Animatable(0f) }
-    val animateFloat1 = remember { Animatable(0f) }
-    var touchX by remember { mutableStateOf(0f) }
-    var touchY by remember { mutableStateOf(0f) }
     var centerX by remember { mutableStateOf(0f) }
     var centerY by remember { mutableStateOf(0f) }
 
-    val lock = Mutex()
+    val colorWheel = ColorWheel(
+        radius = innerRadius, swatches = list,
+        strokeWidth = strokeWidth,
+        isDisplayed = isPaletteDisplayed.value,
+        spacerOutward = spacerOutward,
+        spacerRotation = spacerRotation
+    )
 
+    val swatches = colorWheel.toSwatches()
+    val colorArcsN = mutableListOf<ColorArch>()
 
-    /**
-     * contains  animatables for all shades
-     */
-    val animatables = mutableListOf<Animatable<Float, AnimationVector1D>>()
-
-    var degreeAddition = 0f
-    list.forEachIndexed { i, e ->
-        animatables.add(remember { Animatable(0f) })
-        degreeAddition += degreeEach
+    swatches.forEach {
+        colorArcsN.addAll(it.toColorArch(isPaletteDisplayed.value))
     }
 
+    val rad = mutableListOf<Float>()
 
-    Log.e("degreeEach", degreeEach.toString())
+    var rotationAngle by remember { mutableStateOf(0f) }
+    var dragStartedAngle by remember { mutableStateOf(0f) }
+    var oldAngle by remember { mutableStateOf(rotationAngle) }
 
-    Canvas(
-        modifier = modifier
-            .onGloballyPositioned {
-                drawArea.value = Rect(0, 0, it.size.width, it.size.height)
-                val windowBounds = it.boundsInWindow()
-                centerX = windowBounds.size.width / 2f
-                centerY = windowBounds.size.height / 2f
+    colorArcsN.forEachIndexed { index, it ->
+        val radius: Float by animateFloatAsState(
+            targetValue = if (isPaletteDisplayed.value) it.radius else 0f,
+            animationSpec = spring(
+                dampingRatio = Spring.DampingRatioLowBouncy,
+                stiffness = Spring.StiffnessVeryLow
+            )
+        )
+        rad.add(radius)
+    }
+
+    val rotationAnimatable: Float by animateFloatAsState(
+        targetValue = rotationAngle,
+        animationSpec = spring(
+            dampingRatio = Spring.DampingRatioLowBouncy,
+            stiffness = Spring.StiffnessVeryLow
+        )
+    )
+
+    fun onColorSelected(colorArc: ColorArch) {
+        selectedArch.value = colorArc
+        showSelectedColorArc.value = true
+        isPaletteDisplayed.value = false
+        showSelectedColorArc.value = true
+        coroutineScope.launch {
+            newSeletedAnimatable.snapTo(
+                colorArc.radius
+            )
+            delay(300)
+            newSeletedAnimatable.animateTo(
+                targetValue = 0f,
+                tween(
+                    durationMillis = 1000,
+                    easing = LinearEasing
+                )
+            )
+            colorSelected.value = colorArc.color
+        }
+    }
+
+    BoxWithConstraints(
+        modifier = Modifier
+            .fillMaxSize()
+            .onGloballyPositioned { it ->
+//                centerX = it.size.width / 2f
+//                centerY = it.size.height / 2f
             }
-//            .rotate(rotationAnimatable.value)
-            .pointerInteropFilter { event ->
-                touchX = event.x
-                touchY = event.y
-                val angle = -atan2(centerX - touchX, centerY - touchY) * (180f / PI).toFloat()
 
-                when (event.action) {
-                    ACTION_DOWN, ACTION_MOVE -> {
-                        Log.e("angle", angle.toString())
-                        coroutineScope.launch {
-                            if (angle > 0) {
-                                rotationAnimatable.animateTo(
-                                    targetValue = rotationAnimatable.value + 15,
-                                    animationSpec = tween(durationMillis = 150, easing = LinearEasing)
-
-                                )
-                            } else {
-                                rotationAnimatable.animateTo(
-                                    targetValue = rotationAnimatable.value - 20,
-                                    animationSpec = tween(durationMillis = 100, easing = LinearEasing)
-
-                                )
-                            }
-                        }
-                        true
+            .pointerInput(Unit) {
+                detectDragGestures(
+                    onDragStart = { offset ->
+                        dragStartedAngle = atan2(
+                            y = centerX - offset.x,
+                            x = centerY - offset.y
+                        ) * (180f / Math.PI.toFloat()) * -1
+                    },
+                    onDragEnd = {
+                        oldAngle = rotationAngle
                     }
-                    else -> false
+                ) { change, _ ->
+
+                    val touchAngle = atan2(
+                        y = centerX - change.position.x,
+                        x = centerY - change.position.y
+                    ) * (180f / Math.PI.toFloat()) * -1
+
+                    rotationAngle = oldAngle + (touchAngle - dragStartedAngle)
+
+                    //we want to work with positive angles
+                    if (rotationAngle > 360) {
+                        rotationAngle -= 360
+                    } else if (rotationAngle < 0) {
+                        rotationAngle = 360 - abs(rotationAngle)
+                    }
                 }
             }
-
     ) {
-        val canvasWidth = size.width
-        val canvasHeight = size.height
 
-        maxRadius = canvasWidth / 2f
+        Canvas(modifier = Modifier
+            .fillMaxSize()
+            .pointerInput(Unit) {
+                detectTapGestures(
+                    onTap = { tapOffset ->
+                        if (isPaletteDisplayed.value) {
 
-        val shades = list
-        var radius = innerRadius
-        val degreeIncrement = degreeEach
-        var multiplier = 1
-        var startAngle = 0f
-        var startIndex = 0
-        shades.forEach { shade ->
+                            /**
+                             * Calculate angle between center and tapped offset
+                             */
 
-            shade.forEach {
+                            val angle = Utils.calculateAngle(centerX.dp.value, centerY.dp.value, tapOffset.x, tapOffset.y)
+
+                            /**
+                             * Calculate distance between center and tapped offset
+                             */
+                            val distance = Utils.calculateDistance(centerX, centerY, tapOffset.x, tapOffset.y)
+
+                            colorArcsN.forEachIndexed { index, it ->
+                                if (it.contains(angle, distance, rotationAnimatable)) {
+                                    onColorSelected(it)
+                                    return@forEachIndexed
+                                } else {
+                                    isPaletteDisplayed.value = false
+                                }
+                            }
+                        }
+                    },
+                )
+            }
+        ) {
+            centerX = getCenterXCoordinate(horizontalAlignment, size.width)
+            centerY = getCenterYCoordinate(verticalAlignment, size.height)
+
+            colorArcsN.forEachIndexed { index, it ->
+                val radius = rad[index]
                 drawArc(
-                    color = it,
-                    startAngle = startAngle,
-                    sweepAngle = degreeEach * animatables[startIndex].value,
+                    color = it.color,
+                    startAngle = it.startingAngle + rotationAnimatable,
+                    sweepAngle = it.sweep,
                     useCenter = false,
-                    topLeft = offset(canvasWidth, radius),
-                    style = Stroke(width = 100f),
-                    size = Size(radius, radius)
-                )
-                radius += colorLength + 100f
-            }
-            startAngle += degreeEach
-            radius = innerRadius
-            startIndex++
-        }
-
-//        val shadeOne = list[0]
-//        val shadeTwo = list[1]
-//        val shadeThree = list[2]
-//        shadeOne.forEach {
-//            drawArc(
-//                color = it,
-//                startAngle = 0f,
-//                sweepAngle = 10f * animatables[0].value,
-//                useCenter = false,
-//                topLeft = offset(canvasWidth, radius),
-//                style = Stroke(width = 100f),
-//                size = Size(radius, radius)
-//            )
-//            radius += colorLength + 100f
-//        }
-//        radius = innerRadius
-//        shadeTwo.forEach {
-//            drawArc(
-//                color = it,
-//                startAngle = 10f,
-//                sweepAngle = 10f * animatables[1].value,
-//                useCenter = false,
-//                topLeft = offset(canvasWidth, radius),
-//                style = Stroke(width = 100f),
-//                size = Size(radius, radius)
-//            )
-//            radius += colorLength + 100f
-//        }
-//        radius = innerRadius
-//        shadeThree.forEach {
-//            drawArc(
-//                color = it,
-//                startAngle = 20f,
-//                sweepAngle = 10f * animatables[2].value,
-//                useCenter = false,
-//                topLeft = offset(canvasWidth, radius),
-//                style = Stroke(width = 100f),
-//                size = Size(radius, radius)
-//            )
-//            radius += colorLength + 100f
-//        }
-
-        coroutineScope.launch {
-            animatables.forEach {
-                it.animateTo(
-                    targetValue = 1f,
-//                    animationSpec = tween(durationMillis = 10, easing = FastOutSlowInEasing)
-                    animationSpec = spring(
-                        dampingRatio = Spring.DampingRatioNoBouncy,
-                        stiffness = Spring.StiffnessHigh
-                    )
+                    topLeft = Offset(centerX - radius, centerY - radius),
+                    style = Stroke(width = it.strokeWidth),
+                    size = Size(2 * radius, 2 * radius)
                 )
             }
+
+            drawArc(
+                color = Color.White,
+                startAngle = selectedArch.value.startingAngle + rotationAnimatable - 2f,
+                sweepAngle = selectedArch.value.sweep + 4f,
+                useCenter = false,
+                topLeft = Offset(centerX - newSeletedAnimatable.value, centerY - newSeletedAnimatable.value),
+                style = Stroke(width = selectedArch.value.strokeWidth + 30f),
+                size = Size(2 * newSeletedAnimatable.value, 2 * newSeletedAnimatable.value)
+            )
+
+            drawArc(
+                color = selectedArch.value.color,
+                startAngle = selectedArch.value.startingAngle + rotationAnimatable,
+                sweepAngle = selectedArch.value.sweep,
+                useCenter = false,
+                topLeft = Offset(centerX - newSeletedAnimatable.value, centerY - newSeletedAnimatable.value),
+                style = Stroke(width = selectedArch.value.strokeWidth),
+                size = Size(2 * newSeletedAnimatable.value, 2 * newSeletedAnimatable.value)
+            )
         }
 
-//        coroutineScope.launch {
-//               animateFloat1.animateTo(
-//                    targetValue = 1f,
-//                    animationSpec = tween(durationMillis = 1000, easing = LinearEasing)
-//                )
-//            delay(1000)
-//
-//        }
-
-
-//        shades.forEach { shade ->
-//
-//            shade.forEach {
-//                drawArc(
-//                    color = it,
-//                    startAngle = 50f,
-//                    sweepAngle = 30f,
-//                    useCenter = false,
-//                    topLeft = offset(canvasWidth, radius),
-//                    style = Stroke(width = 100f),
-//                    size = Size(radius, radius)
-//                )
-//                radius += colorLength + 100f
-//            }
-//            startAngle += startAngle
-//            radius = innerRadius
-//            multiplier++
-//
-//
-//        }
-//        coroutineScope.launch {
-//            animateFloat0.animateTo(
-//                targetValue = degreeIncrement,
-//                animationSpec = tween(durationMillis = 1000, easing = LinearEasing)
-//            )
-//        }
-
-    }
-
-
-//        for (item in colors) {
-//            drawArc(
-//                color = item,
-//                startAngle = 0F,
-//                sweepAngle = 2 * degreeEach,
-//                useCenter = false,
-//                topLeft = offset(canvasWidth, radius),
-//                style = Stroke(width = 100f),
-//                size = Size(radius, radius)
-//            )
-//            radius += radiusIncrementEach + 100f
-//        }
-
-//        radius = 600f
-//        for (item in list[1]) {
-//            drawArc(
-//                color = item,
-//                startAngle = 2 * degreeEach,
-//                sweepAngle = 2 * degreeEach,
-//                useCenter = false,
-//                topLeft = offset(canvasWidth, radius),
-//                style = Stroke(width = 100f),
-//                size = Size(radius, radius)
-//            )
-//            radius += radiusIncrementEach + 100f
-//        }
-//
-//        radius = 600f
-//        for (item in list[2]) {
-//            drawArc(
-//                color = item,
-//                startAngle = 4 * degreeEach,
-//                sweepAngle = 2 * degreeEach,
-//                useCenter = false,
-//                topLeft = offset(canvasWidth, radius),
-//                style = Stroke(width = 100f),
-//                size = Size(radius, radius)
-//            )
-//            radius += radiusIncrementEach + 100f
-//        }
-
-//        radius = 600f
-//        for (item in list[3]) {
-//            drawArc(
-//                color = item,
-//                startAngle = 6 * degreeEach,
-//                sweepAngle = 2 * degreeEach,
-//                useCenter = false,
-//                topLeft = offset(canvasWidth, radius),
-//                style = Stroke(width = 100f),
-//                size = Size(radius, radius)
-//            )
-//            radius += radiusIncrementEach + 100f
-//        }
-//
-//        drawArc(
-//            color = Color(0xFF87DD77),
-//            startAngle = 0F,
-//            sweepAngle = 360f,
-//            useCenter = false,
-//            topLeft = offset(canvasWidth, 500f),
-//            style = Stroke(width = 100f),
-//            size = Size(500f, 500f)
-//        )
-//
-//        drawArc(
-//            color = Color(0xFF5F7ECC),
-//            startAngle = 0F,
-//            sweepAngle = 360f,
-//            useCenter = false,
-//            topLeft = offset(canvasWidth, 700f),
-//            style = Stroke(width = 100f),
-//            size = Size(700f, 700f)
-//        )
-//
-//        drawArc(
-//            color = Color(0xFF8C5FCC),
-//            startAngle = 0F,
-//            sweepAngle = degreeEach,
-//            useCenter = false,
-//            topLeft = offset(canvasWidth, 700f),
-//            style = Stroke(width = 100f),
-//            size = Size(700f, 700f)
-//        )
-}
-
-
-@Composable
-fun ColorBox() {
-    Canvas(modifier = Modifier.fillMaxSize(), onDraw = {
-        drawRect(
-            color = Green,
-            style = Stroke(50f)
+        LaunchButton(
+            animationState = isPaletteDisplayed.value,
+            selectedColor = animatedColor,
+            onToggleAnimationState = { isPaletteDisplayed.value = !isPaletteDisplayed.value },
+            offsetX = getCenterXCoordinate(horizontalAlignment, maxWidth.value).dp,
+            offsetY = getCenterYCoordinate(verticalAlignment, maxHeight.value).dp,
+            buttonSize = buttonSize
         )
-    })
-
+    }
 }
+
+fun getCenterXCoordinate(horizontalAxis: HorizontalAlignment, maxX: Float): Float {
+    return when (horizontalAxis) {
+        is Start -> 0f
+        is Center -> maxX / 2
+        is End -> maxX
+    }
+}
+
+fun getCenterYCoordinate(verticalAxis: VerticalAlignment, maxY: Float): Float {
+    return when (verticalAxis) {
+        is Top -> 0f
+        is Middle -> maxY / 2
+        is Bottom -> maxY
+    }
+}
+
 
 @Preview(showBackground = true, widthDp = 500, heightDp = 900)
 @Composable
 fun PreviewPalette() {
-    Palette(defaultColor = Blue, modifier = Modifier.fillMaxSize(), list = Presets.custom())
+    Palette(
+        defaultColor = Blue,
+        list = Presets.custom(),
+    )
 }

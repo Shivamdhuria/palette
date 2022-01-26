@@ -9,10 +9,7 @@ import androidx.compose.ui.graphics.Color
  * @param width the current width of the confetti
  * @param height the current height of a confetti
  * @param color the color that will be used to paint the confetti
- * @param rotation the current rotation of the confetti in degrees
- * @param scaleX the current scale of the confetti used to create a 3D rotation
- * @param shape the Shape of the confetti such as a circle, square of custom shape
- * @param alpha the transparency of the confetti between 0 - 255
+ * @param isSelected tis the color is selected or not
  */
 data class ColorBox(
     val x: Float,
@@ -20,4 +17,5 @@ data class ColorBox(
     val width: Float,
     val height: Float,
     val color: Color,
+    val isSelected:Boolean
 )
