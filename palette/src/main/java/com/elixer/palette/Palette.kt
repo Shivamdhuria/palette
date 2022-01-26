@@ -1,7 +1,6 @@
 package com.elixer.palette
 
 
-import android.util.Log
 import androidx.compose.animation.animateColorAsState
 import androidx.compose.animation.core.*
 import androidx.compose.foundation.Canvas
@@ -13,18 +12,20 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.*
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Color.Companion.Blue
 import androidx.compose.ui.graphics.drawscope.Stroke
-import androidx.compose.ui.input.pointer.consumeAllChanges
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import com.elixer.palette.constraints.HorizontalAxis
+import com.elixer.palette.constraints.HorizontalAxis.*
+import com.elixer.palette.constraints.VerticalAxis
+import com.elixer.palette.constraints.VerticalAxis.*
 import com.elixer.palette.geometry.Utils
 import com.elixer.palette.models.ColorArch
 import com.elixer.palette.models.ColorWheel
@@ -44,7 +45,9 @@ fun Palette(
     colorStroke: Float = 120f,
     modifier: Modifier,
     spacerRotation: Float = 1f,
-    spacerOutward: Float = 500f
+    spacerOutward: Float = 500f,
+    verticalAxis: VerticalAxis = VerticalAxis.Middle,
+    horizontalAxis: HorizontalAxis = HorizontalAxis.End
 ) {
 
     val isPaletteDisplayed = remember { mutableStateOf(false) }
@@ -139,9 +142,10 @@ fun Palette(
         modifier = Modifier
             .fillMaxSize()
             .onGloballyPositioned { it ->
-                centerX = it.size.width / 2f
-                centerY = it.size.height / 2f
+//                centerX = it.size.width / 2f
+//                centerY = it.size.height / 2f
             }
+
             .pointerInput(Unit) {
                 detectDragGestures(
                     onDragStart = { offset ->
@@ -174,7 +178,7 @@ fun Palette(
 
         Canvas(modifier = Modifier
             .fillMaxSize()
-            .background(Color.Red)
+            .background(Color(0x5E9CCC65))
             .pointerInput(Unit) {
                 detectTapGestures(
                     onTap = { tapOffset ->
@@ -204,6 +208,33 @@ fun Palette(
                 )
             }
         ) {
+
+//            val centerOffset = getCenterOffset(position, size)
+
+            //Top Left
+//            centerX = cen
+//            centerY = 0f
+
+
+//            //topRight
+//             centerX = size.width
+//            centerY = 0f
+//
+
+            //bott right
+//            centerX = size.width
+//            centerY = size.height
+
+            //bott Left
+//
+//            centerX = 0f
+//            centerY = size.height
+
+
+            //bott min
+//
+            centerX = getCenterXCoordinate(horizontalAxis, size.width)
+            centerY = getCenterYCoordinate(verticalAxis, size.height)
 
             colorArcsN.forEachIndexed { index, it ->
                 val radius = rad[index]
@@ -238,11 +269,28 @@ fun Palette(
                 size = Size(2 * newSeletedAnimatable.value, 2 * newSeletedAnimatable.value)
             )
         }
-        LaunchButton(
-            animationState = isPaletteDisplayed.value,
-            selectedColor = animatedColor,
-            onToggleAnimationState = { isPaletteDisplayed.value = !isPaletteDisplayed.value }
-        )
+
+    }
+    LaunchButton(
+        animationState = isPaletteDisplayed.value,
+        selectedColor = animatedColor,
+        onToggleAnimationState = { isPaletteDisplayed.value = !isPaletteDisplayed.value }
+    )
+}
+
+fun getCenterXCoordinate(horizontalAxis: HorizontalAxis, maxX: Float): Float {
+    return when (horizontalAxis) {
+        is Start -> 0f
+        is Center -> maxX / 2
+        is End -> maxX
+    }
+}
+
+fun getCenterYCoordinate(verticalAxis: VerticalAxis, maxY: Float): Float {
+    return when (verticalAxis) {
+        is Top -> 0f
+        is Middle -> maxY / 2
+        is Bottom -> maxY
     }
 }
 
@@ -250,5 +298,8 @@ fun Palette(
 @Preview(showBackground = true, widthDp = 500, heightDp = 900)
 @Composable
 fun PreviewPalette() {
-    Palette(defaultColor = Blue, modifier = Modifier.fillMaxSize(), list = Presets.custom())
+    Palette(
+        defaultColor = Blue, modifier = Modifier.fillMaxSize(),
+        list = Presets.custom(),
+    )
 }

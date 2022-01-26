@@ -18,6 +18,8 @@ import androidx.compose.ui.unit.sp
 import com.elixer.colorapp.ui.theme.ColorAppTheme
 import com.elixer.palette.Palette
 import com.elixer.palette.Presets
+import com.elixer.palette.constraints.HorizontalAxis
+import com.elixer.palette.constraints.VerticalAxis
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -29,14 +31,16 @@ class MainActivity : ComponentActivity() {
                     Box(
                         modifier = Modifier
                             .fillMaxSize()
-                            .background(Color.Black)
+
                     ) {
                         Palette(
                             Color.DarkGray, buttonSize = 80.dp,
                             Presets.custom(),
                             modifier = Modifier
                                 .size(1000.dp, 1000.dp)
-                                .offset(0.dp, 250.dp),
+                                .offset(0.dp, 0.dp),
+                            verticalAxis = VerticalAxis.Middle,
+                            horizontalAxis = HorizontalAxis.Start
                         )
 
                         Column {
