@@ -269,7 +269,6 @@ fun Palette(
                 size = Size(2 * newSeletedAnimatable.value, 2 * newSeletedAnimatable.value)
             )
         }
-
     }
     LaunchButton(
         animationState = isPaletteDisplayed.value,
