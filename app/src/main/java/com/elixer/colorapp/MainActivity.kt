@@ -39,8 +39,6 @@ class MainActivity : ComponentActivity() {
                             modifier = Modifier
                                 .size(1000.dp, 1000.dp)
                                 .offset(0.dp, 0.dp),
-                            verticalAxis = VerticalAxis.Middle,
-                            horizontalAxis = HorizontalAxis.Start
                         )
 
                         Column {

@@ -41,13 +41,13 @@ fun Palette(
     defaultColor: Color,
     buttonSize: Dp = 80.dp,
     list: List<List<Color>>,
-    innerRadius: Float = 340f,
+    innerRadius: Float = 440f,
     colorStroke: Float = 120f,
     modifier: Modifier,
     spacerRotation: Float = 1f,
     spacerOutward: Float = 500f,
     verticalAxis: VerticalAxis = VerticalAxis.Middle,
-    horizontalAxis: HorizontalAxis = HorizontalAxis.End
+    horizontalAxis: HorizontalAxis = HorizontalAxis.Center
 ) {
 
     val isPaletteDisplayed = remember { mutableStateOf(false) }
@@ -251,7 +251,7 @@ fun Palette(
 
             drawArc(
                 color = Color.White,
-                startAngle = selectedArch.value.startingAngle - 2f,
+                startAngle = selectedArch.value.startingAngle + rotationAnimatable - 2f,
                 sweepAngle = selectedArch.value.sweep + 4f,
                 useCenter = false,
                 topLeft = Offset(centerX - newSeletedAnimatable.value, centerY - newSeletedAnimatable.value),
@@ -261,7 +261,7 @@ fun Palette(
 
             drawArc(
                 color = selectedArch.value.color,
-                startAngle = selectedArch.value.startingAngle,
+                startAngle = selectedArch.value.startingAngle + rotationAnimatable,
                 sweepAngle = selectedArch.value.sweep,
                 useCenter = false,
                 topLeft = Offset(centerX - newSeletedAnimatable.value, centerY - newSeletedAnimatable.value),
