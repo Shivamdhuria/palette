@@ -172,7 +172,6 @@ fun Palette(
                         oldAngle = rotationAngle
                     }
                 ) { change, _ ->
-
                     val touchAngle = atan2(
                         y = centerX - change.position.x,
                         x = centerY - change.position.y
@@ -180,7 +179,7 @@ fun Palette(
 
                     rotationAngle = oldAngle + (touchAngle - dragStartedAngle)
 
-                    //we want to work with positive angles
+                    //make angles positive
                     if (rotationAngle > 360) {
                         rotationAngle -= 360
                     } else if (rotationAngle < 0) {
@@ -200,14 +199,12 @@ fun Palette(
                             /**
                              * Calculate angle between center and tapped offset
                              */
-
                             val angle = calculateAngle(centerX.dp.value, centerY.dp.value, tapOffset.x, tapOffset.y)
 
                             /**
                              * Calculate distance between center and tapped offset
                              */
                             val distance = calculateDistance(centerX, centerY, tapOffset.x, tapOffset.y)
-
                             colorArcs.forEachIndexed { index, it ->
                                 if (it.contains(angle, distance, rotationAnimatable)) {
                                     onColorSelected(it)
@@ -223,7 +220,6 @@ fun Palette(
         ) {
             centerX = getCenterXCoordinate(horizontalAlignment, size.width)
             centerY = getCenterYCoordinate(verticalAlignment, size.height)
-
             colorArcs.forEachIndexed { index, it ->
                 val radius = radiusAnimatables[index]
                 this.drawColouredArc(it, rotationAnimatable, centerX, radius, centerY)
