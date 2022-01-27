@@ -1,6 +1,5 @@
 package com.elixer.palette.models
 
-import android.util.Log
 import androidx.compose.ui.graphics.Color
 
 data class ColorArch(
@@ -13,7 +12,6 @@ data class ColorArch(
 ) {
 
     fun contains(angle: Float, distance: Float, rotation: Float): Boolean {
-
         if (angle in ((startingAngle + rotation) % 360).rangeTo((startingAngle + sweep + rotation) % 360f)) {
             return distance in (radius - strokeWidth)..(radius + strokeWidth)
         } else return false

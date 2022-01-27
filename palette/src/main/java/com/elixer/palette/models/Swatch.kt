@@ -37,7 +37,7 @@ fun Swatch.toColorArch(isSelected: Boolean): List<ColorArch> {
                 isSelected = isSelected
             )
         )
-        startingRadius += strokeWidth
+        startingRadius += strokeWidth + spacerOutward
     }
     return list
 }

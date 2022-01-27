@@ -16,11 +16,9 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.elixer.colorapp.ui.theme.ColorAppTheme
-import com.elixer.palette.Palette
+import com.elixer.palette.composables.Palette
 import com.elixer.palette.Presets
-import com.elixer.palette.constraints.HorizontalAlignment
 import com.elixer.palette.constraints.HorizontalAlignment.*
-import com.elixer.palette.constraints.VerticalAlignment
 import com.elixer.palette.constraints.VerticalAlignment.*
 
 class MainActivity : ComponentActivity() {
@@ -37,13 +35,13 @@ class MainActivity : ComponentActivity() {
 
                     ) {
                         Palette(
-                            defaultColor = Color(0xFF9CCC65),
+                            defaultColor = Color(0xFFFA8A4D),
                             buttonSize = 190.dp,
                             list = Presets.custom(),
                             innerRadius = 1040f,
                             strokeWidth = 120f,
                             spacerRotation = 1f,
-                            spacerOutward = 500f,
+                            spacerOutward = 0f,
                             verticalAlignment = Top,
                             horizontalAlignment = Start
                         )

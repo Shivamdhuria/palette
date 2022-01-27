@@ -1,5 +1,4 @@
-package com.elixer.palette
-
+package com.elixer.palette.composables
 
 import androidx.compose.animation.animateColorAsState
 import androidx.compose.animation.core.*
@@ -15,12 +14,13 @@ import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Color.Companion.Blue
+import androidx.compose.ui.graphics.drawscope.DrawScope
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.input.pointer.pointerInput
-import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import com.elixer.palette.Presets
 import com.elixer.palette.constraints.HorizontalAlignment
 import com.elixer.palette.constraints.HorizontalAlignment.*
 import com.elixer.palette.constraints.VerticalAlignment
@@ -43,8 +43,9 @@ fun Palette(
     list: List<List<Color>>,
     innerRadius: Float = 440f,
     strokeWidth: Float = 120f,
-    spacerRotation: Float = 1f,
-    spacerOutward: Float = 500f,
+    selectorColor: Color = Color.White,
+    spacerRotation: Float = 20f,
+    spacerOutward: Float = 20f,
     verticalAlignment: VerticalAlignment = Top,
     horizontalAlignment: HorizontalAlignment = Start
 ) {
@@ -69,10 +70,7 @@ fun Palette(
         )
     }
 
-
     val newSeletedAnimatable = remember { Animatable(0f) }
-
-    var rotation by remember { mutableStateOf(0f) }
 
     var centerX by remember { mutableStateOf(0f) }
     var centerY by remember { mutableStateOf(0f) }
@@ -141,11 +139,6 @@ fun Palette(
     BoxWithConstraints(
         modifier = Modifier
             .fillMaxSize()
-            .onGloballyPositioned { it ->
-//                centerX = it.size.width / 2f
-//                centerY = it.size.height / 2f
-            }
-
             .pointerInput(Unit) {
                 detectDragGestures(
                     onDragStart = { offset ->
@@ -212,36 +205,11 @@ fun Palette(
 
             colorArcsN.forEachIndexed { index, it ->
                 val radius = rad[index]
-                drawArc(
-                    color = it.color,
-                    startAngle = it.startingAngle + rotationAnimatable,
-                    sweepAngle = it.sweep,
-                    useCenter = false,
-                    topLeft = Offset(centerX - radius, centerY - radius),
-                    style = Stroke(width = it.strokeWidth),
-                    size = Size(2 * radius, 2 * radius)
-                )
+                this.drawColouredArc(it, rotationAnimatable, centerX, radius, centerY)
             }
 
-            drawArc(
-                color = Color.White,
-                startAngle = selectedArch.value.startingAngle + rotationAnimatable - 2f,
-                sweepAngle = selectedArch.value.sweep + 4f,
-                useCenter = false,
-                topLeft = Offset(centerX - newSeletedAnimatable.value, centerY - newSeletedAnimatable.value),
-                style = Stroke(width = selectedArch.value.strokeWidth + 30f),
-                size = Size(2 * newSeletedAnimatable.value, 2 * newSeletedAnimatable.value)
-            )
-
-            drawArc(
-                color = selectedArch.value.color,
-                startAngle = selectedArch.value.startingAngle + rotationAnimatable,
-                sweepAngle = selectedArch.value.sweep,
-                useCenter = false,
-                topLeft = Offset(centerX - newSeletedAnimatable.value, centerY - newSeletedAnimatable.value),
-                style = Stroke(width = selectedArch.value.strokeWidth),
-                size = Size(2 * newSeletedAnimatable.value, 2 * newSeletedAnimatable.value)
-            )
+            drawSelectorArc(selectedArch, selectorColor, rotationAnimatable, centerX, newSeletedAnimatable, centerY)
+            drawColouredArc(selectedArch.value, rotationAnimatable, centerX, newSeletedAnimatable.value, centerY)
         }
 
         LaunchButton(
@@ -253,6 +221,43 @@ fun Palette(
             buttonSize = buttonSize
         )
     }
+}
+
+private fun DrawScope.drawSelectorArc(
+    selectedArch: MutableState<ColorArch>,
+    selectorColor: Color,
+    rotationAnimatable: Float,
+    centerX: Float,
+    newSeletedAnimatable: Animatable<Float, AnimationVector1D>,
+    centerY: Float
+) {
+    drawArc(
+        color = selectorColor,
+        startAngle = selectedArch.value.startingAngle + rotationAnimatable - 1f,
+        sweepAngle = selectedArch.value.sweep + 2f,
+        useCenter = false,
+        topLeft = Offset(centerX - newSeletedAnimatable.value, centerY - newSeletedAnimatable.value),
+        style = Stroke(width = selectedArch.value.strokeWidth + 20f),
+        size = Size(2 * newSeletedAnimatable.value, 2 * newSeletedAnimatable.value)
+    )
+}
+
+private fun DrawScope.drawColouredArc(
+    it: ColorArch,
+    rotationAnimatable: Float,
+    centerX: Float,
+    radius: Float,
+    centerY: Float
+) {
+    drawArc(
+        color = it.color,
+        startAngle = it.startingAngle + rotationAnimatable,
+        sweepAngle = it.sweep,
+        useCenter = false,
+        topLeft = Offset(centerX - radius, centerY - radius),
+        style = Stroke(width = it.strokeWidth),
+        size = Size(2 * radius, 2 * radius)
+    )
 }
 
 fun getCenterXCoordinate(horizontalAxis: HorizontalAlignment, maxX: Float): Float {
