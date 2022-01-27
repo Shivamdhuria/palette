@@ -15,7 +15,6 @@ class Utils {
         }
 
         fun calculateDistance(centerX: Float, centerY: Float, x2: Float, y2: Float): Float {
-
             return sqrt((x2 - centerX).toDouble().pow(2.0) + (y2 - centerY).toDouble().pow(2.0)).toFloat()
         }
     }

@@ -35,6 +35,22 @@ import kotlinx.coroutines.launch
 import kotlin.math.abs
 import kotlin.math.atan2
 
+/**
+ *@param defaultColor default color of the button
+ * @param buttonSize size of the FAB
+ * @param list list of swatches
+ * @param innerRadius the starting radius of the wheel from the center
+ * @param strokeWidth the stroke width of each color Arc
+ * @param selectorColor border color for the color arc selected
+ * @param spacerRotation the gap between swatches in circular direction
+ * @param spacerOutward the gap between color arcs in outward circular direction
+ * @param verticalAlignment placing center of wheel in y axis
+ * @param horizontalAlignment placeing center of wheel in x axis
+ * @param buttonColorChangeAnimationDuration duration of color change animation of button
+ * @param selectedArchAnimationDuration duration of selected color arc shoot to center animation
+ * @param onColorSelected function triggered when color is selected
+ */
+
 @OptIn(ExperimentalComposeUiApi::class)
 @Composable
 fun Palette(
@@ -48,9 +64,9 @@ fun Palette(
     spacerOutward: Float = 20f,
     verticalAlignment: VerticalAlignment = Top,
     horizontalAlignment: HorizontalAlignment = Start,
-    onColorSelected: (Color) -> Unit = {},
     buttonColorChangeAnimationDuration: Int = 500,
-    selectedArchAnimationDuration: Int = 1000
+    selectedArchAnimationDuration: Int = 1000,
+    onColorSelected: (Color) -> Unit = {},
 ) {
 
     val isPaletteDisplayed = remember { mutableStateOf(false) }
