@@ -3,38 +3,34 @@ package com.elixer.palette.models
 import androidx.compose.ui.graphics.Color
 
 /**
- * Particle holding exact data to instruct where and how to draw a particle
- * @param x the absolute x position on the canvas
- * @param y the absolute y position on the canvas
- * @param width the current width of the confetti
- * @param height the current height of a confetti
- * @param color the color that will be used to paint the confetti
- * @param rotation the current rotation of the confetti in degrees
- * @param scaleX the current scale of the confetti used to create a 3D rotation
- * @param shape the Shape of the confetti such as a circle, square of custom shape
- * @param alpha the transparency of the confetti between 0 - 255
+ * Swatch holds all the color Arc shades only extending outwards
+ * @param radius the starting radius of the first color Arc
+ * @param strokeWidth the stroke width of a colorArc outwards
+ * @param startingAngle the angle to start the arc from 0 - 360
+ * @param sweep arc drawn from starting -> starting + sweep
+ * @param colors all the shades of a colour to be represented in the swatch
+ * @param spacerOutward gap between color Arcs radially outwards
  */
 data class Swatch(
     val radius: Float,
     val strokeWidth: Float,
     val startingAngle: Float,
     val sweep: Float,
-    val color: List<Color>,
+    val colors: List<Color>,
     val spacerOutward: Float
 )
 
-fun Swatch.toColorArch(isSelected: Boolean): List<ColorArch> {
-    val list = mutableListOf<ColorArch>()
+fun Swatch.toColorArch(): List<ColorArc> {
+    val list = mutableListOf<ColorArc>()
     var startingRadius = radius
-    this.color.forEach {
+    this.colors.forEach {
         list.add(
-            ColorArch(
+            ColorArc(
                 radius = startingRadius,
                 strokeWidth = strokeWidth,
                 startingAngle = startingAngle,
                 sweep = sweep,
                 color = it,
-                isSelected = isSelected
             )
         )
         startingRadius += strokeWidth + spacerOutward

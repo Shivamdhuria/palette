@@ -25,8 +25,9 @@ import com.elixer.palette.constraints.HorizontalAlignment
 import com.elixer.palette.constraints.HorizontalAlignment.*
 import com.elixer.palette.constraints.VerticalAlignment
 import com.elixer.palette.constraints.VerticalAlignment.*
-import com.elixer.palette.geometry.Utils
-import com.elixer.palette.models.ColorArch
+import com.elixer.palette.geometry.Utils.Companion.calculateAngle
+import com.elixer.palette.geometry.Utils.Companion.calculateDistance
+import com.elixer.palette.models.ColorArc
 import com.elixer.palette.models.ColorWheel
 import com.elixer.palette.models.toColorArch
 import com.elixer.palette.models.toSwatches
@@ -53,7 +54,6 @@ fun Palette(
 ) {
 
     val isPaletteDisplayed = remember { mutableStateOf(false) }
-
     val selectedArchAnimatable = remember { Animatable(0f) }
     val selectedColor = remember { mutableStateOf(defaultColor) }
 
@@ -67,23 +67,19 @@ fun Palette(
 
     var centerX by remember { mutableStateOf(0f) }
     var centerY by remember { mutableStateOf(0f) }
-
-    val showSelectedColor = remember { mutableStateOf(false) }
     val coroutineScope = rememberCoroutineScope()
 
     val selectedArch = remember {
         mutableStateOf(
-            ColorArch(
+            ColorArc(
                 radius = 0f,
                 strokeWidth = 30f,
                 startingAngle = 240f,
                 sweep = 40f,
                 color = Color.Cyan,
-                isSelected = false
             )
         )
     }
-
 
     val colorWheel = ColorWheel(
         radius = innerRadius, swatches = list,
@@ -94,13 +90,13 @@ fun Palette(
     )
 
     val swatches = colorWheel.toSwatches()
-    val colorArcs = mutableListOf<ColorArch>()
+    val colorArcs = mutableListOf<ColorArc>()
 
     swatches.forEach {
-        colorArcs.addAll(it.toColorArch(isPaletteDisplayed.value))
+        colorArcs.addAll(it.toColorArch())
     }
 
-    val radiusAnimatable = mutableListOf<Float>()
+    val radiusAnimatables = mutableListOf<Float>()
 
     var rotationAngle by remember { mutableStateOf(0f) }
     var dragStartedAngle by remember { mutableStateOf(0f) }
@@ -114,18 +110,18 @@ fun Palette(
                 stiffness = Spring.StiffnessVeryLow
             )
         )
-        radiusAnimatable.add(radius)
+        radiusAnimatables.add(radius)
     }
 
     val rotationAnimatable: Float by animateFloatAsState(
         targetValue = rotationAngle,
-        animationSpec = spring(
-            dampingRatio = Spring.DampingRatioLowBouncy,
-            stiffness = Spring.StiffnessVeryLow
+        animationSpec = tween(
+            durationMillis = 200,
+            easing = LinearEasing
         )
     )
 
-    fun onColorSelected(colorArc: ColorArch) {
+    fun onColorSelected(colorArc: ColorArc) {
         onColorSelected(colorArc.color)
         selectedArch.value = colorArc
         isPaletteDisplayed.value = false
@@ -189,12 +185,12 @@ fun Palette(
                              * Calculate angle between center and tapped offset
                              */
 
-                            val angle = Utils.calculateAngle(centerX.dp.value, centerY.dp.value, tapOffset.x, tapOffset.y)
+                            val angle = calculateAngle(centerX.dp.value, centerY.dp.value, tapOffset.x, tapOffset.y)
 
                             /**
                              * Calculate distance between center and tapped offset
                              */
-                            val distance = Utils.calculateDistance(centerX, centerY, tapOffset.x, tapOffset.y)
+                            val distance = calculateDistance(centerX, centerY, tapOffset.x, tapOffset.y)
 
                             colorArcs.forEachIndexed { index, it ->
                                 if (it.contains(angle, distance, rotationAnimatable)) {
@@ -213,7 +209,7 @@ fun Palette(
             centerY = getCenterYCoordinate(verticalAlignment, size.height)
 
             colorArcs.forEachIndexed { index, it ->
-                val radius = radiusAnimatable[index]
+                val radius = radiusAnimatables[index]
                 this.drawColouredArc(it, rotationAnimatable, centerX, radius, centerY)
             }
 
@@ -232,7 +228,7 @@ fun Palette(
 }
 
 private fun DrawScope.drawSelectorArc(
-    selectedArch: MutableState<ColorArch>,
+    selectedArch: MutableState<ColorArc>,
     selectorColor: Color,
     rotationAnimatable: Float,
     centerX: Float,
@@ -251,7 +247,7 @@ private fun DrawScope.drawSelectorArc(
 }
 
 private fun DrawScope.drawColouredArc(
-    it: ColorArch,
+    it: ColorArc,
     rotationAnimatable: Float,
     centerX: Float,
     radius: Float,
