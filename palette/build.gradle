@@ -4,6 +4,7 @@ plugins {
     id 'maven-publish'
 
 }
+group = 'com.github.Shivamdhuria'
 
 android {
     compileSdk 31

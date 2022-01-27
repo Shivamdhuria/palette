@@ -1,4 +1,4 @@
-package com.elixer.palette.geometry
+package com.elixer.palette
 
 import kotlin.math.atan2
 import kotlin.math.ceil

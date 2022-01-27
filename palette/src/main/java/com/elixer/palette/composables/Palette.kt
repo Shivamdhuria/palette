@@ -25,8 +25,8 @@ import com.elixer.palette.constraints.HorizontalAlignment
 import com.elixer.palette.constraints.HorizontalAlignment.*
 import com.elixer.palette.constraints.VerticalAlignment
 import com.elixer.palette.constraints.VerticalAlignment.*
-import com.elixer.palette.geometry.Utils.Companion.calculateAngle
-import com.elixer.palette.geometry.Utils.Companion.calculateDistance
+import com.elixer.palette.Utils.Companion.calculateAngle
+import com.elixer.palette.Utils.Companion.calculateDistance
 import com.elixer.palette.models.ColorArc
 import com.elixer.palette.models.ColorWheel
 import com.elixer.palette.models.toColorArch
