@@ -82,7 +82,7 @@ fun Palette(
     }
 
     val colorWheel = ColorWheel(
-        radius = innerRadius, swatches = list,
+        startingRadius = innerRadius, swatches = list,
         strokeWidth = strokeWidth,
         isDisplayed = isPaletteDisplayed.value,
         spacerOutward = spacerOutward,
