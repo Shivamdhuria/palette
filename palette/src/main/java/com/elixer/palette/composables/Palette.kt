@@ -30,7 +30,6 @@ import com.elixer.palette.models.ColorArch
 import com.elixer.palette.models.ColorWheel
 import com.elixer.palette.models.toColorArch
 import com.elixer.palette.models.toSwatches
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlin.math.abs
 import kotlin.math.atan2
@@ -49,13 +48,22 @@ fun Palette(
     verticalAlignment: VerticalAlignment = Top,
     horizontalAlignment: HorizontalAlignment = Start,
     onColorSelected: (Color) -> Unit = {},
+    buttonColorChangeAnimationDuration: Int = 500,
+    selectedArchAnimationDuration: Int = 1000
 ) {
 
     val isPaletteDisplayed = remember { mutableStateOf(false) }
 
     val selectedArchAnimatable = remember { Animatable(0f) }
     val selectedColor = remember { mutableStateOf(defaultColor) }
-    val animatedColor = animateColorAsState(selectedColor.value)
+
+    val animatedColor by animateColorAsState(
+        selectedColor.value,
+        tween(
+            durationMillis = buttonColorChangeAnimationDuration,
+            easing = LinearEasing
+        )
+    )
 
     var centerX by remember { mutableStateOf(0f) }
     var centerY by remember { mutableStateOf(0f) }
@@ -121,19 +129,19 @@ fun Palette(
         onColorSelected(colorArc.color)
         selectedArch.value = colorArc
         isPaletteDisplayed.value = false
+        selectedColor.value = colorArc.color
+
         coroutineScope.launch {
             selectedArchAnimatable.snapTo(
                 colorArc.radius
             )
-            delay(300)
             selectedArchAnimatable.animateTo(
                 targetValue = 0f,
                 tween(
-                    durationMillis = 1000,
+                    durationMillis = selectedArchAnimationDuration,
                     easing = LinearEasing
                 )
             )
-            selectedColor.value = colorArc.color
         }
     }
 
@@ -214,7 +222,6 @@ fun Palette(
         }
 
         LaunchButton(
-            animationState = isPaletteDisplayed.value,
             selectedColor = animatedColor,
             onToggleAnimationState = { isPaletteDisplayed.value = !isPaletteDisplayed.value },
             offsetX = getCenterXCoordinate(horizontalAlignment, maxWidth.value).dp,

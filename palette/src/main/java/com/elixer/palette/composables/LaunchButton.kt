@@ -11,9 +11,8 @@ import androidx.compose.ui.unit.Dp
 
 @Composable
 fun LaunchButton(
-    animationState: Boolean,
     onToggleAnimationState: () -> Unit,
-    selectedColor: State<Color>,
+    selectedColor: Color,
     offsetX: Dp,
     offsetY: Dp,
     buttonSize:Dp
@@ -21,7 +20,7 @@ fun LaunchButton(
 
     FloatingActionButton(
         onClick = onToggleAnimationState,
-        backgroundColor = selectedColor.value,
+        backgroundColor = selectedColor,
         contentColor = Color.White,
         modifier = Modifier.size(buttonSize).offset(
             offsetX-buttonSize/2,offsetY-buttonSize/2
