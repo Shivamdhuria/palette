@@ -64,7 +64,7 @@ fun Palette(
     spacerOutward: Float = 20f,
     verticalAlignment: VerticalAlignment = Top,
     horizontalAlignment: HorizontalAlignment = Start,
-    buttonColorChangeAnimationDuration: Int = 500,
+    buttonColorChangeAnimationDuration: Int = 1000,
     selectedArchAnimationDuration: Int = 1000,
     onColorSelected: (Color) -> Unit = {},
 ) {
@@ -86,15 +86,7 @@ fun Palette(
     val coroutineScope = rememberCoroutineScope()
 
     val selectedArch = remember {
-        mutableStateOf(
-            ColorArc(
-                radius = 0f,
-                strokeWidth = 30f,
-                startingAngle = 240f,
-                sweep = 40f,
-                color = Color.Cyan,
-            )
-        )
+        mutableStateOf(ColorArc(radius = 0f, strokeWidth = 0f, startingAngle = 0f, sweep = 40f, color = selectorColor,))
     }
 
     val colorWheel = ColorWheel(
@@ -113,7 +105,6 @@ fun Palette(
     }
 
     val radiusAnimatables = mutableListOf<Float>()
-
     var rotationAngle by remember { mutableStateOf(0f) }
     var dragStartedAngle by remember { mutableStateOf(0f) }
     var oldAngle by remember { mutableStateOf(rotationAngle) }
@@ -291,7 +282,6 @@ fun getCenterYCoordinate(verticalAxis: VerticalAlignment, maxY: Float): Float {
         is Bottom -> maxY
     }
 }
-
 
 @Preview(showBackground = true, widthDp = 500, heightDp = 900)
 @Composable
