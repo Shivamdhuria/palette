@@ -6,7 +6,7 @@ import com.elixer.palette.models.Swatch
 class Presets {
     companion object {
 
-        fun custom(): List<List<Color>> {
+        fun material(): List<List<Color>> {
             return listOf(
                 redOne.map { getColor(it) },
                 redTwo.map { getColor(it) },
@@ -27,9 +27,9 @@ class Presets {
                 greenLight.map { getColor(it) },
                 greenLighter.map { getColor(it) },
                 greenLighterLight.map { getColor(it) },
-                lime.map { getColor(it) },
-                limeLight.map { getColor(it) },
-                yellow.map { getColor(it) },
+//                lime.map { getColor(it) },
+//                limeLight.map { getColor(it) },
+//                yellow.map { getColor(it) },
                 yellowLight.map { getColor(it) },
                 amber.map { getColor(it) },
                 amberLight.map { getColor(it) },
@@ -37,11 +37,11 @@ class Presets {
                 orangeLight.map { getColor(it) },
                 deepOrange.map { getColor(it) },
                 deepOrangeLight.map { getColor(it) },
-                brown.map { getColor(it) },
-                gray.map { getColor(it) },
-                blueGray.map { getColor(it) },
-                black.map { getColor(it) },
-                white.map { getColor(it) },
+//                brown.map { getColor(it) },
+//                gray.map { getColor(it) },
+//                blueGray.map { getColor(it) },
+//                black.map { getColor(it) },
+//                white.map { getColor(it) },
             )
         }
 

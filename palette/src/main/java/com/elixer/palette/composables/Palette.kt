@@ -38,7 +38,7 @@ import kotlin.math.atan2
 /**
  *@param defaultColor default color of the button
  * @param buttonSize size of the FAB
- * @param list list of swatches
+ * @param swatches list of swatches
  * @param innerRadius the starting radius of the wheel from the center
  * @param strokeWidth the stroke width of each color Arc
  * @param selectorColor border color for the color arc selected
@@ -53,15 +53,15 @@ import kotlin.math.atan2
 
 @OptIn(ExperimentalComposeUiApi::class)
 @Composable
-fun Palette(
-    defaultColor: Color,
+fun  Palette(
+    defaultColor: Color = Color(0xFFFF9800),
     buttonSize: Dp = 100.dp,
-    list: List<List<Color>>,
+    swatches: List<List<Color>>,
     innerRadius: Float = 440f,
     strokeWidth: Float = 120f,
     selectorColor: Color = Color.White,
-    spacerRotation: Float = 20f,
-    spacerOutward: Float = 20f,
+    spacerRotation: Float = 2f,
+    spacerOutward: Float = 2f,
     verticalAlignment: VerticalAlignment = Top,
     horizontalAlignment: HorizontalAlignment = Start,
     buttonColorChangeAnimationDuration: Int = 1000,
@@ -90,7 +90,7 @@ fun Palette(
     }
 
     val colorWheel = ColorWheel(
-        startingRadius = innerRadius, swatches = list,
+        startingRadius = innerRadius, swatches = swatches,
         strokeWidth = strokeWidth,
         isDisplayed = isPaletteDisplayed.value,
         spacerOutward = spacerOutward,
@@ -288,6 +288,6 @@ fun getCenterYCoordinate(verticalAxis: VerticalAlignment, maxY: Float): Float {
 fun PreviewPalette() {
     Palette(
         defaultColor = Blue,
-        list = Presets.custom(),
+        swatches = Presets.material(),
     )
 }
