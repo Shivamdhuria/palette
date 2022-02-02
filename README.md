@@ -5,11 +5,9 @@ A color picker library made in Jetpack Compose.
 </p>
 </br>
 <p align="center">
-<img src="https://github.com/Shivamdhuria/puck/blob/main/assets/gravity.gif" width="15.3%"/>
-<img src="https://github.com/Shivamdhuria/puck/blob/main/assets/freeform.gif" width="17.5%"/>
-<img src="https://github.com/Shivamdhuria/puck/blob/main/assets/all.gif" width="17.5%"/>
-<img src="https://github.com/Shivamdhuria/puck/blob/main/assets/stickNew.gif" width="16.8%"/>
-<img src="https://github.com/Shivamdhuria/puck/blob/main/assets/towards center.gif" width="18%"/>
+<img src="https://github.com/Shivamdhuria/palette/blob/main/assets/leftLow.gif" width="17.5%"/>
+<img src="https://github.com/Shivamdhuria/puck/blob/main/assets/midLow.gif" width="17.5%"/>
+<img src="https://github.com/Shivamdhuria/puck/blob/main/assets/RightLow.gif" width="17.5%"/>
 </p>
 
 ## Including in your project
