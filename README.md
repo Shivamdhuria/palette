@@ -1,4 +1,4 @@
-<h1 align="center">🌈 palette</h1></br>
+<h1 align="center">🌈 Palette</h1></br>
 
 <p align="center">
 A color picker library made in Jetpack Compose.
