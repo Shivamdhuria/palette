@@ -5,9 +5,9 @@ A color picker library made in Jetpack Compose.
 </p>
 </br>
 <p align="center">
-<img src="https://github.com/Shivamdhuria/palette/blob/main/assets/LeftHigh.gif" width="30.5%"/>
-<img src="https://github.com/Shivamdhuria/palette/blob/main/assets/midHigh.gif" width="30.5%"/>
-<img src="https://github.com/Shivamdhuria/palette/blob/main/assets/rightHigh.gif" width="30.5%"/>
+<img src="https://github.com/Shivamdhuria/palette/blob/main/assets/LeftHigh.gif" width="25.5%"/>
+<img src="https://github.com/Shivamdhuria/palette/blob/main/assets/midHigh.gif" width="25.5%"/>
+<img src="https://github.com/Shivamdhuria/palette/blob/main/assets/rightHigh.gif" width="25.5%"/>
 </p>
 
 ## Including in your project
