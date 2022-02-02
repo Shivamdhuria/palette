@@ -29,6 +29,16 @@ dependencies {
 ```
 
 ## Terminology
+<p align="start">
+<img src="https://user-images.githubusercontent.com/10262897/152220146-277408d5-14e4-4ef7-84cd-646a17bbcae0.jpg"/>
+</p>
+
+<p align="start">
+<img src="https://user-images.githubusercontent.com/10262897/152220196-80a2272a-a8aa-4596-b470-49adcac4e344.jpg"/>
+</p>
+
+
+
 
 ## How to use
 ```kotlin
