@@ -16,11 +16,9 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.elixer.colorapp.ui.theme.ColorAppTheme
-import com.elixer.palette.Palette
+import com.elixer.palette.composables.Palette
 import com.elixer.palette.Presets
-import com.elixer.palette.constraints.HorizontalAlignment
 import com.elixer.palette.constraints.HorizontalAlignment.*
-import com.elixer.palette.constraints.VerticalAlignment
 import com.elixer.palette.constraints.VerticalAlignment.*
 
 class MainActivity : ComponentActivity() {
@@ -36,17 +34,17 @@ class MainActivity : ComponentActivity() {
                             .background(Color(0xFF1E1E1F))
 
                     ) {
-                        Palette(
-                            defaultColor = Color(0xFF9CCC65),
-                            buttonSize = 190.dp,
-                            list = Presets.custom(),
-                            innerRadius = 1040f,
-                            strokeWidth = 120f,
-                            spacerRotation = 1f,
-                            spacerOutward = 500f,
-                            verticalAlignment = Top,
-                            horizontalAlignment = Start
-                        )
+//                        Palette(
+//                            defaultColor = Color(0xFFFA8A4D),
+//                            buttonSize = 190.dp,
+//                            list = Presets.custom(),
+//                            innerRadius = 1040f,
+//                            strokeWidth = 120f,
+//                            spacerRotation = 1f,
+//                            spacerOutward = 0f,
+//                            verticalAlignment = Top,
+//                            horizontalAlignment = Start
+//                        )
 //
 //                        Palette(
 //                            Color(0xFF65CCCC),
@@ -72,13 +70,17 @@ class MainActivity : ComponentActivity() {
 //                            horizontalAlignment = Start
 //                        )
 //
-//                        Palette(
-//                            Color(0xFFCC65C2),
-//                            buttonSize = 100.dp,
-//                            Presets.custom(),
-//                            verticalAlignment = Middle,
-//                            horizontalAlignment = Center
-//                        )
+                        Palette(
+                            Color(0xFFCC65C2),
+                            buttonSize = 210.dp,
+                            Presets.custom(),
+                            innerRadius = 400f,
+                            strokeWidth = 120f,
+                            spacerRotation = .2f,
+                            spacerOutward = 0f,
+                            verticalAlignment = Middle,
+                            horizontalAlignment = Center
+                        )
 //
 //                        Palette(
 //                            Color(0xFF8465CC),
@@ -107,8 +109,12 @@ class MainActivity : ComponentActivity() {
 //
 //                        Palette(
 //                            Color(0xFFC2CC65),
-//                            buttonSize = 100.dp,
+//                            buttonSize = 190.dp,
 //                            Presets.custom(),
+//                            innerRadius = 1040f,
+//                            strokeWidth = 120f,
+//                            spacerRotation = 1f,
+//                            spacerOutward = 0f,
 //                            verticalAlignment = Bottom,
 //                            horizontalAlignment = End
 //                        )
