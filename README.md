@@ -24,66 +24,31 @@ allprojects {
 And add a dependency code to your **module**'s `build.gradle` file.
 ```gradle
 dependencies {
-    implementation 'com.github.Shivamdhuria:puck:Version'
+    implementation 'com.github.Shivamdhuria:palette:Version'
 }
 ```
 
+## Terminology
+
 ## Usage
 ```kotlin
-        setContent {
-            // this keeps parents size
-            val parentSize = remember { mutableStateOf(Size.Zero) } 
-            PuckTheme {
-                // A surface container using the 'background' color from the theme
+      setContent {
+            ColorAppTheme {
                 Surface(modifier = Modifier.fillMaxSize(), color = MaterialTheme.colors.background) {
-                    Box(modifier = Modifier
-                        .onGloballyPositioned { coordinates ->
-                            //Set parents Size
-                            parentSize.value = coordinates.size.toSize()
-                        }
-                        .fillMaxSize()
-                    ) {
-                        //Adding puck to Card Composable
-                        Card(
-                            modifier = Modifier
-                                .puck(parentSize, behaviour = FreeForm), backgroundColor = PINK200
-                        ) {
-                            Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                                Image(
-                                    painterResource(drawable.zoid),
-                                    contentDescription = "",
-                                    contentScale = ContentScale.Crop,
-                                    modifier = Modifier
-                                        .height(70.dp)
-                                        .width(70.dp)
-                                )
-                                Text(text = "Card Composable", fontSize = 24.sp, modifier = Modifier.padding(10.dp))
-                            }
-                        }
-                        //Adding puck to Button Composable
-                        Button(onClick = { }, modifier = Modifier.puck(parentSize, behaviour = FreeForm, animationDuration = 700)) {
-                            Text(text = "Button Composable", fontSize = 24.sp)
-                        }
-                        
-                       //Adding puck to FAB Composable
-                        FloatingActionButton(
-                            onClick = {},
-                            modifier = Modifier
-                                .puck(parentSize, FreeForm, animationDuration = 700)
-                                .width(90.dp)
-                                .height(90.dp),
-                        ) {
-                            Image(
-                                painterResource(drawable.pencil),
-                                contentDescription = "",
-                                modifier = Modifier
-                                    .height(50.dp)
-                                    .width(50.dp)
-                            )
-                        }
-                    }
+                    Palette(
+                        Color(0xFFCC65C2),
+                        buttonSize = 210.dp,
+                        swatches = Presets.custom(),
+                        innerRadius = 400f,
+                        strokeWidth = 120f,
+                        spacerRotation = 5f,
+                        spacerOutward = 2f,
+                        verticalAlignment = Middle,
+                        horizontalAlignment = Start
+                    )  
                 }
             }
+        }
 ```
 ## Behaviours
 
