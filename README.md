@@ -30,32 +30,37 @@ dependencies {
 
 ## Terminology
 
-## Usage
+## How to use
 ```kotlin
-      setContent {
-            ColorAppTheme {
-                Surface(modifier = Modifier.fillMaxSize(), color = MaterialTheme.colors.background) {
-                    Palette(
-                        Color(0xFFCC65C2),
-                        buttonSize = 210.dp,
-                        swatches = Presets.custom(),
-                        innerRadius = 400f,
-                        strokeWidth = 120f,
-                        spacerRotation = 5f,
-                        spacerOutward = 2f,
-                        verticalAlignment = Middle,
-                        horizontalAlignment = Start
-                    )  
-                }
-            }
-        }
+Palette(
+       defaultColor = Color.Magenta,
+       buttonSize = 210.dp,
+       swatches = Presets.custom(),
+       innerRadius = 400f,
+       strokeWidth = 120f,
+       spacerRotation = 5f,
+       spacerOutward = 2f,
+       verticalAlignment = Middle,
+       horizontalAlignment = Start,
+       onColorSelected = { onColorSelected(it) }
+     )
 ```
-## Behaviours
+### Positioning
 
-Currently Puck supports three behaviours
-- Freeform
-- Sticky
-- Gravity
+The color picker can be positioned by using the combinations of vertical and horizontal alignments. For ```verticalAlignment```, use ```Top,Middle,Bottom``` and for ```horizontalAlignment```, use ```Start,Center,End```. For example to position the color picker on top left, use -
+```
+Palette(
+        buttonSize = 210.dp,
+        swatches = Presets.custom(),
+        verticalAlignment = VerticalAlignment.Top,
+        horizontalAlignment = HorizontalAlignment.Start,
+         )
+
+```
+Which would make the color picker looks like this.
+<p align="start">
+<img src="https://user-images.githubusercontent.com/10262897/152209128-5a120494-7304-4274-8acb-e5d16df904a1.png" width="18%"/>
+</p>
 
 ### FreeForm
 Freeform makes Composable draggable anywhere in the screen. If the user drags a composable out of screen area, it is coerced within the bounds of the screen.
