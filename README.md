@@ -5,9 +5,9 @@ A color picker library made in Jetpack Compose.
 </p>
 </br>
 <p align="center">
-<img src="https://github.com/Shivamdhuria/palette/blob/main/assets/leftLow.gif" width="17.5%"/>
-<img src="https://github.com/Shivamdhuria/puck/blob/main/assets/midLow.gif" width="17.5%"/>
-<img src="https://github.com/Shivamdhuria/puck/blob/main/assets/RightLow.gif" width="17.5%"/>
+<img src="https://github.com/Shivamdhuria/palette/blob/main/assets/LeftHigh.gif" width="25.5%"/>
+<img src="https://github.com/Shivamdhuria/palette/blob/main/assets/midHigh.gif" width="25.5%"/>
+<img src="https://github.com/Shivamdhuria/palette/blob/main/assets/rightHigh.gif" width="25.5%"/>
 </p>
 
 ## Including in your project
@@ -24,141 +24,85 @@ allprojects {
 And add a dependency code to your **module**'s `build.gradle` file.
 ```gradle
 dependencies {
-    implementation 'com.github.Shivamdhuria:puck:Version'
+    implementation 'com.github.Shivamdhuria:palette:Version'
 }
 ```
 
-## Usage
-```kotlin
-        setContent {
-            // this keeps parents size
-            val parentSize = remember { mutableStateOf(Size.Zero) } 
-            PuckTheme {
-                // A surface container using the 'background' color from the theme
-                Surface(modifier = Modifier.fillMaxSize(), color = MaterialTheme.colors.background) {
-                    Box(modifier = Modifier
-                        .onGloballyPositioned { coordinates ->
-                            //Set parents Size
-                            parentSize.value = coordinates.size.toSize()
-                        }
-                        .fillMaxSize()
-                    ) {
-                        //Adding puck to Card Composable
-                        Card(
-                            modifier = Modifier
-                                .puck(parentSize, behaviour = FreeForm), backgroundColor = PINK200
-                        ) {
-                            Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                                Image(
-                                    painterResource(drawable.zoid),
-                                    contentDescription = "",
-                                    contentScale = ContentScale.Crop,
-                                    modifier = Modifier
-                                        .height(70.dp)
-                                        .width(70.dp)
-                                )
-                                Text(text = "Card Composable", fontSize = 24.sp, modifier = Modifier.padding(10.dp))
-                            }
-                        }
-                        //Adding puck to Button Composable
-                        Button(onClick = { }, modifier = Modifier.puck(parentSize, behaviour = FreeForm, animationDuration = 700)) {
-                            Text(text = "Button Composable", fontSize = 24.sp)
-                        }
-                        
-                       //Adding puck to FAB Composable
-                        FloatingActionButton(
-                            onClick = {},
-                            modifier = Modifier
-                                .puck(parentSize, FreeForm, animationDuration = 700)
-                                .width(90.dp)
-                                .height(90.dp),
-                        ) {
-                            Image(
-                                painterResource(drawable.pencil),
-                                contentDescription = "",
-                                modifier = Modifier
-                                    .height(50.dp)
-                                    .width(50.dp)
-                            )
-                        }
-                    }
-                }
-            }
-```
-## Behaviours
-
-Currently Puck supports three behaviours
-- Freeform
-- Sticky
-- Gravity
-
-### FreeForm
-Freeform makes Composable draggable anywhere in the screen. If the user drags a composable out of screen area, it is coerced within the bounds of the screen.
+## Terminology
 <p align="start">
-<img src="https://github.com/Shivamdhuria/puck/blob/main/assets/freeform.gif" width="18%"/>
+<img src="https://user-images.githubusercontent.com/10262897/152220146-277408d5-14e4-4ef7-84cd-646a17bbcae0.jpg"/>
 </p>
-
-For adding Freeform behaviour to any composable, do - 
-```kotlin
-FloatingActionButton(onClick = {},
-                            modifier = Modifier
-                                .puck(parentSize, behaviour = FreeForm)
-                                .width(90.dp)
-                                .height(90.dp)) {
-                            //Image or anything
-                        }
-```
-
-### Sticky
-You can also make Composables stick to the edges or corners of the screen. Simple flick the Composable in the direction you want it to stick and it will follow the trajectory and stick there. To use stick you need to pass a parameter (EDGES, CORNERS,VERTICAL EDGsE HORIZONATL EDGES). Puck will automatically make the set parameter "sticky".
-<p align="start">
-<img src="https://github.com/Shivamdhuria/puck/blob/main/assets/stickNew.gif" width="18%"/>
-</p>
-
-```kotlin
-FloatingActionButton(onClick = {},
-                           modifier = Modifier
-                                .puck(parentSize, behaviour = Sticky(Corners), animationDuration = 500)
-                                .width(90.dp)
-                                .height(90.dp),
-                            backgroundColor = WHITE200
-                        ) {
-                            Image()
-                        }
-```
-### Gravity
-We can define gravity points with center and radius. Any composable that falls within this circle's gravity field will "zap" towards this center.
-Note: The circle isn't actualy drawn as above while using puck. I have shown the circle only for demonstration purposes. 
 
 <p align="start">
-<img src="https://github.com/Shivamdhuria/puck/blob/main/assets/gravityN.gif" width="18%"/>
+<img src="https://user-images.githubusercontent.com/10262897/152220196-80a2272a-a8aa-4596-b470-49adcac4e344.jpg"/>
 </p>
+
+
+
+
+## How to use
+```kotlin
+Palette(
+       defaultColor = Color.Magenta,
+       buttonSize = 210.dp,
+       swatches = Presets.material(),
+       innerRadius = 400f,
+       strokeWidth = 120f,
+       spacerRotation = 5f,
+       spacerOutward = 2f,
+       verticalAlignment = Middle,
+       horizontalAlignment = Start,
+       onColorSelected = { onColorSelected(it) }
+     )
+```
+### How to change positioning of Color Picker?
+
+The color picker can be positioned by using the combinations of vertical and horizontal alignments. For ```verticalAlignment```, use ```Top,Middle,Bottom``` and for ```horizontalAlignment```, use ```Start,Center,End```. For example to position the color picker on top left, use -
+```
+Palette(
+        buttonSize = 210.dp,
+        swatches = Presets.material(),
+        verticalAlignment = VerticalAlignment.Top,
+        horizontalAlignment = HorizontalAlignment.Start,
+         )
+
+```
+Which would make the color picker look like this.
+<p align="start">
+<img src="https://user-images.githubusercontent.com/10262897/152209128-5a120494-7304-4274-8acb-e5d16df904a1.png" width="18%"/>
+</p>
+
+### How to set button properties?
+```kotlin
+Palette(
+        defaultColor = Color.Blue,
+        buttonSize = 210.dp,
+        selectedArchAnimationDuration = 1000,
+        ...
+        )
+```
+The library uses a FAB button under the hood whose `defaultColor` , `buttonSize` and `selectedArchAnimationDuration` can be set. `selectedArchAnimationDuration` is the duration of the color change animation of the button when a color is picked.
+
+### How to change colors in the Palette?
 
 ```kotlin
-val circle = Circle(800f, 1800f, 500f)
-FloatingActionButton(onClick = {},
-                           modifier = Modifier
-                                .puck(parentSize,behaviour = Gravity(circle), animationDuration = 500)
-                                .width(90.dp)
-                                .height(90.dp),
-                            backgroundColor = WHITE200
-                        ) {
-                            Image()
-                        }
+Palette(
+       swatches = Presets.material(),
+        )
 ```
+`swatches` parameter accepts a list of *Swatches*. Each *Swatch* contains a list of colors. Ideally swatches must only shades of the same color but sometime you need to go a little crazy. 
 
 
-## Attributes
-- isPointsTowardsCenter - Currently this only works for Sticky(Edges) mode. Composable will always point towards center by using rotation animation. When a composable is dragged, the rotation value is set to default (0f), after the drag ends and the commposable sticks to any of the edges, the composable rotates according and points towards center. 
-<p align="center">
-<img src="https://github.com/Shivamdhuria/puck/blob/main/assets/towards%20center.gif" width="18%"/>
-</p>
+### How to know when a color is picked?
 
-- animationDuration - This is time taken in milli seconds for the drag animation. The lesser the time the quicker the animation. (Note: When the behaviour is set to Freeform, a composable is draggable without any animation.)
+```kotlin
+Palette(
+      onColorSelected = { onColorSelected(it) },
+      swatches = Presets.material(),
+        )
+```
+`onColorSelected` parameter accepts a function which is triggered when a color is picked. It also return the value of the `Color` which is picked.
 
-- focusedSizeMultiplier - When a composable is in pressed state, its size increases by this factor. You can set it to 1, if you don't want to increase it's size when in pressed date
-
-- onOffsetChanged - This returns the latest int offset of the composable's position after the drag ends. You should ideally use it to save the latest offset in shared preferences/ datastore to use it again and position the composable when the app restarts again. 
 
 #### Code & Issues
 If you are a developer and you wish to contribute to the app please raise an issue, discuss, fork and submit a pull request. 
