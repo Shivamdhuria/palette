@@ -10,7 +10,7 @@ A color picker library made in Jetpack Compose.
 <img src="https://github.com/Shivamdhuria/palette/blob/main/assets/rightHigh.gif" width="25.5%"/>
 </p>
 
-## Including in your project
+<!-- ## Including in your project
 [![](https://jitpack.io/v/Shivamdhuria/puck.svg)](https://jitpack.io/#Shivamdhuria/puck/0.0.1)
 ### Gradle 
 Add below codes to your **root** `build.gradle` file (not your module build.gradle file).
@@ -26,7 +26,7 @@ And add a dependency code to your **module**'s `build.gradle` file.
 dependencies {
     implementation 'com.github.Shivamdhuria:palette:Version'
 }
-```
+``` -->
 
 ## Terminology
 <p align="start">
