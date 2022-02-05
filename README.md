@@ -11,21 +11,22 @@ A color picker library made in Jetpack Compose.
 </p>
 
 ## Including in your project
-[![](https://jitpack.io/v/Shivamdhuria/puck.svg)](https://jitpack.io/#Shivamdhuria/puck/0.0.1)
+[![](https://jitpack.io/v/Shivamdhuria/palette.svg)](https://jitpack.io/#Shivamdhuria/palette)
 ### Gradle 
-Add below codes to your **root** `build.gradle` file (not your module build.gradle file).
-```Gradle
+Add it in your **root** build.gradle at the end of repositories:
+
+```gradle
 allprojects {
     repositories {
-        mavenCentral()
+	maven { url 'https://jitpack.io' }
+	}
     }
-}
 ```
-And add a dependency code to your **module**'s `build.gradle` file.
+Add the dependency.
 ```gradle
 dependencies {
-    implementation 'com.github.Shivamdhuria:palette:Version'
-}
+ implementation 'com.github.Shivamdhuria:palette:Tag'
+	}
 ```
 
 ## Terminology
