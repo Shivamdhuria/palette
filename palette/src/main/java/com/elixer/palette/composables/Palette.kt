@@ -152,7 +152,7 @@ fun  Palette(
 
     BoxWithConstraints(
         modifier = Modifier
-            .zIndex(if (isPaletteDisplayed.value) 0f else -3f)
+            .zIndex(if (isPaletteDisplayed.value) Float.MAX_VALUE else 0f)
             .fillMaxSize()
             .pointerInput(Unit) {
                 detectDragGestures(
