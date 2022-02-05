@@ -69,6 +69,8 @@ fun  Palette(
     buttonColorChangeAnimationDuration: Int = 1000,
     selectedArchAnimationDuration: Int = 1000,
     onColorSelected: (Color) -> Unit = {},
+    colorWheelZIndexOnWheelDisplayed:Float = 0f,
+    colorWheelZIndexOnWheelHidden:Float = 0f
 ) {
 
     val isPaletteDisplayed = remember { mutableStateOf(false) }
@@ -152,7 +154,7 @@ fun  Palette(
 
     BoxWithConstraints(
         modifier = Modifier
-            .zIndex(if (isPaletteDisplayed.value) Float.MAX_VALUE else 0f)
+            .zIndex(if (isPaletteDisplayed.value) colorWheelZIndexOnWheelDisplayed else colorWheelZIndexOnWheelHidden)
             .fillMaxSize()
             .pointerInput(Unit) {
                 detectDragGestures(
