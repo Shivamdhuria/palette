@@ -6,9 +6,7 @@ import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Surface
-import androidx.compose.material.Text
+import androidx.compose.material.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -27,21 +25,18 @@ class MainActivity : ComponentActivity() {
             ColorAppTheme {
                 // A surface container using the 'background' color from the theme
                 Surface(modifier = Modifier.fillMaxSize(), color = MaterialTheme.colors.background) {
-
+                    Heading()
                     Palette(
                         defaultColor = Color.Blue,
                         buttonSize = 210.dp,
                         onColorSelected = { onColorSelected(it) },
                         swatches = Presets.material(),
                     )
-                    Column {
-                        Heading()
-                    }
-
                 }
             }
         }
     }
+
     private fun onColorSelected(it: Color) {
     }
 }
@@ -55,6 +50,9 @@ private fun Heading() {
     ) {
         Text(text = "palette", fontSize = 80.sp, color = Color.DarkGray, textAlign = TextAlign.Center)
         Text(text = "color picker made with Jetpack Compose", fontSize = 15.sp, color = Color.DarkGray, textAlign = TextAlign.Center)
+        TextButton(onClick = { }) {
+            Text("Some lccikable ", modifier = Modifier.padding(40.dp))
+        }
     }
 }
 

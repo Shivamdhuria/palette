@@ -3,6 +3,7 @@ package com.elixer.palette.composables
 import androidx.compose.animation.animateColorAsState
 import androidx.compose.animation.core.*
 import androidx.compose.foundation.Canvas
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.gestures.detectDragGestures
 import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.BoxWithConstraints
@@ -20,6 +21,7 @@ import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.zIndex
 import com.elixer.palette.Presets
 import com.elixer.palette.constraints.HorizontalAlignment
 import com.elixer.palette.constraints.HorizontalAlignment.*
@@ -150,6 +152,7 @@ fun  Palette(
 
     BoxWithConstraints(
         modifier = Modifier
+            .zIndex(if (isPaletteDisplayed.value) 0f else -3f)
             .fillMaxSize()
             .pointerInput(Unit) {
                 detectDragGestures(
